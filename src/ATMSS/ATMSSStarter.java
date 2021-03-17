@@ -1,6 +1,8 @@
 package ATMSS;
 
 import ATMSS.CollectorHandler.CollectorHandler;
+import ATMSS.DispenserHandler.DispenserHandler;
+import ATMSS.DispenserHandler.Emulator.DispenserEmulator;
 import ATMSS.KeypadHandler.Emulator.KeypadEmulator;
 import AppKickstarter.AppKickstarter;
 import AppKickstarter.misc.Msg;
@@ -23,6 +25,7 @@ public class ATMSSStarter extends AppKickstarter {
     protected KeypadHandler keypadHandler;
     protected TouchDisplayHandler touchDisplayHandler;
     protected CollectorHandler collectorHandler;
+    protected DispenserHandler dispenserHandler;
 
 
     //------------------------------------------------------------
@@ -63,6 +66,7 @@ public class ATMSSStarter extends AppKickstarter {
 			keypadHandler = new KeypadHandler("KeypadHandler", this);
 			touchDisplayHandler = new TouchDisplayHandler("TouchDisplayHandler", this);
 			collectorHandler = new CollectorHandler("CollectorHandler", this);
+			dispenserHandler = new DispenserHandler("DispenserHandler", this);
 		} catch (Exception e) {
 			System.out.println("AppKickstarter: startApp failed");
 			e.printStackTrace();
@@ -76,6 +80,7 @@ public class ATMSSStarter extends AppKickstarter {
 		new Thread(keypadHandler).start();
 		new Thread(touchDisplayHandler).start();
 		new Thread(collectorHandler).start();
+		new Thread(dispenserHandler).start();
     } // startHandlers
 
 
@@ -91,6 +96,7 @@ public class ATMSSStarter extends AppKickstarter {
 		keypadHandler.getMBox().send(new Msg(id, null, Msg.Type.Terminate, "Terminate now!"));
 		touchDisplayHandler.getMBox().send(new Msg(id, null, Msg.Type.Terminate, "Terminate now!"));
 		collectorHandler.getMBox().send(new Msg(id, null, Msg.Type.Terminate, "Terminate now!"));
+		dispenserHandler.getMBox().send(new Msg(id, null, Msg.Type.Terminate, "Terminate now!"));
 		timer.getMBox().send(new Msg(id, null, Msg.Type.Terminate, "Terminate now!"));
     } // stopApp
 } // ATM.ATMSSStarter

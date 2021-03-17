@@ -1,5 +1,7 @@
 package ATMSS;
 
+import ATMSS.DispenserHandler.DispenserHandler;
+import ATMSS.DispenserHandler.Emulator.DispenserEmulator;
 import AppKickstarter.timer.Timer;
 
 import ATMSS.ATMSS.ATMSS;
@@ -54,6 +56,7 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
 			KeypadEmulator keypadEmulator = null;
 			TouchDisplayEmulator touchDisplayEmulator = null;
 			CollectorEmulator collectorEmulator = null;
+			DispenserEmulator dispenserEmulator = null;
 
 			// create emulators
 			try {
@@ -63,12 +66,14 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
 				keypadEmulator = new KeypadEmulator("KeypadHandler", atmssEmulatorStarter);
 				touchDisplayEmulator = new TouchDisplayEmulator("TouchDisplayHandler", atmssEmulatorStarter);
 				collectorEmulator = new CollectorEmulator("CollectorHandler", atmssEmulatorStarter);
+				dispenserEmulator = new DispenserEmulator("DispenserHandler", atmssEmulatorStarter);
 
 				// start emulator GUIs
 				keypadEmulator.start();
 				cardReaderEmulator.start();
 				touchDisplayEmulator.start();
 				collectorEmulator.start();
+				dispenserEmulator.start();
 				} catch (Exception e) {
 				System.out.println("Emulators: start failed");
 				e.printStackTrace();
@@ -80,6 +85,7 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
 			atmssEmulatorStarter.setKeypadHandler(keypadEmulator);
 			atmssEmulatorStarter.setTouchDisplayHandler(touchDisplayEmulator);
 			atmssEmulatorStarter.setCollectorHandler(collectorEmulator);
+			atmssEmulatorStarter.setDispenserHandler(dispenserEmulator);
 
 			// start threads
 			new Thread(timer).start();
@@ -88,6 +94,7 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
 			new Thread(keypadEmulator).start();
 			new Thread(touchDisplayEmulator).start();
 			new Thread(collectorEmulator).start();
+			new Thread(dispenserEmulator).start();
 		} // start
 	} // Emulators
 
@@ -111,5 +118,8 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
     }
 	private void setCollectorHandler(CollectorHandler collectorHandler) {
 		this.collectorHandler = collectorHandler;
+	}
+	private void setDispenserHandler(DispenserHandler dispenserHandler) {
+		this.dispenserHandler = dispenserHandler;
 	}
 } // ATMSSEmulatorStarter
