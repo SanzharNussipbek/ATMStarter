@@ -2,6 +2,8 @@ package ATMSS;
 
 import ATMSS.DispenserHandler.DispenserHandler;
 import ATMSS.DispenserHandler.Emulator.DispenserEmulator;
+import ATMSS.PrinterHandler.Emulator.PrinterEmulator;
+import ATMSS.PrinterHandler.PrinterHandler;
 import AppKickstarter.timer.Timer;
 
 import ATMSS.ATMSS.ATMSS;
@@ -57,6 +59,7 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
 			TouchDisplayEmulator touchDisplayEmulator = null;
 			CollectorEmulator collectorEmulator = null;
 			DispenserEmulator dispenserEmulator = null;
+			PrinterEmulator printerEmulator = null;
 
 			// create emulators
 			try {
@@ -67,6 +70,7 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
 				touchDisplayEmulator = new TouchDisplayEmulator("TouchDisplayHandler", atmssEmulatorStarter);
 				collectorEmulator = new CollectorEmulator("CollectorHandler", atmssEmulatorStarter);
 				dispenserEmulator = new DispenserEmulator("DispenserHandler", atmssEmulatorStarter);
+				printerEmulator = new PrinterEmulator("PrinterHandler", atmssEmulatorStarter);
 
 				// start emulator GUIs
 				keypadEmulator.start();
@@ -74,6 +78,7 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
 				touchDisplayEmulator.start();
 				collectorEmulator.start();
 				dispenserEmulator.start();
+				printerEmulator.start();
 				} catch (Exception e) {
 				System.out.println("Emulators: start failed");
 				e.printStackTrace();
@@ -86,6 +91,7 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
 			atmssEmulatorStarter.setTouchDisplayHandler(touchDisplayEmulator);
 			atmssEmulatorStarter.setCollectorHandler(collectorEmulator);
 			atmssEmulatorStarter.setDispenserHandler(dispenserEmulator);
+			atmssEmulatorStarter.setPrinterHandler(printerEmulator);
 
 			// start threads
 			new Thread(timer).start();
@@ -95,6 +101,7 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
 			new Thread(touchDisplayEmulator).start();
 			new Thread(collectorEmulator).start();
 			new Thread(dispenserEmulator).start();
+			new Thread(printerEmulator).start();
 		} // start
 	} // Emulators
 
@@ -121,5 +128,8 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
 	}
 	private void setDispenserHandler(DispenserHandler dispenserHandler) {
 		this.dispenserHandler = dispenserHandler;
+	}
+	private void setPrinterHandler(PrinterHandler printerHandler) {
+		this.printerHandler = printerHandler;
 	}
 } // ATMSSEmulatorStarter
