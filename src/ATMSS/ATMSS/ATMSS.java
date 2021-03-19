@@ -1,5 +1,6 @@
 package ATMSS.ATMSS;
 
+import ATMSS.Account.Account;
 import AppKickstarter.AppKickstarter;
 import AppKickstarter.misc.*;
 import AppKickstarter.timer.Timer;
@@ -15,6 +16,7 @@ public class ATMSS extends AppThread {
     private MBox collectorMBox;
     private MBox dispenserMBox;
     private MBox printerMBox;
+    private Account userAccount;
 
     //------------------------------------------------------------
     // ATMSS
@@ -36,6 +38,7 @@ public class ATMSS extends AppThread {
 		collectorMBox = appKickstarter.getThread("CollectorHandler").getMBox();
 		dispenserMBox = appKickstarter.getThread("DispenserHandler").getMBox();
 		printerMBox = appKickstarter.getThread("PrinterHandler").getMBox();
+		userAccount = new Account();
 
 		initWelcomeScreen();
 
@@ -97,8 +100,49 @@ public class ATMSS extends AppThread {
 	// handleCardInserted
 	private void handleCardInserted(Msg msg) {
 		log.info("CardInserted: " + msg.getDetails());
+		userAccount.setCardNum(msg.getDetails());
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Pin"));
 	} // handleCardInserted
+
+
+	private void handleSetAccountPin(String pinNum) {
+		if (userAccount.getPin() == null) {
+			userAccount.setPin(pinNum);
+		} else if(userAccount.getPin().length() < 6) {
+			userAccount.setPin(userAccount.getPin() + pinNum);
+		}
+	}
+
+
+	private void handleAuth() {
+		if (!userAccount.isValid()) {
+			log.info("Invalid PIN: " + userAccount.getPin());
+			userAccount.setPin(null);
+			handleErase();
+			return;
+		}
+		log.info("Authorize account: " + userAccount.toString());
+	}
+
+
+	private void handleCancel() {
+		userAccount.reset();
+		cardReaderMBox.send(new Msg(id, mbox, Msg.Type.CR_EjectCard, ""));
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Welcome"));
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_ClearPinText, "TD_ClearPinText"));
+	}
+
+
+	private void handleErase() {
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_ClearPinText, "TD_ClearPinText"));
+	}
+
+
+	private void handleNumkeyPress(Msg msg) {
+		if (msg.getDetails().compareToIgnoreCase("00") == 0) return;
+		handleSetAccountPin(msg.getDetails());
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_AppendPinText, "TD_AppendPinText"));
+	}
 
 
     //------------------------------------------------------------
@@ -106,21 +150,17 @@ public class ATMSS extends AppThread {
     private void processKeyPressed(Msg msg) {
         // *** The following is an example only!! ***
         if (msg.getDetails().compareToIgnoreCase("Cancel") == 0) {
-			cardReaderMBox.send(new Msg(id, mbox, Msg.Type.CR_EjectCard, ""));
-			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Welcome"));
-			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_ClearPinText, "TD_ClearPinText"));
+        	handleCancel();
 		} else if (msg.getDetails().compareToIgnoreCase("Erase") == 0) {
-			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_ClearPinText, "TD_ClearPinText"));
+			handleErase();
 		} else if (msg.getDetails().compareToIgnoreCase("???") == 0) {
 
 		} else if (msg.getDetails().compareToIgnoreCase("Enter") == 0) {
-
-		} else if (msg.getDetails().compareToIgnoreCase("00") == 0) {
-
+			handleAuth();
 		} else if (msg.getDetails().compareToIgnoreCase(".") == 0) {
 
 		} else {
-			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_AppendPinText, "TD_AppendPinText"));
+			handleNumkeyPress(msg);
 		}
     } // processKeyPressed
 
