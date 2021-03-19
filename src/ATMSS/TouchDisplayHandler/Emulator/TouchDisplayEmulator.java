@@ -61,6 +61,14 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 		log.info(id + ": update display -- " + msg.getDetails());
 
 		switch (msg.getDetails()) {
+			case "Welcome":
+				reloadStage("TouchDisplayWelcome.fxml");
+				break;
+
+			case "Pin":
+				reloadStage("TouchDisplayPin.fxml");
+				break;
+
 			case "BlankScreen":
 				reloadStage("TouchDisplayEmulator.fxml");
 				break;
@@ -105,4 +113,19 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 			}
 		});
     } // reloadStage
+
+	//------------------------------------------------------------
+	// handleAppendPinText
+	protected void handleAppendPinText() {
+		log.info(id + ": update pin text");
+
+		touchDisplayEmulatorController.appendCardPinText();
+	} // handleAppendPinText
+
+	//------------------------------------------------------------
+	// handleClearPinText
+	protected void handleClearPinText() {
+		log.info(id + ": clear pin text");
+		touchDisplayEmulatorController.clearCardPinText();
+	} // handleClearPinText
 } // TouchDisplayEmulator

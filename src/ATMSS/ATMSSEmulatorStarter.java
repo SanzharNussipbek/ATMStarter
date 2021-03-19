@@ -76,10 +76,10 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
 				keypadEmulator.start();
 				cardReaderEmulator.start();
 				touchDisplayEmulator.start();
-				collectorEmulator.start();
-				dispenserEmulator.start();
-				printerEmulator.start();
-				} catch (Exception e) {
+//				collectorEmulator.start();
+//				dispenserEmulator.start();
+//				printerEmulator.start();
+			} catch (Exception e) {
 				System.out.println("Emulators: start failed");
 				e.printStackTrace();
 				Platform.exit();
@@ -99,9 +99,9 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
 			new Thread(cardReaderEmulator).start();
 			new Thread(keypadEmulator).start();
 			new Thread(touchDisplayEmulator).start();
-			new Thread(collectorEmulator).start();
-			new Thread(dispenserEmulator).start();
-			new Thread(printerEmulator).start();
+//			new Thread(collectorEmulator).start();
+//			new Thread(dispenserEmulator).start();
+//			new Thread(printerEmulator).start();
 		} // start
 	} // Emulators
 

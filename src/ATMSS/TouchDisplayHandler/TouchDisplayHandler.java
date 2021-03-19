@@ -27,6 +27,14 @@ public class TouchDisplayHandler extends HWHandler {
                 handleUpdateDisplay(msg);
                 break;
 
+            case TD_AppendPinText:
+                handleAppendPinText();
+                break;
+
+            case TD_ClearPinText:
+                handleClearPinText();
+                break;
+
             default:
                 log.warning(id + ": unknown message type: [" + msg + "]");
         }
@@ -38,4 +46,18 @@ public class TouchDisplayHandler extends HWHandler {
     protected void handleUpdateDisplay(Msg msg) {
 	    log.info(id + ": update display -- " + msg.getDetails());
     } // handleUpdateDisplay
+
+
+    //------------------------------------------------------------
+    // handleAppendPinText
+    protected void handleAppendPinText() {
+        log.info(id + ": update pin text");
+    } // handleAppendPinText
+
+
+    //------------------------------------------------------------
+    // handleClearPinText
+    protected void handleClearPinText() {
+        log.info(id + ": clear pin text");
+    } // handleClearPinText
 } // TouchDisplayHandler

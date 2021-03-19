@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="680.0" xmlns="http://javafx.com/javafx/8.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ATMSS.TouchDisplayHandler.Emulator.TouchDisplayEmulatorController">
+    <children>
+        <AnchorPane prefHeight="480.0" prefWidth="640.0" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="20">
+            <children>
+                <Text text="Welcome to ATM!" AnchorPane.leftAnchor="265" AnchorPane.topAnchor="175"/>
+                <Text text="Please insert your card"  AnchorPane.leftAnchor="250" AnchorPane.topAnchor="225"/>
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>
