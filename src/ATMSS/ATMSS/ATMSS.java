@@ -56,8 +56,7 @@ public class ATMSS extends AppThread {
 					break;
 
 				case CR_CardInserted:
-					log.info("CardInserted: " + msg.getDetails());
-					touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Pin"));
+					handleCardInserted(msg);
 					break;
 
 				case TimesUp:
@@ -92,6 +91,14 @@ public class ATMSS extends AppThread {
 	private void initWelcomeScreen() {
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Welcome"));
 	} // initWelcomeScreen
+
+
+	//------------------------------------------------------------
+	// handleCardInserted
+	private void handleCardInserted(Msg msg) {
+		log.info("CardInserted: " + msg.getDetails());
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Pin"));
+	} // handleCardInserted
 
 
     //------------------------------------------------------------
