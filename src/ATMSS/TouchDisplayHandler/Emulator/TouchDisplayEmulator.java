@@ -69,6 +69,10 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 				reloadStage("TouchDisplayPin.fxml");
 				break;
 
+			case "Incorrect Pin":
+				handleIncorrectPin();
+				break;
+
 			case "BlankScreen":
 				reloadStage("TouchDisplayEmulator.fxml");
 				break;
@@ -118,7 +122,6 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 	// handleAppendPinText
 	protected void handleAppendPinText() {
 		log.info(id + ": update pin text");
-
 		touchDisplayEmulatorController.appendCardPinText();
 	} // handleAppendPinText
 
@@ -128,4 +131,9 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 		log.info(id + ": clear pin text");
 		touchDisplayEmulatorController.clearCardPinText();
 	} // handleClearPinText
+
+	protected void handleIncorrectPin() {
+		log.info(id + ": Incorrect Pin");
+		touchDisplayEmulatorController.handleIncorrectPin();
+	}
 } // TouchDisplayEmulator

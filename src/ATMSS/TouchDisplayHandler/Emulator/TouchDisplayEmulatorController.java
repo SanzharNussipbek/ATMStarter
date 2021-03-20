@@ -19,6 +19,8 @@ public class TouchDisplayEmulatorController {
     private TouchDisplayEmulator touchDisplayEmulator;
     private MBox touchDisplayMBox;
     public TextField cardPin;
+    public Text title;
+    public Text subtitle;
 
 
     //------------------------------------------------------------
@@ -56,4 +58,10 @@ public class TouchDisplayEmulatorController {
     protected void clearCardPinText() {
         cardPin.setText("");
     } // clearCardPinText
+
+    protected void handleIncorrectPin() {
+        title.setText("Incorrect PIN");
+        title.setTranslateX(10);
+        subtitle.setVisible(true);
+    }
 } // TouchDisplayEmulatorController

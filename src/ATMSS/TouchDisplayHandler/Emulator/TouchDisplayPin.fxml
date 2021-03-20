@@ -7,12 +7,14 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="680.0" xmlns="http://javafx.com/javafx/8.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ATMSS.TouchDisplayHandler.Emulator.TouchDisplayEmulatorController">
     <children>
         <AnchorPane prefHeight="480.0" prefWidth="640.0" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="20">
             <children>
-                <Text text="Please enter PIN:" AnchorPane.leftAnchor="250" AnchorPane.topAnchor="200"/>
-                <TextField fx:id="cardPin" editable="false" prefWidth="90.0" AnchorPane.leftAnchor="260" AnchorPane.topAnchor="225" />
+                <Text fx:id="title" text="Please enter PIN:" AnchorPane.leftAnchor="220" AnchorPane.topAnchor="150"><font><Font size="24.0" /></font></Text>
+                <Text visible="false" fx:id="subtitle" text="Please try again" AnchorPane.leftAnchor="240" AnchorPane.topAnchor="175"><font><Font size="18.0" /></font></Text>
+                <TextField fx:id="cardPin" editable="false" prefWidth="90.0" AnchorPane.leftAnchor="260" AnchorPane.topAnchor="235"/>
             </children>
         </AnchorPane>
     </children>
