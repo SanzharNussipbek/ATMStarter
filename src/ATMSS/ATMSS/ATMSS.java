@@ -17,6 +17,14 @@ public class ATMSS extends AppThread {
     private MBox dispenserMBox;
     private MBox printerMBox;
     private Account userAccount;
+    private enum State {
+    	WELCOME,
+		PIN,
+		INCORRECT_PIN,
+		MAIN_MENU,
+	}
+	private boolean isLoggedIn;
+	private State state;
 
     //------------------------------------------------------------
     // ATMSS
@@ -40,6 +48,8 @@ public class ATMSS extends AppThread {
 		printerMBox = appKickstarter.getThread("PrinterHandler").getMBox();
 
 		userAccount = new Account();
+		isLoggedIn = false;
+		state = State.WELCOME;
 
 		initWelcomeScreen();
 	} // init
@@ -114,6 +124,7 @@ public class ATMSS extends AppThread {
 		log.info("CardInserted: " + msg.getDetails());
 		userAccount.setCardNum(msg.getDetails());
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Pin"));
+		state = State.PIN;
 	} // handleCardInserted
 
 
@@ -136,9 +147,12 @@ public class ATMSS extends AppThread {
 			userAccount.setPin(null);
 			handleErase();
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Incorrect Pin"));
+			state = State.INCORRECT_PIN;
 			return;
 		}
 		log.info("Authorize account: " + userAccount.toString());
+		state = State.MAIN_MENU;
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "MainMenu"));
 	} // handleAuth
 
 
@@ -152,6 +166,14 @@ public class ATMSS extends AppThread {
 	} // handleCancel
 
 
+	// handleEnter
+	private void handleEnter() {
+		if (state == State.PIN || state == State.INCORRECT_PIN) {
+			handleAuth();
+		}
+	} // handleEnter
+
+
 	//------------------------------------------------------------
 	// handleErase
 	private void handleErase() {
@@ -162,6 +184,7 @@ public class ATMSS extends AppThread {
 	//------------------------------------------------------------
 	// handleNumkeyPress
 	private void handleNumkeyPress(Msg msg) {
+    	if (state == State.WELCOME || state == State.MAIN_MENU) return;
 		if (msg.getDetails().compareToIgnoreCase("00") == 0) return;
 		handleSetAccountPin(msg.getDetails());
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_AppendPinText, "TD_AppendPinText"));
@@ -180,7 +203,7 @@ public class ATMSS extends AppThread {
 		} else if (msg.getDetails().compareToIgnoreCase("???") == 0) {
 
 		} else if (msg.getDetails().compareToIgnoreCase("Enter") == 0) {
-			handleAuth();
+			handleEnter();
 		} else if (msg.getDetails().compareToIgnoreCase(".") == 0) {
 
 		} else {
