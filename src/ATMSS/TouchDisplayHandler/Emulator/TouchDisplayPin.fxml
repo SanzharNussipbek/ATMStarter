@@ -12,8 +12,8 @@
     <children>
         <AnchorPane prefHeight="480.0" prefWidth="640.0" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="20">
             <children>
-                <Text fx:id="title" text="Please enter PIN:" AnchorPane.leftAnchor="220" AnchorPane.topAnchor="150"><font><Font size="24.0" /></font></Text>
-                <Text visible="false" fx:id="subtitle" text="Please try again" AnchorPane.leftAnchor="240" AnchorPane.topAnchor="175"><font><Font size="18.0" /></font></Text>
+                <Text textAlignment="CENTER" fx:id="title" text="Please enter PIN:" AnchorPane.leftAnchor="220" AnchorPane.topAnchor="150"><font><Font size="24.0" /></font></Text>
+                <Text textAlignment="CENTER"  visible="false" fx:id="subtitle" text="Please try again" AnchorPane.leftAnchor="240" AnchorPane.topAnchor="175"><font><Font size="18.0" /></font></Text>
                 <TextField fx:id="cardPin" editable="false" prefWidth="90.0" AnchorPane.leftAnchor="260" AnchorPane.topAnchor="235"/>
             </children>
         </AnchorPane>

@@ -1,49 +1,42 @@
-210320-16:36:51 [INFO] -- 
-210320-16:36:51 [INFO] -- 
-210320-16:36:51 [INFO] -- ============================================================
-210320-16:36:51 [INFO] -- ATMSSStarter: Application Starting...
-210320-16:36:53 [INFO] -- timer: starting...
-210320-16:36:53 [INFO] -- TouchDisplayHandler: starting...
-210320-16:36:53 [INFO] -- KeypadHandler: starting...
-210320-16:36:53 [INFO] -- CardReaderHandler: starting...
-210320-16:36:53 [INFO] -- ATMSS: starting...
-210320-16:36:53 [INFO] -- TouchDisplayHandler: update display -- Welcome
-210320-16:36:53 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayWelcome.fxml
-210320-16:37:32 [INFO] -- CardInserted: 2026-6202-2026-6202
-210320-16:37:32 [INFO] -- TouchDisplayHandler: update display -- Pin
-210320-16:37:32 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayPin.fxml
-210320-16:37:34 [INFO] -- KeyPressed: 5
-210320-16:37:34 [INFO] -- TouchDisplayHandler: update pin text
-210320-16:37:35 [INFO] -- KeyPressed: Enter
-210320-16:37:35 [INFO] -- Invalid PIN: 5
-210320-16:37:35 [INFO] -- TouchDisplayHandler: clear pin text
-210320-16:37:35 [INFO] -- TouchDisplayHandler: update display -- Incorrect Pin
-210320-16:37:35 [INFO] -- TouchDisplayHandler: Incorrect Pin
-210320-16:37:36 [INFO] -- KeyPressed: 2
-210320-16:37:36 [INFO] -- TouchDisplayHandler: update pin text
-210320-16:37:36 [INFO] -- KeyPressed: 2
-210320-16:37:36 [INFO] -- TouchDisplayHandler: update pin text
-210320-16:37:37 [INFO] -- KeyPressed: 2
-210320-16:37:37 [INFO] -- TouchDisplayHandler: update pin text
-210320-16:37:38 [INFO] -- KeyPressed: 2
-210320-16:37:38 [INFO] -- TouchDisplayHandler: update pin text
-210320-16:37:38 [INFO] -- KeyPressed: 2
-210320-16:37:38 [INFO] -- TouchDisplayHandler: update pin text
-210320-16:37:38 [INFO] -- KeyPressed: 2
-210320-16:37:38 [INFO] -- TouchDisplayHandler: update pin text
-210320-16:37:39 [INFO] -- KeyPressed: Enter
-210320-16:37:39 [INFO] -- Authorize account: Card Number: 2026-6202-2026-6202, Password: [222222]
-210320-16:37:53 [INFO] -- Poll: TimesUp 53740 0
-210320-16:37:53 [INFO] -- PollAck: KeypadHandler is up!
-210320-16:37:53 [INFO] -- PollAck: TouchDisplayHandler is up!
-210320-16:37:53 [INFO] -- PollAck: CardReaderHandler is up!
-210320-16:38:12 [INFO] -- 
-210320-16:38:12 [INFO] -- 
-210320-16:38:12 [INFO] -- ============================================================
-210320-16:38:12 [INFO] -- ATMSSStarter: Application Stopping...
-210320-16:38:12 [INFO] -- CardReaderHandler: terminating...
-210320-16:38:12 [INFO] -- timer: received terminate!
-210320-16:38:12 [INFO] -- TouchDisplayHandler: terminating...
-210320-16:38:12 [INFO] -- ATMSS: terminating...
-210320-16:38:12 [INFO] -- timer: terminating...
-210320-16:38:12 [INFO] -- KeypadHandler: terminating...
+210320-17:50:33 [INFO] -- 
+210320-17:50:33 [INFO] -- 
+210320-17:50:33 [INFO] -- ============================================================
+210320-17:50:33 [INFO] -- ATMSSStarter: Application Starting...
+210320-17:50:34 [INFO] -- timer: starting...
+210320-17:50:34 [INFO] -- TouchDisplayHandler: starting...
+210320-17:50:34 [INFO] -- KeypadHandler: starting...
+210320-17:50:34 [INFO] -- CardReaderHandler: starting...
+210320-17:50:34 [INFO] -- ATMSS: starting...
+210320-17:50:34 [INFO] -- TouchDisplayHandler: update display -- Welcome
+210320-17:50:34 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayWelcome.fxml
+210320-17:50:37 [INFO] -- CardInserted: 4107-7014-4107-7014
+210320-17:50:37 [INFO] -- TouchDisplayHandler: update display -- Pin
+210320-17:50:37 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayPin.fxml
+210320-17:50:38 [INFO] -- KeyPressed: 3
+210320-17:50:38 [INFO] -- TouchDisplayHandler: update pin text
+210320-17:50:38 [INFO] -- KeyPressed: 3
+210320-17:50:38 [INFO] -- TouchDisplayHandler: update pin text
+210320-17:50:38 [INFO] -- KeyPressed: 3
+210320-17:50:38 [INFO] -- TouchDisplayHandler: update pin text
+210320-17:50:38 [INFO] -- KeyPressed: 3
+210320-17:50:38 [INFO] -- TouchDisplayHandler: update pin text
+210320-17:50:39 [INFO] -- KeyPressed: 3
+210320-17:50:39 [INFO] -- TouchDisplayHandler: update pin text
+210320-17:50:39 [INFO] -- KeyPressed: 3
+210320-17:50:39 [INFO] -- TouchDisplayHandler: update pin text
+210320-17:50:39 [INFO] -- KeyPressed: 3
+210320-17:50:39 [INFO] -- TouchDisplayHandler: update pin text
+210320-17:50:39 [INFO] -- KeyPressed: Enter
+210320-17:50:39 [INFO] -- Authorize account: Card Number: 4107-7014-4107-7014, Password: [333333]
+210320-17:50:39 [INFO] -- TouchDisplayHandler: update display -- MainMenu
+210320-17:50:39 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayMainMenu.fxml
+210320-17:50:45 [INFO] -- 
+210320-17:50:45 [INFO] -- 
+210320-17:50:45 [INFO] -- ============================================================
+210320-17:50:45 [INFO] -- ATMSSStarter: Application Stopping...
+210320-17:50:45 [INFO] -- ATMSS: terminating...
+210320-17:50:45 [INFO] -- timer: received terminate!
+210320-17:50:45 [INFO] -- timer: terminating...
+210320-17:50:45 [INFO] -- TouchDisplayHandler: terminating...
+210320-17:50:45 [INFO] -- CardReaderHandler: terminating...
+210320-17:50:45 [INFO] -- KeypadHandler: terminating...
