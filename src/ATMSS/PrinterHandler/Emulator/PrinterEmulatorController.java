@@ -5,6 +5,7 @@ import AppKickstarter.AppKickstarter;
 import AppKickstarter.misc.MBox;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 
 import java.util.logging.Logger;
 
@@ -17,6 +18,7 @@ public class PrinterEmulatorController {
     private Logger log;
     private PrinterEmulator printerEmulator;
     private MBox printerMBox;
+    public TextArea printerOutput;
 
 
     //------------------------------------------------------------
@@ -41,4 +43,9 @@ public class PrinterEmulatorController {
                 break;
         }
     } // buttonPressed
-} // PrinterEmulatorController
+
+
+    //------------------------------------------------------------
+    // print
+    public void print(String output) { printerOutput.setText(output); } // buttonPressed
+} // print

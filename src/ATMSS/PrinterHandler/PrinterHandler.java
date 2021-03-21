@@ -19,8 +19,18 @@ public class PrinterHandler extends HWHandler {
     // processMsg
     protected void processMsg(Msg msg) {
         switch (msg.getType()) {
+            case PR_PRINT:
+                handlePrint(msg);
+                break;
+
             default:
                 log.warning(id + ": unknown message type: [" + msg + "]");
         }
     } // processMsg
+
+    //------------------------------------------------------------
+    // handlePrint
+    public void handlePrint(Msg msg) {
+        log.info(id + ": printer output");
+    } // handlePrint
 } // PrinterHandler

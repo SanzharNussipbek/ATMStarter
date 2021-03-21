@@ -3,6 +3,7 @@ package ATMSS.PrinterHandler.Emulator;
 import ATMSS.ATMSSStarter;
 import ATMSS.PrinterHandler.PrinterHandler;
 import ATMSS.PrinterHandler.Emulator.PrinterEmulatorController;
+import AppKickstarter.misc.Msg;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -49,5 +50,12 @@ public class PrinterEmulator extends PrinterHandler {
         });
         myStage.show();
     } // PrinterEmulator
+
+
+    //------------------------------------------------------------
+    // handlePrint
+    public void handlePrint(Msg msg) {
+        printerEmulatorController.print(msg.getDetails());
+    } // handlePrint
 } // PrinterEmulator
 

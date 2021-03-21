@@ -96,5 +96,6 @@ public class Msg {
 	/** Card removed */			CR_CardRemoved,
 	/** Eject card */			CR_EjectCard,
 	/** Key pressed */			KP_KeyPressed,
+    /** Printer Print */			PR_PRINT,
     } // Type
 } // Msg
