@@ -39,6 +39,7 @@ public class CardReaderEmulatorController {
     // buttonPressed
     public void buttonPressed(ActionEvent actionEvent) {
 		Button btn = (Button) actionEvent.getSource();
+		cardReaderMBox.send(new Msg(id, cardReaderMBox, Msg.Type.BZ_PLAY, "button"));
 
 		switch (btn.getText()) {
 			case "Card 1":

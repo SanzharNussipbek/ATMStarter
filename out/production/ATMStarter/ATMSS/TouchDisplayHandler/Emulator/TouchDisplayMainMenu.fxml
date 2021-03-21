@@ -12,22 +12,6 @@
 			<children>
 				<Text fx:id="menu_title" text="ATM" AnchorPane.leftAnchor="265" AnchorPane.topAnchor="100"><font><Font size="36.0" /></font></Text>
 
-<!--				<Text text="TRANSFER" AnchorPane.leftAnchor="80" AnchorPane.bottomAnchor="160"><font><Font size="24.0" /></font></Text>-->
-<!--				<Text text="DEPOSIT" AnchorPane.leftAnchor="80" AnchorPane.bottomAnchor="90"><font><Font size="24.0" /></font></Text>-->
-<!--				<Text text="WITHDRAW" AnchorPane.leftAnchor="80" AnchorPane.bottomAnchor="20"><font><Font size="24.0" /></font></Text>-->
-
-<!--				<Text text="BALANCE ENQUIRY" AnchorPane.rightAnchor="50" AnchorPane.bottomAnchor="160"><font><Font size="24.0" /></font></Text>-->
-<!--				<Text text="???" AnchorPane.rightAnchor="150" AnchorPane.bottomAnchor="90"><font><Font size="24.0" /></font></Text>-->
-<!--				<Text text="CANCEL" AnchorPane.rightAnchor="100" AnchorPane.bottomAnchor="20"><font><Font size="24.0" /></font></Text>-->
-
-<!--				<Rectangle fx:id="TRANSFER" onMouseClicked="#handleMenuItemClick" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="70.0" stroke="BLACK" strokeType="OUTSIDE" width="300.0" AnchorPane.bottomAnchor="140" AnchorPane.leftAnchor="0" />-->
-<!--				<Rectangle fx:id="DEPOSIT" onMouseClicked="#handleMenuItemClick" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="70.0" stroke="BLACK" strokeType="OUTSIDE" width="300.0" AnchorPane.bottomAnchor="70" AnchorPane.leftAnchor="0" />-->
-<!--				<Rectangle fx:id="WITHDRAW" onMouseClicked="#handleMenuItemClick" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="70.0" stroke="BLACK" strokeType="OUTSIDE" width="300.0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" />-->
-
-<!--				<Rectangle fx:id="BALANCE" onMouseClicked="#handleMenuItemClick" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="70.0" stroke="BLACK" strokeType="OUTSIDE" width="300.0" AnchorPane.bottomAnchor="140" AnchorPane.rightAnchor="0" />-->
-<!--				<Rectangle fx:id="UNKNOWN" onMouseClicked="#handleMenuItemClick" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="70.0" stroke="BLACK" strokeType="OUTSIDE" width="300.0" AnchorPane.bottomAnchor="70" AnchorPane.rightAnchor="0" />-->
-<!--				<Rectangle fx:id="CANCEL" onMouseClicked="#handleMenuItemClick" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="70.0" stroke="BLACK" strokeType="OUTSIDE" width="300.0" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" />-->
-
 <!--				<Rectangle translateZ="-Infinity" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="480.0" onMouseClicked="#td_mouseClick" stroke="BLACK" strokeType="OUTSIDE" width="640" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0" />-->
 
 				<Button  mnemonicParsing="false" onAction="#handleMenuItemClick" prefHeight="70.0" prefWidth="300.0" text="TRANSFER" AnchorPane.bottomAnchor="140.0" AnchorPane.leftAnchor="0.0" ><font><Font size="24.0" /></font></Button>

@@ -8,6 +8,7 @@ import AppKickstarter.misc.*;
 //======================================================================
 // TouchDisplayHandler
 public class TouchDisplayHandler extends HWHandler {
+
     //------------------------------------------------------------
     // TouchDisplayHandler
     public TouchDisplayHandler(String id, AppKickstarter appKickstarter) throws Exception {
@@ -33,6 +34,10 @@ public class TouchDisplayHandler extends HWHandler {
 
             case TD_ClearPinText:
                 handleClearPinText();
+                break;
+
+            case BZ_PLAY:
+                atmss.send(new Msg(id, mbox, Msg.Type.BZ_PLAY, msg.getDetails()));
                 break;
 
             default:

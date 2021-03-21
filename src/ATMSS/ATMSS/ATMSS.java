@@ -4,6 +4,13 @@ import ATMSS.Account.Account;
 import AppKickstarter.AppKickstarter;
 import AppKickstarter.misc.*;
 import AppKickstarter.timer.Timer;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 //======================================================================
@@ -16,6 +23,7 @@ public class ATMSS extends AppThread {
     private MBox collectorMBox;
     private MBox dispenserMBox;
     private MBox printerMBox;
+    private MBox buzzerMBox;
     private Account userAccount;
     private enum State {
     	WELCOME,
@@ -46,6 +54,7 @@ public class ATMSS extends AppThread {
 		collectorMBox = appKickstarter.getThread("CollectorHandler").getMBox();
 		dispenserMBox = appKickstarter.getThread("DispenserHandler").getMBox();
 		printerMBox = appKickstarter.getThread("PrinterHandler").getMBox();
+		buzzerMBox = appKickstarter.getThread("BuzzerHandler").getMBox();
 
 		userAccount = new Account();
 		isLoggedIn = false;
@@ -75,6 +84,10 @@ public class ATMSS extends AppThread {
 
 				case CR_CardInserted:
 					handleCardInserted(msg);
+					break;
+
+				case BZ_PLAY:
+					buzz(msg.getDetails());
 					break;
 
 				case TimesUp:
@@ -111,6 +124,7 @@ public class ATMSS extends AppThread {
 		collectorMBox.send(new Msg(id, mbox, Msg.Type.Poll, ""));
 		dispenserMBox.send(new Msg(id, mbox, Msg.Type.Poll, ""));
 		printerMBox.send(new Msg(id, mbox, Msg.Type.Poll, ""));
+		buzzerMBox.send(new Msg(id, mbox, Msg.Type.Poll, ""));
 	} // handleTimesUp
 
 
@@ -125,6 +139,7 @@ public class ATMSS extends AppThread {
 	// handleCardInserted
 	private void handleCardInserted(Msg msg) {
 		log.info("CardInserted: " + msg.getDetails());
+		buzz("beep");
 		userAccount.setCardNum(msg.getDetails());
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Pin"));
 		state = State.PIN;
@@ -145,6 +160,7 @@ public class ATMSS extends AppThread {
 	//------------------------------------------------------------
 	// handleAuth
 	private void handleAuth() {
+		buzz("beep");
 		if (!userAccount.isValid()) {
 			log.info("Invalid PIN: " + userAccount.getPin());
 			userAccount.setPin(null);
@@ -162,6 +178,7 @@ public class ATMSS extends AppThread {
 	//------------------------------------------------------------
 	// handleCancel
 	private void handleCancel() {
+		buzz("beep");
 		userAccount.reset();
 		cardReaderMBox.send(new Msg(id, mbox, Msg.Type.CR_EjectCard, ""));
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Welcome"));
@@ -217,6 +234,12 @@ public class ATMSS extends AppThread {
 			handleNumkeyPress(msg);
 		}
     } // processKeyPressed
+
+	//------------------------------------------------------------
+	// buzz
+	private void buzz(String variant) {
+		buzzerMBox.send(new Msg(id, mbox, Msg.Type.BZ_PLAY, variant));
+	} // buzz
 
 
     //------------------------------------------------------------

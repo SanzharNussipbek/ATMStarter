@@ -78,6 +78,8 @@ public class TouchDisplayEmulatorController {
     public void handleMenuItemClick(ActionEvent actionEvent) {
         log.info(id + ": menu item clicked");
 
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_PLAY, "button"));
+
         Button btn = (Button) actionEvent.getSource();
         String btnTxt = btn.getText();
 
