@@ -3,8 +3,11 @@ package ATMSS.TouchDisplayHandler.Emulator;
 import AppKickstarter.AppKickstarter;
 import AppKickstarter.misc.MBox;
 import AppKickstarter.misc.Msg;
+import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.util.logging.Logger;
@@ -19,8 +22,9 @@ public class TouchDisplayEmulatorController {
     private TouchDisplayEmulator touchDisplayEmulator;
     private MBox touchDisplayMBox;
     public TextField cardPin;
-    public Text title;
-    public Text subtitle;
+    public Text pin_title;
+    public Text pin_subtitle;
+    public Text menu_title;
 
 
     //------------------------------------------------------------
@@ -59,9 +63,50 @@ public class TouchDisplayEmulatorController {
         cardPin.setText("");
     } // clearCardPinText
 
+
+    //------------------------------------------------------------
+    // handleIncorrectPin
     protected void handleIncorrectPin() {
-        title.setText("Incorrect PIN");
-        title.setTranslateX(10);
-        subtitle.setVisible(true);
-    }
+        pin_title.setText("Incorrect PIN");
+        pin_title.setTranslateX(10);
+        pin_subtitle.setVisible(true);
+    } // handleIncorrectPin
+
+
+    //------------------------------------------------------------
+    // handleMenuItemClick
+    public void handleMenuItemClick(ActionEvent actionEvent) {
+        log.info(id + ": menu item clicked");
+
+        Button btn = (Button) actionEvent.getSource();
+        String btnTxt = btn.getText();
+
+        switch (btnTxt) {
+            case "TRANSFER":
+                menu_title.setTranslateX(-50.0);
+                menu_title.setText(btnTxt + " clicked");
+                break;
+
+            case "DEPOSIT":
+                menu_title.setText(btnTxt + " clicked");
+                break;
+
+            case "WITHDRAW":
+                menu_title.setText(btnTxt + " clicked");
+                break;
+
+            case "BALANCE":
+                menu_title.setText(btnTxt + " clicked");
+                break;
+
+            case "CANCEL":
+                menu_title.setText(btnTxt + " clicked");
+                break;
+
+            case "???":
+                menu_title.setText(btnTxt + " clicked");
+                break;
+        }
+    } // handleMenuItemClick
+
 } // TouchDisplayEmulatorController

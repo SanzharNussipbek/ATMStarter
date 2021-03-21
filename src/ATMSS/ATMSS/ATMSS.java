@@ -108,6 +108,9 @@ public class ATMSS extends AppThread {
 		cardReaderMBox.send(new Msg(id, mbox, Msg.Type.Poll, ""));
 		keypadMBox.send(new Msg(id, mbox, Msg.Type.Poll, ""));
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.Poll, ""));
+		collectorMBox.send(new Msg(id, mbox, Msg.Type.Poll, ""));
+		dispenserMBox.send(new Msg(id, mbox, Msg.Type.Poll, ""));
+		printerMBox.send(new Msg(id, mbox, Msg.Type.Poll, ""));
 	} // handleTimesUp
 
 
@@ -162,7 +165,9 @@ public class ATMSS extends AppThread {
 		userAccount.reset();
 		cardReaderMBox.send(new Msg(id, mbox, Msg.Type.CR_EjectCard, ""));
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Welcome"));
-		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_ClearPinText, "TD_ClearPinText"));
+		if (state == State.PIN || state == State.INCORRECT_PIN) {
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_ClearPinText, "TD_ClearPinText"));
+		}
 	} // handleCancel
 
 
@@ -177,7 +182,9 @@ public class ATMSS extends AppThread {
 	//------------------------------------------------------------
 	// handleErase
 	private void handleErase() {
-		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_ClearPinText, "TD_ClearPinText"));
+    	if (state == State.PIN || state == State.INCORRECT_PIN) {
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_ClearPinText, "TD_ClearPinText"));
+		}
 	} // handleErase
 
 

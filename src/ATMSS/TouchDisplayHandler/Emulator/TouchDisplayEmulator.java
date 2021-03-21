@@ -118,12 +118,14 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 		});
     } // reloadStage
 
+
 	//------------------------------------------------------------
 	// handleAppendPinText
 	protected void handleAppendPinText() {
 		log.info(id + ": update pin text");
 		touchDisplayEmulatorController.appendCardPinText();
 	} // handleAppendPinText
+
 
 	//------------------------------------------------------------
 	// handleClearPinText
@@ -132,8 +134,11 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 		touchDisplayEmulatorController.clearCardPinText();
 	} // handleClearPinText
 
+
+	//------------------------------------------------------------
+	// handleIncorrectPin
 	protected void handleIncorrectPin() {
 		log.info(id + ": Incorrect Pin");
 		touchDisplayEmulatorController.handleIncorrectPin();
-	}
+	} // handleIncorrectPin
 } // TouchDisplayEmulator
