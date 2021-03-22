@@ -235,6 +235,7 @@ public class ATMSS extends AppThread {
 		}
     } // processKeyPressed
 
+
 	//------------------------------------------------------------
 	// buzz
 	private void buzz(String variant) {
