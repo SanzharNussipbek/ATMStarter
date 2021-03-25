@@ -23,6 +23,10 @@ public class PrinterHandler extends HWHandler {
                 handlePrint(msg);
                 break;
 
+            case BZ_PLAY:
+                atmss.send(new Msg(id, mbox, Msg.Type.BZ_PLAY, msg.getDetails()));
+                break;
+
             default:
                 log.warning(id + ": unknown message type: [" + msg + "]");
         }

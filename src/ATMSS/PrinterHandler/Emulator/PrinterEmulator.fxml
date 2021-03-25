@@ -6,9 +6,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.text.Font?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="ATMSS.PrinterHandler.Emulator.PrinterEmulatorController"
             prefHeight="400.0" prefWidth="600.0">
-    <TextArea fx:id="printerOutput" editable="false" layoutX="20.0" layoutY="169.0" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20" />
+    <children>
+        <TextArea fx:id="printerOutput" editable="false" layoutX="20.0" layoutY="169.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20" />
+        <Button mnemonicParsing="false" onAction="#buttonPressed" prefHeight="30.0" prefWidth="360.0" text="Take out receipt" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0"><font><Font size="14.0" /></font></Button>
+    </children>
 </AnchorPane>
