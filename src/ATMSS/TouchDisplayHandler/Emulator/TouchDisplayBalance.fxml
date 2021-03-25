@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ATMSS.TouchDisplayHandler.Emulator.TouchDisplayEmulatorController"
+            prefHeight="400.0" prefWidth="600.0">
+    <children>
+        <AnchorPane prefHeight="480.0" prefWidth="640.0" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="20">
+            <children>
+                <Text fx:id="title" text="Do you require" AnchorPane.leftAnchor="265" AnchorPane.topAnchor="100"><font><Font size="36.0" /></font></Text>
+                <Text fx:id="subtitle" text="another service?" AnchorPane.leftAnchor="265" AnchorPane.topAnchor="120"><font><Font size="36.0" /></font></Text>
+                <Button mnemonicParsing="false" onAction="#handleReceiptChoiceClick" prefHeight="70.0" prefWidth="300.0" text="NO" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" ><font><Font size="24.0" /></font></Button>
+                <Button mnemonicParsing="false" onAction="#handleReceiptChoiceClick" prefHeight="70.0" prefWidth="300.0" text="YES" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" ><font><Font size="24.0" /></font></Button>
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

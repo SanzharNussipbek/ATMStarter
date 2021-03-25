@@ -111,4 +111,25 @@ public class TouchDisplayEmulatorController {
         }
     } // handleMenuItemClick
 
+    //------------------------------------------------------------
+    // handleReceiptChoiceClick
+    public void handleReceiptChoiceClick(ActionEvent actionEvent) {
+        log.info(id + ": receipt choice clicked");
+
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_PLAY, "button"));
+
+        Button btn = (Button) actionEvent.getSource();
+        String btnTxt = btn.getText();
+
+        switch (btnTxt) {
+            case "NO":
+                log.info(id + ": NO clicked");
+                break;
+
+            case "YES":
+                log.info(id + ": YES clicked");
+                break;
+        }
+    } // handleReceiptChoiceClick
+
 } // TouchDisplayEmulatorController
