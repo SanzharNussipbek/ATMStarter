@@ -36,7 +36,7 @@ public class BuzzerHandler extends HWHandler {
     //------------------------------------------------------------
     // play
     private void play(String audio) {
-        String audiofile = "C:\\Users\\snussipbek\\Desktop\\ATMStarter\\etc\\sounds\\" + audio + ".wav";
+        String audiofile = "etc\\sounds\\" + audio + ".wav";
         playSound(audiofile);
     } // play
 
