@@ -152,6 +152,30 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 
 
 	//------------------------------------------------------------
+	// handleCardInput
+	protected void handleCardInput(Msg msg) {
+		log.info(id + ": card input");
+		touchDisplayEmulatorController.handleCardInput(msg.getDetails());
+	} // handleCardInput
+
+
+	//------------------------------------------------------------
+	// handleGetAmount
+	protected void handleGetAmount() {
+		log.info(id + ": send amount");
+		touchDisplayEmulatorController.handleSendAmount();
+	} // handleGetAmount
+
+
+	//------------------------------------------------------------
+	// handleGetCard
+	protected void handleGetCard() {
+		log.info(id + ": send card number");
+		touchDisplayEmulatorController.handleSendCard();
+	} // handleGetCard
+
+
+	//------------------------------------------------------------
 	// handleAppendText
 	protected void handleAppendPinText() {
 		log.info(id + ": update pin text");

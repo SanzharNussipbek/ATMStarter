@@ -15,9 +15,9 @@
     <children>
         <AnchorPane prefHeight="480.0" prefWidth="640.0" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="20">
             <children>
-                <Text fx:id="title" text="Would you like a receipt?" AnchorPane.leftAnchor="265" AnchorPane.topAnchor="100"><font><Font size="36.0" /></font></Text>
-                <Button mnemonicParsing="false" onAction="#handleReceiptChoiceClick" prefHeight="70.0" prefWidth="300.0" text="NO" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" ><font><Font size="24.0" /></font></Button>
-                <Button mnemonicParsing="false" onAction="#handleReceiptChoiceClick" prefHeight="70.0" prefWidth="300.0" text="YES" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" ><font><Font size="24.0" /></font></Button>
+                <Text fx:id="title" text="Would you like a receipt?" AnchorPane.leftAnchor="200" AnchorPane.topAnchor="100"><font><Font size="36.0" /></font></Text>
+                <Button mnemonicParsing="false" onAction="#handleReceiptChoiceClick" prefHeight="70.0" prefWidth="300.0" text="NO" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" ><font><Font size="24.0" /></font></Button>
+                <Button mnemonicParsing="false" onAction="#handleReceiptChoiceClick" prefHeight="70.0" prefWidth="300.0" text="YES" AnchorPane.bottomAnchor="40.0" AnchorPane.rightAnchor="0.0" ><font><Font size="24.0" /></font></Button>
             </children>
         </AnchorPane>
     </children>

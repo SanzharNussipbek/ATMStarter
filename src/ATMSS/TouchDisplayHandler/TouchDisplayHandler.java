@@ -60,10 +60,45 @@ public class TouchDisplayHandler extends HWHandler {
                 atmss.send(new Msg(id, mbox, Msg.Type.WITHDRAW_AMOUNT, msg.getDetails()));
                 break;
 
+            case TD_GetAmount:
+                handleGetAmount();
+                break;
+
+            case TD_CardInput:
+                handleCardInput(msg);
+                break;
+
+            case TD_GetCard:
+                handleGetCard();
+                break;
+
+            case TD_SendCard:
+                atmss.send(new Msg(id, mbox, Msg.Type.TD_SendCard, msg.getDetails()));
+                break;
+
             default:
                 log.warning(id + ": unknown message type: [" + msg + "]");
         }
     } // processMsg
+
+
+    //------------------------------------------------------------
+    // handleCardInput
+    protected void handleCardInput(Msg msg) { log.info(id + ": card input"); } // handleCardInput
+
+
+    //------------------------------------------------------------
+    // handleUpdateDisplay
+    protected void handleGetAmount() {
+        log.info(id + ": send amount");
+    } // processMsg
+
+
+    //------------------------------------------------------------
+    // handleGetAmount
+    protected void handleGetCard() {
+        log.info(id + ": send card number");
+    } // handleGetAmount
 
 
     //------------------------------------------------------------

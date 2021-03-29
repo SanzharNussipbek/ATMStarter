@@ -17,25 +17,25 @@
                     <Text fx:id="title100" text="HKD$100" AnchorPane.leftAnchor="200" AnchorPane.topAnchor="20"><font><Font size="18.0" /></font></Text>
                     <AnchorPane prefHeight="30.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="50.0">
                         <children>
-                            <Button fx:id="decrease100" mnemonicParsing="false" onAction="#buttonPressed" prefHeight="30.0" prefWidth="100.0" text="-" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0"><font><Font size="24.0" /></font></Button>
+                            <Button fx:id="decrease100" mnemonicParsing="false" onAction="#amountButtonPressed" prefHeight="30.0" prefWidth="100.0" text="-" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0"><font><Font size="24.0" /></font></Button>
                             <TextField fx:id="denomination100Input" alignment="CENTER" text="0" editable="false" prefHeight="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" ><font><Font size="18.0" /></font></TextField>
-                            <Button fx:id="increase100" mnemonicParsing="false" onAction="#buttonPressed" prefHeight="30.0" prefWidth="100.0" text="+" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"><font><Font size="24.0" /></font></Button>
+                            <Button fx:id="increase100" mnemonicParsing="false" onAction="#amountButtonPressed" prefHeight="30.0" prefWidth="100.0" text="+" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"><font><Font size="24.0" /></font></Button>
                         </children>
                     </AnchorPane>
                     <Text fx:id="title500" text="HKD$500" AnchorPane.leftAnchor="200" AnchorPane.topAnchor="120"><font><Font size="18.0" /></font></Text>
                     <AnchorPane prefHeight="30.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="150.0">
                         <children>
-                            <Button fx:id="decrease500" mnemonicParsing="false" onAction="#buttonPressed" prefHeight="30.0" prefWidth="100.0" text="-" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0"><font><Font size="24.0" /></font></Button>
+                            <Button fx:id="decrease500" mnemonicParsing="false" onAction="#amountButtonPressed" prefHeight="30.0" prefWidth="100.0" text="-" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0"><font><Font size="24.0" /></font></Button>
                             <TextField fx:id="denomination500Input" alignment="CENTER" text="0" editable="false" prefHeight="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" ><font><Font size="18.0" /></font></TextField>
-                            <Button fx:id="increase500" mnemonicParsing="false" onAction="#buttonPressed" prefHeight="30.0" prefWidth="100.0" text="+" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"><font><Font size="24.0" /></font></Button>
+                            <Button fx:id="increase500" mnemonicParsing="false" onAction="#amountButtonPressed" prefHeight="30.0" prefWidth="100.0" text="+" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"><font><Font size="24.0" /></font></Button>
                         </children>
                     </AnchorPane>
                     <Text fx:id="title1000" text="HKD$1000" AnchorPane.leftAnchor="200" AnchorPane.topAnchor="220"><font><Font size="18.0" /></font></Text>
                     <AnchorPane prefHeight="30.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="250.0">
                         <children>
-                            <Button fx:id="decrease1000" mnemonicParsing="false" onAction="#buttonPressed" prefHeight="30.0" prefWidth="100.0" text="-" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0"><font><Font size="24.0" /></font></Button>
+                            <Button fx:id="decrease1000" mnemonicParsing="false" onAction="#amountButtonPressed" prefHeight="30.0" prefWidth="100.0" text="-" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0"><font><Font size="24.0" /></font></Button>
                             <TextField fx:id="denomination1000Input" alignment="CENTER" text="0" editable="false" prefHeight="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" ><font><Font size="18.0" /></font></TextField>
-                            <Button fx:id="increase1000" mnemonicParsing="false" onAction="#buttonPressed" prefHeight="30.0" prefWidth="100.0" text="+" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"><font><Font size="24.0" /></font></Button>
+                            <Button fx:id="increase1000" mnemonicParsing="false" onAction="#amountButtonPressed" prefHeight="30.0" prefWidth="100.0" text="+" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"><font><Font size="24.0" /></font></Button>
                         </children>
                     </AnchorPane>
                     <Text fx:id="totalCashTitle" text="Total Amount: HKD$" AnchorPane.leftAnchor="120" AnchorPane.topAnchor="320"><font><Font size="24.0" /></font></Text>

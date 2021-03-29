@@ -14,7 +14,7 @@
             <children>
                 <Text textAlignment="CENTER" fx:id="pin_title" text="Please enter PIN:" AnchorPane.leftAnchor="220" AnchorPane.topAnchor="150"><font><Font size="24.0" /></font></Text>
                 <Text textAlignment="CENTER"  visible="false" fx:id="pin_subtitle" text="Please try again" AnchorPane.leftAnchor="240" AnchorPane.topAnchor="180"><font><Font size="18.0" /></font></Text>
-                <TextField fx:id="cardPin" editable="false" prefWidth="90.0" AnchorPane.leftAnchor="260" AnchorPane.topAnchor="235"/>
+                <TextField fx:id="cardPin" editable="false" prefWidth="130.0" AnchorPane.leftAnchor="240" AnchorPane.topAnchor="235"><font><Font size="24.0" /></font></TextField>
             </children>
         </AnchorPane>
     </children>

@@ -59,7 +59,7 @@ public class CardReaderEmulatorController {
 				break;
 
 			case "Insert Card":
-				if (cardNumField.getText().length() != 0) {
+				if (isValidCardNum(cardNumField.getText())) {
 					cardReaderMBox.send(new Msg(id, cardReaderMBox, Msg.Type.CR_CardInserted, cardNumField.getText()));
 					cardReaderTextArea.appendText("Sending " + cardNumField.getText()+"\n");
 					cardStatusField.setText("Card Inserted");
@@ -92,4 +92,22 @@ public class CardReaderEmulatorController {
     public void appendTextArea(String status) {
 	cardReaderTextArea.appendText(status+"\n");
     } // appendTextArea
+
+
+	//------------------------------------------------------------
+	// isValidCardNum
+	private boolean isValidCardNum(String value) {
+		return numCount(value) == 16;
+	} // isValidCardNum
+
+
+	//------------------------------------------------------------
+	// numCount
+	private int numCount(String value) {
+		int counter = 0;
+		for (char ch : value.toCharArray()) {
+			counter += Character.isDigit(ch) ? 1 : 0;
+		}
+		return counter;
+	}// numCount
 } // CardReaderEmulatorController

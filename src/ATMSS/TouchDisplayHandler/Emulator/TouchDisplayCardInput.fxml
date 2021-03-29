@@ -15,7 +15,7 @@
             <children>
                 <Text textAlignment="CENTER" fx:id="title" text="Please enter card number:" AnchorPane.leftAnchor="200" AnchorPane.topAnchor="150"><font><Font size="24.0" /></font></Text>
                 <Text textAlignment="CENTER"  visible="false" fx:id="subtitle" text="Please try again" AnchorPane.leftAnchor="240" AnchorPane.topAnchor="180"><font><Font size="18.0" /></font></Text>
-                <MaskField mask="DDDD-DDDD-DDDD-DDDD" fx:id="cardNumber" editable="false" prefWidth="135.0" AnchorPane.leftAnchor="250" AnchorPane.topAnchor="235" />
+                <MaskField mask="DDDD-DDDD-DDDD-DDDD" fx:id="cardNumber" text="" editable="false" prefWidth="280.0" AnchorPane.leftAnchor="210" AnchorPane.topAnchor="235"><font><Font size="24.0" /></font></MaskField>
             </children>
         </AnchorPane>
     </children>

@@ -31,6 +31,7 @@ public class ATMSS extends AppThread {
 		INCORRECT_PIN,
 		MAIN_MENU,
 		AMOUNT_INPUT,
+		CARD_INPUT,
 	}
 	private boolean isLoggedIn;
 	private State state;
@@ -119,6 +120,10 @@ public class ATMSS extends AppThread {
 					handleWithdrawAmount(msg);
 					break;
 
+				case TD_SendCard:
+					handleReceiveTransferCard(msg.getDetails());
+					break;
+
 				default:
 					log.warning(id + ": unknown message type: [" + msg + "]");
 			}
@@ -130,12 +135,26 @@ public class ATMSS extends AppThread {
     } // run
 
 
+	//------------------------------------------------------------
+	// handleReceiveTransferCard
+	private void handleReceiveTransferCard(String cardNumber) {
+		log.info(id + ": received card number: " + cardNumber);
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AmountInput"));
+		state = State.AMOUNT_INPUT;
+	} // handleReceiveTransferCard
+
+
+	//------------------------------------------------------------
+	// handleWithdrawAmount
 	private void handleWithdrawAmount(Msg msg) {
 		if (msg.getDetails().equals("Other")) {
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AmountInput"));
 			state = State.AMOUNT_INPUT;
+			return;
 		}
-	}
+
+		log.info(id + ": withdraw amount HKD$" + msg.getDetails());
+	} // handleWithdrawAmount
 
 
 	//------------------------------------------------------------
@@ -165,6 +184,11 @@ public class ATMSS extends AppThread {
 
 			case "TRANSFER":
 				touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "CardInput"));
+				state = State.CARD_INPUT;
+				break;
+
+			case "CANCEL":
+				handleCancel();
 				break;
 
 			default:
@@ -193,6 +217,8 @@ public class ATMSS extends AppThread {
 	// initWelcomeScreen
 	private void initWelcomeScreen() {
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Welcome"));
+//		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "CardInput"));
+//		state = State.CARD_INPUT;
 	} // initWelcomeScreen
 
 
@@ -254,6 +280,12 @@ public class ATMSS extends AppThread {
 		if (state == State.PIN || state == State.INCORRECT_PIN) {
 			handleAuth();
 		}
+		if (state == State.AMOUNT_INPUT) {
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_GetAmount, ""));
+		}
+		if (state == State.CARD_INPUT) {
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_GetCard, ""));
+		}
 	} // handleEnter
 
 
@@ -269,11 +301,11 @@ public class ATMSS extends AppThread {
 	//------------------------------------------------------------
 	// handleNumkeyPress
 	private void handleNumkeyPress(Msg msg) {
-    	if (state == State.WELCOME || state == State.MAIN_MENU) return;
-
     	if (msg.getDetails().compareToIgnoreCase("00") == 0) return;
 
-    	if (state == State.PIN) {
+    	if (state == State.WELCOME || state == State.MAIN_MENU) return;
+
+    	if (state == State.PIN || state == State.INCORRECT_PIN) {
 			handleSetAccountPin(msg.getDetails());
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_AppendPinText, "pin"));
 			return;
@@ -281,6 +313,12 @@ public class ATMSS extends AppThread {
 
     	if (state == State.AMOUNT_INPUT) {
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_AppendAmountText, msg.getDetails()));
+			return;
+		}
+
+    	if (state == State.CARD_INPUT) {
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_CardInput, msg.getDetails()));
+			return;
 		}
 	} // handleNumkeyPress
 

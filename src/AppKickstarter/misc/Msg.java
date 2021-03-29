@@ -103,5 +103,9 @@ public class Msg {
         /** Account */                      ACCOUNT,
         /** Cancel */                       CANCEL,
         /** Withdraw Amount */              WITHDRAW_AMOUNT,
+        /** Get Amount */                   TD_GetAmount,
+        /** Get Card */                     TD_GetCard,
+        /** Send Card */                    TD_SendCard,
+        /** Card Input */                   TD_CardInput,
     } // Type
 } // Msg
