@@ -91,6 +91,7 @@ public class Msg {
         /** Update Display */			    TD_UpdateDisplay,
         /** Mouse Clicked */			    TD_MouseClicked,
         /** Append PIN Text*/			    TD_AppendPinText,
+        /** Append Amount Text*/            TD_AppendAmountText,
         /** Clear PIN Text*/			    TD_ClearPinText,
         /** Card inserted */			    CR_CardInserted,
         /** Card removed */			        CR_CardRemoved,
@@ -98,5 +99,9 @@ public class Msg {
         /** Key pressed */			        KP_KeyPressed,
         /** Printer Print */		        PR_PRINT,
         /** Buzzer play */                  BZ_PLAY,
+        /** Main Menu Item */               MAIN_MENU_ITEM,
+        /** Account */                      ACCOUNT,
+        /** Cancel */                       CANCEL,
+        /** Withdraw Amount */              WITHDRAW_AMOUNT,
     } // Type
 } // Msg

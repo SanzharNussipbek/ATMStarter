@@ -85,6 +85,38 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 				reloadStage("TouchDisplayConfirmation.fxml");
 				break;
 
+			case "AccountList":
+				reloadStage("TouchDisplayAccountList.fxml");
+				break;
+
+			case "AmountInput":
+				reloadStage("TouchDisplayAmountInput.fxml");
+				break;
+
+			case "Balance":
+				reloadStage("TouchDisplayBalance.fxml");
+				break;
+
+			case "CardInput":
+				reloadStage("TouchDisplayCardInput.fxml");
+				break;
+
+			case "RemoveCard":
+				reloadStage("TouchDisplayRemoveCard.fxml");
+				break;
+
+			case "RemoveCash":
+				reloadStage("TouchDisplayRemoveCash.fxml");
+				break;
+
+			case "ReceiptChoice":
+				reloadStage("TouchDisplayReceiptChoice.fxml");
+				break;
+
+			case "WithdrawAmount":
+				reloadStage("TouchDisplayWithdrawAmountList.fxml");
+				break;
+
 			default:
 				log.severe(id + ": update display with unknown display type -- " + msg.getDetails());
 				break;
@@ -120,11 +152,19 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 
 
 	//------------------------------------------------------------
-	// handleAppendPinText
+	// handleAppendText
 	protected void handleAppendPinText() {
 		log.info(id + ": update pin text");
 		touchDisplayEmulatorController.appendCardPinText();
-	} // handleAppendPinText
+	} // handleAppendText
+
+
+	//------------------------------------------------------------
+	// handleAppendAmountText
+	protected void handleAppendAmountText(Msg msg) {
+		log.info(id + ": update amount text");
+		touchDisplayEmulatorController.appendAmountText(msg.getDetails());
+	} // handleAppendAmountText
 
 
 	//------------------------------------------------------------

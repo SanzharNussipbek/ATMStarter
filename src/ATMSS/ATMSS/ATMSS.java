@@ -30,6 +30,7 @@ public class ATMSS extends AppThread {
 		PIN,
 		INCORRECT_PIN,
 		MAIN_MENU,
+		AMOUNT_INPUT,
 	}
 	private boolean isLoggedIn;
 	private State state;
@@ -102,6 +103,22 @@ public class ATMSS extends AppThread {
 					quit = true;
 					break;
 
+				case MAIN_MENU_ITEM:
+					handleMainMenuItemClick(msg);
+					break;
+
+				case ACCOUNT:
+					handleAccountClick(msg);
+					break;
+
+				case CANCEL:
+					handleCancel();
+					break;
+
+				case WITHDRAW_AMOUNT:
+					handleWithdrawAmount(msg);
+					break;
+
 				default:
 					log.warning(id + ": unknown message type: [" + msg + "]");
 			}
@@ -111,6 +128,50 @@ public class ATMSS extends AppThread {
 		appKickstarter.unregThread(this);
 		log.info(id + ": terminating...");
     } // run
+
+
+	private void handleWithdrawAmount(Msg msg) {
+		if (msg.getDetails().equals("Other")) {
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AmountInput"));
+			state = State.AMOUNT_INPUT;
+		}
+	}
+
+
+	//------------------------------------------------------------
+	// handleAccountClick
+	private void handleAccountClick(Msg msg) {
+		log.info(id + ": Account chosen: [" + msg.getDetails() + "]");
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "MainMenu"));
+	} // handleAccountClick
+
+
+	//------------------------------------------------------------
+	// handleMainMenuItemClick
+	private void handleMainMenuItemClick(Msg msg) {
+		log.info(id + ": Main Menu Item clicked [" + msg.getDetails() + "]");
+
+		switch (msg.getDetails()) {
+			case "WITHDRAW":
+				touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "WithdrawAmount"));
+				break;
+
+			case "DEPOSIT":
+				break;
+
+			case "BALANCE":
+				touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Balance"));
+				break;
+
+			case "TRANSFER":
+				touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "CardInput"));
+				break;
+
+			default:
+				log.info(id + ": unknown menu item " + msg.getDetails());
+				break;
+		}
+	} // handleMainMenuItemClick
 
 
 	//------------------------------------------------------------
@@ -171,7 +232,7 @@ public class ATMSS extends AppThread {
 		}
 		log.info("Authorize account: " + userAccount.toString());
 		state = State.MAIN_MENU;
-		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "MainMenu"));
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AccountList"));
 	} // handleAuth
 
 
@@ -209,9 +270,18 @@ public class ATMSS extends AppThread {
 	// handleNumkeyPress
 	private void handleNumkeyPress(Msg msg) {
     	if (state == State.WELCOME || state == State.MAIN_MENU) return;
-		if (msg.getDetails().compareToIgnoreCase("00") == 0) return;
-		handleSetAccountPin(msg.getDetails());
-		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_AppendPinText, "TD_AppendPinText"));
+
+    	if (msg.getDetails().compareToIgnoreCase("00") == 0) return;
+
+    	if (state == State.PIN) {
+			handleSetAccountPin(msg.getDetails());
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_AppendPinText, "pin"));
+			return;
+		}
+
+    	if (state == State.AMOUNT_INPUT) {
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_AppendAmountText, msg.getDetails()));
+		}
 	} // handleNumkeyPress
 
 

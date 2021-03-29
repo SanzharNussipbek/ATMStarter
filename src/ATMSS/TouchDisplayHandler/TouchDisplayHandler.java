@@ -32,12 +32,32 @@ public class TouchDisplayHandler extends HWHandler {
                 handleAppendPinText();
                 break;
 
+            case TD_AppendAmountText:
+                handleAppendAmountText(msg);
+                break;
+
             case TD_ClearPinText:
                 handleClearPinText();
                 break;
 
             case BZ_PLAY:
                 atmss.send(new Msg(id, mbox, Msg.Type.BZ_PLAY, msg.getDetails()));
+                break;
+
+            case MAIN_MENU_ITEM:
+                atmss.send(new Msg(id, mbox, Msg.Type.MAIN_MENU_ITEM, msg.getDetails()));
+                break;
+
+            case ACCOUNT:
+                atmss.send(new Msg(id, mbox, Msg.Type.ACCOUNT, msg.getDetails()));
+                break;
+
+            case CANCEL:
+                atmss.send(new Msg(id, mbox, Msg.Type.CANCEL, msg.getDetails()));
+                break;
+
+            case WITHDRAW_AMOUNT:
+                atmss.send(new Msg(id, mbox, Msg.Type.WITHDRAW_AMOUNT, msg.getDetails()));
                 break;
 
             default:
@@ -58,6 +78,12 @@ public class TouchDisplayHandler extends HWHandler {
     protected void handleAppendPinText() {
         log.info(id + ": update pin text");
     } // handleAppendPinText
+
+    //------------------------------------------------------------
+    // handleAppendAmountText
+    protected void handleAppendAmountText(Msg msg) {
+        log.info(id + ": update amount text");
+    } // handleAppendAmountText
 
 
     //------------------------------------------------------------

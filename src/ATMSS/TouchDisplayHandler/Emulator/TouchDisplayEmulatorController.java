@@ -25,6 +25,11 @@ public class TouchDisplayEmulatorController {
     public Text pin_title;
     public Text pin_subtitle;
     public Text menu_title;
+    public TextField amount;
+    public TextField denomination100Input;
+    public TextField denomination500Input;
+    public TextField denomination1000Input;
+    public Text totalCash;
 
 
     //------------------------------------------------------------
@@ -55,6 +60,12 @@ public class TouchDisplayEmulatorController {
         if (cardPin.getText().length() >= 12) return;
         cardPin.appendText("* ");
     } // appendCardPinText
+
+    //------------------------------------------------------------
+    // appendAmountText
+    public void appendAmountText(String value) {
+        amount.appendText(value);
+    } // appendAmountText
 
 
     //------------------------------------------------------------
@@ -109,6 +120,8 @@ public class TouchDisplayEmulatorController {
                 menu_title.setText(btnTxt + " clicked");
                 break;
         }
+
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.MAIN_MENU_ITEM, btnTxt));
     } // handleMenuItemClick
 
     //------------------------------------------------------------
@@ -124,6 +137,7 @@ public class TouchDisplayEmulatorController {
         switch (btnTxt) {
             case "NO":
                 log.info(id + ": NO clicked");
+                touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.CANCEL, "receipt_no"));
                 break;
 
             case "YES":
@@ -132,4 +146,124 @@ public class TouchDisplayEmulatorController {
         }
     } // handleReceiptChoiceClick
 
+
+    //------------------------------------------------------------
+    // handleAccountClick
+    public void handleAccountClick(ActionEvent actionEvent) {
+        log.info(id + ": account clicked");
+
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_PLAY, "button"));
+
+        Button btn = (Button) actionEvent.getSource();
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.ACCOUNT, btn.getText()));
+
+    } // handleAccountClick
+
+
+    //------------------------------------------------------------
+    // handleWithdrawAmountClick
+    public void handleWithdrawAmountClick(ActionEvent actionEvent) {
+        log.info(id + ": withdraw amount clicked");
+
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_PLAY, "button"));
+
+        Button btn = (Button) actionEvent.getSource();
+        String btnTxt = btn.getText();
+
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.WITHDRAW_AMOUNT, btnTxt));
+    } // handleWithdrawAmountClick
+
+
+    public void buttonPressed(ActionEvent actionEvent) {
+        Button btn = (Button) actionEvent.getSource();
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_PLAY, "button"));
+
+        switch (btn.getId()) {
+
+            case "decrease100":
+                handleDecreaseDenomination(100);
+                break;
+
+            case "decrease500":
+                handleDecreaseDenomination(500);
+                break;
+
+            case "decrease1000":
+                handleDecreaseDenomination(1000);
+                break;
+
+            case "increase100":
+                handleIncreaseDenomination(100);
+                break;
+
+            case "increase500":
+                handleIncreaseDenomination(500);
+                break;
+
+            case "increase1000":
+                handleIncreaseDenomination(1000);
+                break;
+
+            default:
+                log.warning(id + ": unknown button: [" + btn.getText() + "]");
+                break;
+        }
+    }
+
+    //------------------------------------------------------------
+    // handleDecreaseDenomination
+    public void handleDecreaseDenomination(int nominal) {
+        log.info(id + ": decrease number of denomination " + nominal);
+
+        int value;
+        switch (nominal) {
+            case 100:
+                value = Integer.parseInt(denomination100Input.getText());
+                if (value == 0) return;
+                denomination100Input.setText(String.valueOf(value-1));
+                break;
+
+            case 500:
+                value = Integer.parseInt(denomination500Input.getText());
+                if (value == 0) return;
+                denomination500Input.setText(String.valueOf(value-1));
+                break;
+
+            case 1000:
+                value = Integer.parseInt(denomination1000Input.getText());
+                if (value == 0) return;
+                denomination1000Input.setText(String.valueOf(value-1));
+                break;
+        }
+
+        int prevAmount = Integer.parseInt(totalCash.getText());
+        totalCash.setText(String.valueOf(prevAmount - nominal));
+    } // handleDecreaseDenomination
+
+
+    //------------------------------------------------------------
+    // handleIncreaseDenomination
+    public void handleIncreaseDenomination(int nominal) {
+        log.info(id + ": increase number of denomination " + nominal);
+
+        int value;
+        switch (nominal) {
+            case 100:
+                value = Integer.parseInt(denomination100Input.getText());
+                denomination100Input.setText(String.valueOf(value+1));
+                break;
+
+            case 500:
+                value = Integer.parseInt(denomination500Input.getText());
+                denomination500Input.setText(String.valueOf(value+1));
+                break;
+
+            case 1000:
+                value = Integer.parseInt(denomination1000Input.getText());
+                denomination1000Input.setText(String.valueOf(value+1));
+                break;
+        }
+        int prevAmount = Integer.parseInt(totalCash.getText());
+        totalCash.setText(String.valueOf(prevAmount + nominal));
+    } // handleIncreaseDenomination
 } // TouchDisplayEmulatorController
