@@ -117,6 +117,10 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 				reloadStage("TouchDisplayWithdrawAmountList.fxml");
 				break;
 
+			case "InsertCash":
+				reloadStage("TouchDisplayInsertCash.fxml");
+				break;
+
 			default:
 				log.severe(id + ": update display with unknown display type -- " + msg.getDetails());
 				break;
@@ -149,6 +153,14 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 			}
 		});
     } // reloadStage
+
+
+	//------------------------------------------------------------
+	// handleCashReceived
+	protected void handleCashReceived() {
+    	log.info(id + ": cash received");
+		touchDisplayEmulatorController.handleCashReceived();
+    } // handleCashReceived
 
 
 	//------------------------------------------------------------

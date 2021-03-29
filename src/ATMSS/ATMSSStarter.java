@@ -85,7 +85,7 @@ public class ATMSSStarter extends AppKickstarter {
 		new Thread(cardReaderHandler).start();
 		new Thread(keypadHandler).start();
 		new Thread(touchDisplayHandler).start();
-//		new Thread(collectorHandler).start();
+		new Thread(collectorHandler).start();
 //		new Thread(dispenserHandler).start();
 //		new Thread(printerHandler).start();
 		new Thread(buzzerHandler).start();

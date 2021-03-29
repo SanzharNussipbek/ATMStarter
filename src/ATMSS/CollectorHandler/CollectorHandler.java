@@ -19,6 +19,18 @@ public class CollectorHandler extends HWHandler {
     // processMsg
     protected void processMsg(Msg msg) {
         switch (msg.getType()) {
+            case TD_GetAmount:
+                handleGetAmount();
+                break;
+
+            case AmountInput:
+                atmss.send(new Msg(id, mbox, Msg.Type.AmountInput, msg.getDetails()));
+                break;
+
+            case Reset:
+                handleReset();
+                break;
+
             case BZ_PLAY:
                 atmss.send(new Msg(id, mbox, Msg.Type.BZ_PLAY, msg.getDetails()));
                 break;
@@ -27,4 +39,18 @@ public class CollectorHandler extends HWHandler {
                 log.warning(id + ": unknown message type: [" + msg + "]");
         }
     } // processMsg
+
+    //------------------------------------------------------------
+    // handleGetAmount
+    protected void handleGetAmount() {
+        log.info(id + ": ready to receive cash");
+    } // handleGetAmount
+
+
+    //------------------------------------------------------------
+    // handleReset
+    protected void handleReset() {
+        log.info(id + ": reset");
+    } // handleReset
+
 } // CollectorHandler

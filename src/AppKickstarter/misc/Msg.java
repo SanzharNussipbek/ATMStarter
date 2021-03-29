@@ -107,5 +107,9 @@ public class Msg {
         /** Get Card */                     TD_GetCard,
         /** Send Card */                    TD_SendCard,
         /** Card Input */                   TD_CardInput,
+        TD_MainMenu,
+        AmountInput,
+        Reset,
+        CashReceived,
     } // Type
 } // Msg

@@ -49,5 +49,20 @@ public class CollectorEmulator extends CollectorHandler {
         });
         myStage.show();
     } // CollectorEmulator
+
+    //------------------------------------------------------------
+    // handleGetAmount
+    protected void handleGetAmount() {
+        log.info(id + ": ready to receive cash");
+        collectorEmulatorController.getReady();
+    } // handleGetAmount
+
+
+    //------------------------------------------------------------
+    // handleReset
+    protected void handleReset() {
+        log.info(id + ": reset");
+        collectorEmulatorController.reset();
+    } // handleReset
 } // CollectorEmulator
 

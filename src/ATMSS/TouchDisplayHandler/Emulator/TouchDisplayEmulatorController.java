@@ -30,6 +30,7 @@ public class TouchDisplayEmulatorController {
     public TextField denomination500Input;
     public TextField denomination1000Input;
     public Text totalCash;
+    public Text insertCashTitle;
     public TextField cardNumber;
 
 
@@ -53,6 +54,11 @@ public class TouchDisplayEmulatorController {
         log.fine(id + ": mouse clicked: -- (" + x + ", " + y + ")");
         touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.TD_MouseClicked, x + " " + y));
     } // td_mouseClick
+
+
+    public void handleCashReceived() {
+        insertCashTitle.setText("Cash Received");
+    }
 
 
     //------------------------------------------------------------
@@ -114,6 +120,7 @@ public class TouchDisplayEmulatorController {
 
             case "YES":
                 log.info(id + ": YES clicked");
+                touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.TD_MainMenu, ""));
                 break;
         }
     } // handleReceiptChoiceClick
@@ -122,7 +129,7 @@ public class TouchDisplayEmulatorController {
     //------------------------------------------------------------
     // handleSendAmount
     public void handleSendAmount() {
-        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.WITHDRAW_AMOUNT, totalCash.getText()));
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.AmountInput, totalCash.getText()));
     } // handleSendAmount
 
 

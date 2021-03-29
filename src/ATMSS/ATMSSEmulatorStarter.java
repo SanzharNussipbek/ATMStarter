@@ -80,7 +80,7 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
 				keypadEmulator.start();
 				cardReaderEmulator.start();
 				touchDisplayEmulator.start();
-//				collectorEmulator.start();
+				collectorEmulator.start();
 //				dispenserEmulator.start();
 //				printerEmulator.start();
 			} catch (Exception e) {
@@ -104,7 +104,7 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
 			new Thread(cardReaderEmulator).start();
 			new Thread(keypadEmulator).start();
 			new Thread(touchDisplayEmulator).start();
-//			new Thread(collectorEmulator).start();
+			new Thread(collectorEmulator).start();
 //			new Thread(dispenserEmulator).start();
 //			new Thread(printerEmulator).start();
 			new Thread(buzzerEmulator).start();

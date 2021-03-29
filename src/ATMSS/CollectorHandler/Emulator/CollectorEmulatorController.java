@@ -24,6 +24,7 @@ public class CollectorEmulatorController {
     public TextField denomination1000Input;
     public Text totalCash;
     public TextField collectorStatusField;
+    private String STATUS_READY = "Ready for deposit";
 
     //------------------------------------------------------------
     // initialize
@@ -34,6 +35,11 @@ public class CollectorEmulatorController {
         this.collectorEmulator = collectorEmulator;
         this.collectorMBox = appKickstarter.getThread("CollectorHandler").getMBox();
     } // initialize
+
+
+    public void getReady() {
+        collectorStatusField.setText(STATUS_READY);
+    }
 
 
     //------------------------------------------------------------
@@ -81,6 +87,8 @@ public class CollectorEmulatorController {
     //------------------------------------------------------------
     // handleInsertCash
     public void handleInsertCash() {
+        if (!collectorStatusField.getText().equals(STATUS_READY)) return;
+
         int value = Integer.parseInt(totalCash.getText());
         log.info(id + ": insert cash HKD$" + value);
 
@@ -90,6 +98,7 @@ public class CollectorEmulatorController {
         }
 
         collectorStatusField.setText("Received cash: HKD$" + value);
+        collectorMBox.send(new Msg(id, collectorMBox, Msg.Type.AmountInput, String.valueOf(value)));
     } // handleInsertCash
 
 
@@ -149,4 +158,12 @@ public class CollectorEmulatorController {
         int prevAmount = Integer.parseInt(totalCash.getText());
         totalCash.setText(String.valueOf(prevAmount + nominal));
     } // handleIncreaseDenomination
+
+
+    public void reset() {
+        collectorStatusField.setText("Closed");
+        denomination100Input.setText("0");
+        denomination500Input.setText("0");
+        denomination1000Input.setText("0");
+    }
 } // CollectorEmulatorController
