@@ -114,5 +114,7 @@ public class Msg {
         CashReceived,
         TD_GetBalance,
         TD_SendBalance,
+        Receipt,
+        AnotherService,
     } // Type
 } // Msg

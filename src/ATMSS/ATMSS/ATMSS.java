@@ -70,6 +70,14 @@ public class ATMSS extends AppThread {
 		initWelcomeScreen();
 	} // init
 
+
+	//------------------------------------------------------------
+	// initWelcomeScreen
+	private void initWelcomeScreen() {
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Welcome"));
+	} // initWelcomeScreen
+
+
     //------------------------------------------------------------
     // run
     public void run() {
@@ -141,6 +149,14 @@ public class ATMSS extends AppThread {
 					touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_SendBalance, "1000.0"));
 					break;
 
+				case Receipt:
+					handleReceipt(msg.getDetails());
+					break;
+
+				case AnotherService:
+					handleAnotherService(msg.getDetails());
+					break;
+
 				default:
 					log.warning(id + ": unknown message type: [" + msg + "]");
 					break;
@@ -165,6 +181,29 @@ public class ATMSS extends AppThread {
 	private void updateOperation(Operation newOperation) {
 		operation = newOperation;
 	} // updateOperation
+
+
+	private void restart() {
+    	updateState(State.WELCOME);
+    	updateOperation(Operation.NONE);
+	}
+
+
+	private void handleReceipt(String choice) {
+    	if (choice.equals("YES")) {
+			log.info(id + ": print receipt");
+		}
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AnotherService"));
+	}
+
+
+	private void handleAnotherService(String choice) {
+		if (choice.equals("YES")) {
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "MainMenu"));
+			return;
+		}
+		handleCancel();
+	}
 
 
 	//------------------------------------------------------------
@@ -194,6 +233,7 @@ public class ATMSS extends AppThread {
 	// handleTransfer
 	private void handleTransfer() {
 		log.info(id + ": TRANSFER HKD$" + transferAmount + " FROM [" + user.getCurrentAcc().getAccountNo() + "] TO [" + transferAcc + "]");
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "TransactionSuccess"));
 	} // handleTransfer
 
 
@@ -297,13 +337,6 @@ public class ATMSS extends AppThread {
 
 
 	//------------------------------------------------------------
-	// initWelcomeScreen
-	private void initWelcomeScreen() {
-		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Welcome"));
-	} // initWelcomeScreen
-
-
-	//------------------------------------------------------------
 	// handleCardInserted
 	private void handleCardInserted(Msg msg) {
 		log.info("CardInserted: " + msg.getDetails());
@@ -353,6 +386,7 @@ public class ATMSS extends AppThread {
 	// handleCancel
 	private void handleCancel() {
 		buzz("beep");
+		restart();
 		user.reset();
 		cardReaderMBox.send(new Msg(id, mbox, Msg.Type.CR_EjectCard, ""));
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Welcome"));

@@ -107,26 +107,30 @@ public class TouchDisplayEmulatorController {
         touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.MAIN_MENU_ITEM, btnTxt));
     } // handleMenuItemClick
 
+
     //------------------------------------------------------------
-    // handleReceiptChoiceClick
-    public void handleReceiptChoiceClick(ActionEvent actionEvent) {
-        log.info(id + ": receipt choice clicked");
+    // handleAnotherServiceClick
+    public void handleAnotherServiceClick(ActionEvent actionEvent) {
         touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_PLAY, "button"));
 
         Button btn = (Button) actionEvent.getSource();
         String btnTxt = btn.getText();
 
-        switch (btnTxt) {
-            case "NO":
-                log.info(id + ": NO clicked");
-                touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.CANCEL, "receipt_no"));
-                break;
+        log.info(id + ": another service choice [" + btnTxt + "]");
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.AnotherService, btnTxt));
+    } // handleAnotherServiceClick
 
-            case "YES":
-                log.info(id + ": YES clicked");
-                touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.TD_MainMenu, ""));
-                break;
-        }
+
+    //------------------------------------------------------------
+    // handleReceiptChoiceClick
+    public void handleReceiptChoiceClick(ActionEvent actionEvent) {
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_PLAY, "button"));
+
+        Button btn = (Button) actionEvent.getSource();
+        String btnTxt = btn.getText();
+
+        log.info(id + ": receipt choice [" + btnTxt + "]");
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.Receipt, btnTxt));
     } // handleReceiptChoiceClick
 
 

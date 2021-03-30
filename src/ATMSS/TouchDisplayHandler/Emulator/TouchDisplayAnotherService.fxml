@@ -15,8 +15,6 @@
     <children>
         <AnchorPane prefHeight="480.0" prefWidth="640.0" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="20">
             <children>
-                <Text fx:id="balance_title" text="Your balance is:" AnchorPane.leftAnchor="220" AnchorPane.topAnchor="70"><font><Font size="28.0" /></font></Text>
-                <Text fx:id="balance" text="" AnchorPane.leftAnchor="250" AnchorPane.topAnchor="110"><font><Font size="28.0" /></font></Text>
                 <Text text="Do you require" AnchorPane.leftAnchor="200" AnchorPane.topAnchor="180"><font><Font size="36.0" /></font></Text>
                 <Text text="another service?" AnchorPane.leftAnchor="195" AnchorPane.topAnchor="220"><font><Font size="36.0" /></font></Text>
                 <Button mnemonicParsing="false" onAction="#handleAnotherServiceClick" prefHeight="70.0" prefWidth="300.0" text="NO" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" ><font><Font size="24.0" /></font></Button>

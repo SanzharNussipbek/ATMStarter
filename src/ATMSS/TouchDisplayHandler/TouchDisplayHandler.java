@@ -100,6 +100,14 @@ public class TouchDisplayHandler extends HWHandler {
                 handleSetBalance(msg.getDetails());
                 break;
 
+            case Receipt:
+                atmss.send(new Msg(id, mbox, Msg.Type.Receipt, msg.getDetails()));
+                break;
+
+            case AnotherService:
+                atmss.send(new Msg(id, mbox, Msg.Type.AnotherService, msg.getDetails()));
+                break;
+
             default:
                 log.warning(id + ": unknown message type: [" + msg + "]");
                 break;
