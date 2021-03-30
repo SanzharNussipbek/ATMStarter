@@ -221,12 +221,21 @@ public class ATMSS extends AppThread {
 		}
 
 		if (operation == Operation.DEPOSIT) {
-			log.info(id + ": cash deposit received HKD$" + amount);
-			collectorMBox.send(new Msg(id, mbox, Msg.Type.Reset, ""));
-			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.CashReceived, ""));
+			handleDeposit(amount);
 			return;
 		}
 	} // handleAmountInput
+
+
+	private void handleDeposit(String amount) {
+		log.info(id + ": cash deposit received HKD$" + amount);
+		collectorMBox.send(new Msg(id, mbox, Msg.Type.Reset, ""));
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.CashReceived, ""));
+		boolean depositSuccess = true;
+		if (depositSuccess) {
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "DepositSuccess"));
+		}
+	}
 
 
 	//------------------------------------------------------------

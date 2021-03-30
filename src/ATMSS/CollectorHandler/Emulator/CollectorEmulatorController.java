@@ -165,5 +165,6 @@ public class CollectorEmulatorController {
         denomination100Input.setText("0");
         denomination500Input.setText("0");
         denomination1000Input.setText("0");
+        totalCash.setText("0");
     }
 } // CollectorEmulatorController
