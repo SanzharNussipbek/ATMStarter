@@ -80,4 +80,13 @@ public class User {
         }
         return result;
     }
+
+    public boolean hasAccount(String accountNo) {
+        for (Account acc : this.getAccounts()) {
+            if (acc.getAccountNo().equals(accountNo)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

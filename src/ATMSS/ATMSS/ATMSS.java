@@ -25,7 +25,7 @@ public class ATMSS extends AppThread {
 		INCORRECT_PIN,
 		MAIN_MENU,
 		AMOUNT_INPUT,
-		CARD_INPUT,
+		ACCOUNT_INPUT,
 		ACCOUNT_LIST,
 	}
 	private enum Operation {
@@ -37,7 +37,7 @@ public class ATMSS extends AppThread {
 	private boolean isLoggedIn;
 	private State state;
 	private Operation operation;
-	private String transferCard;
+	private String transferAcc;
 	private String transferAmount;
 
     //------------------------------------------------------------
@@ -65,7 +65,7 @@ public class ATMSS extends AppThread {
 		user = new User();
 		isLoggedIn = false;
 		updateState(State.WELCOME);
-		operation = Operation.NONE;
+		updateOperation(Operation.NONE);
 
 		initWelcomeScreen();
 	} // init
@@ -126,7 +126,7 @@ public class ATMSS extends AppThread {
 					break;
 
 				case TD_SendCard:
-					handleReceiveTransferCard(msg.getDetails());
+					handleReceiveTransferAcc(msg.getDetails());
 					break;
 
 				case TD_MainMenu:
@@ -148,11 +148,22 @@ public class ATMSS extends AppThread {
     } // run
 
 
+	//------------------------------------------------------------
+	// updateOperation
 	private void updateState(State newState) {
     	state = newState;
-	}
+	} // updateOperation
 
 
+	//------------------------------------------------------------
+	// updateOperation
+	private void updateOperation(Operation newOperation) {
+		operation = newOperation;
+	} // updateOperation
+
+
+	//------------------------------------------------------------
+	// handleReceiveTrahandleAmountInputnsferCard
 	private void handleAmountInput(String amount) {
     	if (operation == Operation.WITHDRAW) {
     		handleWithdrawAmount(amount);
@@ -171,19 +182,30 @@ public class ATMSS extends AppThread {
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.CashReceived, ""));
 			return;
 		}
-	}
+	} // handleAmountInput
 
 
+	//------------------------------------------------------------
+	// handleTransfer
 	private void handleTransfer() {
-		log.info(id + ": transfer HKD$" + transferAmount + " to [" + transferCard + "]");
-	}
+		log.info(id + ": TRANSFER HKD$" + transferAmount + " FROM [" + user.getCurrentAcc().getAccountNo() + "] TO [" + transferAcc + "]");
+	} // handleTransfer
 
 
 	//------------------------------------------------------------
 	// handleReceiveTransferCard
-	private void handleReceiveTransferCard(String cardNumber) {
-		log.info(id + ": received card number: " + cardNumber);
-		transferCard = cardNumber;
+	private void handleReceiveTransferAcc(String accountNo) {
+		log.info(id + ": received account number: " + accountNo);
+		/** boolean accountExists = user.hasAccount(accountNo); */
+		boolean accountExists = true;
+		if (!accountExists) {
+			handleCancel();
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "InvalidAccount"));
+			updateState(State.WELCOME);
+			updateOperation(Operation.NONE);
+			return;
+		}
+		transferAcc = accountNo;
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AmountInput"));
 		updateState(State.AMOUNT_INPUT);
 	} // handleReceiveTransferCard
@@ -224,13 +246,13 @@ public class ATMSS extends AppThread {
 		switch (msg.getDetails()) {
 			case "WITHDRAW":
 				touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "WithdrawAmount"));
-				operation = Operation.WITHDRAW;
+				updateOperation(Operation.WITHDRAW);
 				break;
 
 			case "DEPOSIT":
 				touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "InsertCash"));
 				collectorMBox.send(new Msg(id, mbox, Msg.Type.TD_GetAmount, "InsertCash"));
-				operation = Operation.DEPOSIT;
+				updateOperation(Operation.DEPOSIT);
 				break;
 
 			case "BALANCE":
@@ -238,9 +260,9 @@ public class ATMSS extends AppThread {
 				break;
 
 			case "TRANSFER":
-				touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "CardInput"));
-				operation = Operation.TRANSFER;
-				updateState(State.CARD_INPUT);
+				touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AccountInput"));
+				updateOperation(Operation.TRANSFER);
+				updateState(State.ACCOUNT_INPUT);
 				break;
 
 			case "CANCEL":
@@ -343,7 +365,7 @@ public class ATMSS extends AppThread {
 		if (state == State.AMOUNT_INPUT) {
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_GetAmount, ""));
 		}
-		if (state == State.CARD_INPUT) {
+		if (state == State.ACCOUNT_INPUT) {
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_GetCard, ""));
 		}
 	} // handleEnter
@@ -376,7 +398,7 @@ public class ATMSS extends AppThread {
 			return;
 		}
 
-    	if (state == State.CARD_INPUT) {
+    	if (state == State.ACCOUNT_INPUT) {
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_CardInput, msg.getDetails()));
 			return;
 		}

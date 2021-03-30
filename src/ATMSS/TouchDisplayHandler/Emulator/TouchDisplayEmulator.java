@@ -81,10 +81,6 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 				reloadStage("TouchDisplayMainMenu.fxml");
 				break;
 
-			case "Confirmation":
-				reloadStage("TouchDisplayConfirmation.fxml");
-				break;
-
 			case "AccountList":
 				reloadStage("TouchDisplayAccountList.fxml");
 				break;
@@ -97,8 +93,12 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 				reloadStage("TouchDisplayBalance.fxml");
 				break;
 
-			case "CardInput":
-				reloadStage("TouchDisplayCardInput.fxml");
+			case "AccountInput":
+				reloadStage("TouchDisplayAccountInput.fxml");
+				break;
+
+			case "InvalidAccount":
+				reloadStage("TouchDisplayInvalidAccount.fxml");
 				break;
 
 			case "RemoveCard":
