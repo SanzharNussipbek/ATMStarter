@@ -35,6 +35,7 @@ public class TouchDisplayEmulatorController {
     public Button firstAcc;
     public Button secondAcc;
     public Button thirdAcc;
+    public Text balance;
 
 
     //------------------------------------------------------------
@@ -278,12 +279,25 @@ public class TouchDisplayEmulatorController {
     public void handleSetAccountList(String accountList) {
         String[] accounts = accountList.split("/");
         /** There is a NullPointerException because this function is being executed before the display loads */
-        /**
-         * firstAcc.setText(accounts[0]);
-         * secondAcc.setText(accounts[1]);
-         * thirdAcc.setText(accounts[2]);
-         */
+        if (firstAcc == null || secondAcc == null || thirdAcc == null) return;
+        firstAcc.setText(accounts[0]);
+        secondAcc.setText(accounts[1]);
+        thirdAcc.setText(accounts[2]);
     } // handleSetAccountList
+
+
+    public void enquireBalance() {
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.TD_GetBalance, ""));
+    }
+
+
+    //------------------------------------------------------------
+    // setBalance
+    public void setBalance(String amount) {
+        /** There is a NullPointerException because this function is being executed before the display loads */
+        if (balance == null) return;
+        balance.setText("HKD$" + amount);
+    } // setBalance
 
 
     //------------------------------------------------------------

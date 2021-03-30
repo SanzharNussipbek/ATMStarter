@@ -92,11 +92,24 @@ public class TouchDisplayHandler extends HWHandler {
                 handleAccountList(msg.getDetails());
                 break;
 
+            case TD_GetBalance:
+                atmss.send(new Msg(id, mbox, Msg.Type.TD_GetBalance, msg.getDetails()));
+                break;
+
+            case TD_SendBalance:
+                handleSetBalance(msg.getDetails());
+                break;
+
             default:
                 log.warning(id + ": unknown message type: [" + msg + "]");
                 break;
         }
     } // processMsg
+
+
+    //------------------------------------------------------------
+    // handleSetBalance
+    protected void handleSetBalance(String balance) { log.info(id + ":show balance [" + balance + "]"); } // handleSetBalance
 
 
     //------------------------------------------------------------

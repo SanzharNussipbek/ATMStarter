@@ -112,5 +112,7 @@ public class Msg {
         AmountInput,
         Reset,
         CashReceived,
+        TD_GetBalance,
+        TD_SendBalance,
     } // Type
 } // Msg

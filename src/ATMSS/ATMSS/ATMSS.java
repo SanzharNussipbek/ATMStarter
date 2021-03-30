@@ -137,8 +137,13 @@ public class ATMSS extends AppThread {
 					handleAmountInput(msg.getDetails());
 					break;
 
+				case TD_GetBalance:
+					touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_SendBalance, "1000.0"));
+					break;
+
 				default:
 					log.warning(id + ": unknown message type: [" + msg + "]");
+					break;
 			}
 		}
 

@@ -1,118 +1,73 @@
-210330-15:07:14 [INFO] -- 
-210330-15:07:14 [INFO] -- 
-210330-15:07:14 [INFO] -- ============================================================
-210330-15:07:14 [INFO] -- ATMSSStarter: Application Starting...
-210330-15:07:17 [INFO] -- TouchDisplayHandler: starting...
-210330-15:07:17 [INFO] -- timer: starting...
-210330-15:07:17 [INFO] -- CardReaderHandler: starting...
-210330-15:07:17 [INFO] -- BuzzerHandler: starting...
-210330-15:07:17 [INFO] -- KeypadHandler: starting...
-210330-15:07:17 [INFO] -- ATMSS: starting...
-210330-15:07:17 [INFO] -- TouchDisplayHandler: update display -- Welcome
-210330-15:07:17 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayWelcome.fxml
-210330-15:07:24 [INFO] -- CardInserted: 1005-5001-1005-5001
-210330-15:07:24 [INFO] -- TouchDisplayHandler: update display -- Pin
-210330-15:07:24 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayPin.fxml
-210330-15:07:26 [INFO] -- KeyPressed: 6
-210330-15:07:26 [INFO] -- TouchDisplayHandler: update pin text
-210330-15:07:26 [INFO] -- KeyPressed: 6
-210330-15:07:26 [INFO] -- TouchDisplayHandler: update pin text
-210330-15:07:26 [INFO] -- KeyPressed: 6
-210330-15:07:26 [INFO] -- TouchDisplayHandler: update pin text
-210330-15:07:26 [INFO] -- KeyPressed: 6
-210330-15:07:26 [INFO] -- TouchDisplayHandler: update pin text
-210330-15:07:26 [INFO] -- KeyPressed: 6
-210330-15:07:26 [INFO] -- TouchDisplayHandler: update pin text
-210330-15:07:26 [INFO] -- KeyPressed: 6
-210330-15:07:26 [INFO] -- TouchDisplayHandler: update pin text
-210330-15:07:27 [INFO] -- KeyPressed: Enter
-210330-15:07:27 [INFO] -- Authorize account: Card Number: 1005-5001-1005-5001, Password: [666666]
-210330-15:07:27 [INFO] -- TouchDisplayHandler: update display -- AccountList
-210330-15:07:27 [INFO] -- TouchDisplayHandler: show accounts list [1111-1111-1111-1111/2222-2222-2222-2222/3333-3333-3333-3333]
-210330-15:07:27 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayAccountList.fxml
-210330-15:07:28 [INFO] -- TouchDisplayHandler: account clicked
-210330-15:07:28 [INFO] -- ATMSS: Account chosen: [0]
-210330-15:07:28 [INFO] -- ATMSS: Current Account: [1111-1111-1111-1111]
-210330-15:07:28 [INFO] -- TouchDisplayHandler: update display -- MainMenu
-210330-15:07:28 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayMainMenu.fxml
-210330-15:07:29 [INFO] -- TouchDisplayHandler: menu item clicked
-210330-15:07:29 [INFO] -- ATMSS: Main Menu Item clicked [TRANSFER]
-210330-15:07:29 [INFO] -- TouchDisplayHandler: update display -- AccountInput
-210330-15:07:29 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayAccountInput.fxml
-210330-15:07:30 [INFO] -- KeyPressed: 6
-210330-15:07:30 [INFO] -- TouchDisplayHandler: card input
-210330-15:07:30 [INFO] -- KeyPressed: 6
-210330-15:07:30 [INFO] -- TouchDisplayHandler: card input
-210330-15:07:30 [INFO] -- KeyPressed: 6
-210330-15:07:30 [INFO] -- TouchDisplayHandler: card input
-210330-15:07:30 [INFO] -- KeyPressed: 6
-210330-15:07:30 [INFO] -- TouchDisplayHandler: card input
-210330-15:07:30 [INFO] -- KeyPressed: 6
-210330-15:07:30 [INFO] -- TouchDisplayHandler: card input
-210330-15:07:30 [INFO] -- KeyPressed: 6
-210330-15:07:30 [INFO] -- TouchDisplayHandler: card input
-210330-15:07:31 [INFO] -- KeyPressed: 6
-210330-15:07:31 [INFO] -- TouchDisplayHandler: card input
-210330-15:07:31 [INFO] -- KeyPressed: 6
-210330-15:07:31 [INFO] -- TouchDisplayHandler: card input
-210330-15:07:31 [INFO] -- KeyPressed: 6
-210330-15:07:31 [INFO] -- TouchDisplayHandler: card input
-210330-15:07:31 [INFO] -- KeyPressed: 6
-210330-15:07:31 [INFO] -- TouchDisplayHandler: card input
-210330-15:07:31 [INFO] -- KeyPressed: 6
-210330-15:07:31 [INFO] -- TouchDisplayHandler: card input
-210330-15:07:31 [INFO] -- KeyPressed: 6
-210330-15:07:31 [INFO] -- TouchDisplayHandler: card input
-210330-15:07:31 [INFO] -- KeyPressed: 6
-210330-15:07:31 [INFO] -- TouchDisplayHandler: card input
-210330-15:07:31 [INFO] -- KeyPressed: 6
-210330-15:07:31 [INFO] -- TouchDisplayHandler: card input
-210330-15:07:32 [INFO] -- KeyPressed: 6
-210330-15:07:32 [INFO] -- TouchDisplayHandler: card input
-210330-15:07:32 [INFO] -- KeyPressed: 6
-210330-15:07:32 [INFO] -- TouchDisplayHandler: card input
-210330-15:07:33 [INFO] -- KeyPressed: Enter
-210330-15:07:33 [INFO] -- TouchDisplayHandler: send card number
-210330-15:07:33 [INFO] -- ATMSS: received card number: 6666-6666-6666-6666
-210330-15:07:33 [INFO] -- CardReaderHandler: card ejected
-210330-15:07:33 [INFO] -- TouchDisplayHandler: update display -- Welcome
-210330-15:07:33 [INFO] -- TouchDisplayHandler: update display -- InvalidAccount
-210330-15:07:33 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayWelcome.fxml
-210330-15:07:33 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayInvalidAccount.fxml
-210330-15:07:36 [INFO] -- CardReaderHandler: card removed
-210330-15:07:40 [INFO] -- CardInserted: 1005-5001-1005-5001
-210330-15:07:40 [INFO] -- TouchDisplayHandler: update display -- Pin
-210330-15:07:40 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayPin.fxml
-210330-15:07:45 [INFO] -- KeyPressed: 6
-210330-15:07:45 [INFO] -- TouchDisplayHandler: update pin text
-210330-15:07:45 [INFO] -- KeyPressed: 6
-210330-15:07:45 [INFO] -- TouchDisplayHandler: update pin text
-210330-15:07:45 [INFO] -- KeyPressed: 6
-210330-15:07:45 [INFO] -- TouchDisplayHandler: update pin text
-210330-15:07:45 [INFO] -- KeyPressed: 6
-210330-15:07:45 [INFO] -- TouchDisplayHandler: update pin text
-210330-15:07:45 [INFO] -- KeyPressed: 6
-210330-15:07:45 [INFO] -- TouchDisplayHandler: update pin text
-210330-15:07:46 [INFO] -- KeyPressed: 6
-210330-15:07:46 [INFO] -- TouchDisplayHandler: update pin text
-210330-15:07:46 [INFO] -- KeyPressed: Enter
-210330-15:07:46 [INFO] -- Authorize account: Card Number: 1005-5001-1005-5001, Password: [666666]
-210330-15:07:46 [INFO] -- TouchDisplayHandler: update display -- AccountList
-210330-15:07:46 [INFO] -- TouchDisplayHandler: show accounts list [1111-1111-1111-1111/2222-2222-2222-2222/3333-3333-3333-3333]
-210330-15:07:46 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayAccountList.fxml
-210330-15:07:47 [INFO] -- TouchDisplayHandler: account clicked
-210330-15:07:47 [INFO] -- ATMSS: Account chosen: [1]
-210330-15:07:47 [INFO] -- ATMSS: Current Account: [1111-1111-1111-1111]
-210330-15:07:47 [INFO] -- TouchDisplayHandler: update display -- MainMenu
-210330-15:07:47 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayMainMenu.fxml
-210330-15:07:49 [INFO] -- 
-210330-15:07:49 [INFO] -- 
-210330-15:07:49 [INFO] -- ============================================================
-210330-15:07:49 [INFO] -- ATMSSStarter: Application Stopping...
-210330-15:07:49 [INFO] -- ATMSS: terminating...
-210330-15:07:49 [INFO] -- CardReaderHandler: terminating...
-210330-15:07:49 [INFO] -- KeypadHandler: terminating...
-210330-15:07:49 [INFO] -- TouchDisplayHandler: terminating...
-210330-15:07:49 [INFO] -- BuzzerHandler: terminating...
-210330-15:07:49 [INFO] -- timer: received terminate!
-210330-15:07:49 [INFO] -- timer: terminating...
+210330-18:00:53 [INFO] -- 
+210330-18:00:53 [INFO] -- 
+210330-18:00:53 [INFO] -- ============================================================
+210330-18:00:53 [INFO] -- ATMSSStarter: Application Starting...
+210330-18:00:57 [INFO] -- TouchDisplayHandler: starting...
+210330-18:00:57 [INFO] -- KeypadHandler: starting...
+210330-18:00:57 [INFO] -- BuzzerHandler: starting...
+210330-18:00:57 [INFO] -- CardReaderHandler: starting...
+210330-18:00:57 [INFO] -- timer: starting...
+210330-18:00:57 [INFO] -- ATMSS: starting...
+210330-18:00:57 [INFO] -- TouchDisplayHandler: update display -- Welcome
+210330-18:00:57 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayWelcome.fxml
+210330-18:01:00 [INFO] -- CardInserted: 1005-5001-1005-5001
+210330-18:01:00 [INFO] -- TouchDisplayHandler: update display -- Pin
+210330-18:01:00 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayPin.fxml
+210330-18:01:02 [INFO] -- KeyPressed: 3
+210330-18:01:02 [INFO] -- TouchDisplayHandler: update pin text
+210330-18:01:02 [INFO] -- KeyPressed: 3
+210330-18:01:02 [INFO] -- TouchDisplayHandler: update pin text
+210330-18:01:02 [INFO] -- KeyPressed: 3
+210330-18:01:02 [INFO] -- TouchDisplayHandler: update pin text
+210330-18:01:02 [INFO] -- KeyPressed: 3
+210330-18:01:02 [INFO] -- TouchDisplayHandler: update pin text
+210330-18:01:02 [INFO] -- KeyPressed: 3
+210330-18:01:02 [INFO] -- TouchDisplayHandler: update pin text
+210330-18:01:02 [INFO] -- KeyPressed: 3
+210330-18:01:02 [INFO] -- TouchDisplayHandler: update pin text
+210330-18:01:03 [INFO] -- KeyPressed: Enter
+210330-18:01:03 [INFO] -- Authorize account: Card Number: 1005-5001-1005-5001, Password: [333333]
+210330-18:01:03 [INFO] -- TouchDisplayHandler: update display -- AccountList
+210330-18:01:03 [INFO] -- TouchDisplayHandler: show accounts list [1111-1111-1111-1111/2222-2222-2222-2222/3333-3333-3333-3333]
+210330-18:01:03 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayAccountList.fxml
+210330-18:01:04 [INFO] -- TouchDisplayHandler: account clicked
+210330-18:01:04 [INFO] -- ATMSS: Account chosen: [0]
+210330-18:01:04 [INFO] -- ATMSS: Current Account: [1111-1111-1111-1111]
+210330-18:01:04 [INFO] -- TouchDisplayHandler: update display -- MainMenu
+210330-18:01:04 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayMainMenu.fxml
+210330-18:01:05 [INFO] -- TouchDisplayHandler: menu item clicked
+210330-18:01:05 [INFO] -- ATMSS: Main Menu Item clicked [BALANCE]
+210330-18:01:05 [INFO] -- TouchDisplayHandler: update display -- Balance
+210330-18:01:05 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayBalance.fxml
+210330-18:01:05 [INFO] -- TouchDisplayHandler: show balance [1000.0]
+210330-18:01:06 [INFO] -- TouchDisplayHandler: receipt choice clicked
+210330-18:01:06 [INFO] -- TouchDisplayHandler: YES clicked
+210330-18:01:06 [INFO] -- TouchDisplayHandler: update display -- MainMenu
+210330-18:01:06 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayMainMenu.fxml
+210330-18:01:07 [INFO] -- TouchDisplayHandler: menu item clicked
+210330-18:01:07 [INFO] -- ATMSS: Main Menu Item clicked [BALANCE]
+210330-18:01:07 [INFO] -- TouchDisplayHandler: update display -- Balance
+210330-18:01:07 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayBalance.fxml
+210330-18:01:07 [INFO] -- TouchDisplayHandler: show balance [1000.0]
+210330-18:01:08 [INFO] -- TouchDisplayHandler: receipt choice clicked
+210330-18:01:08 [INFO] -- TouchDisplayHandler: YES clicked
+210330-18:01:08 [INFO] -- TouchDisplayHandler: update display -- MainMenu
+210330-18:01:08 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayMainMenu.fxml
+210330-18:01:08 [INFO] -- TouchDisplayHandler: menu item clicked
+210330-18:01:08 [INFO] -- ATMSS: Main Menu Item clicked [???]
+210330-18:01:08 [INFO] -- ATMSS: unknown menu item ???
+210330-18:01:10 [INFO] -- TouchDisplayHandler: menu item clicked
+210330-18:01:10 [INFO] -- ATMSS: Main Menu Item clicked [DEPOSIT]
+210330-18:01:10 [INFO] -- TouchDisplayHandler: update display -- InsertCash
+210330-18:01:10 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayInsertCash.fxml
+210330-18:01:12 [INFO] -- 
+210330-18:01:12 [INFO] -- 
+210330-18:01:12 [INFO] -- ============================================================
+210330-18:01:12 [INFO] -- ATMSSStarter: Application Stopping...
+210330-18:01:12 [INFO] -- ATMSS: terminating...
+210330-18:01:12 [INFO] -- CardReaderHandler: terminating...
+210330-18:01:12 [INFO] -- KeypadHandler: terminating...
+210330-18:01:12 [INFO] -- TouchDisplayHandler: terminating...
+210330-18:01:12 [INFO] -- BuzzerHandler: terminating...
+210330-18:01:12 [INFO] -- timer: received terminate!
+210330-18:01:12 [INFO] -- timer: terminating...
