@@ -88,11 +88,20 @@ public class TouchDisplayHandler extends HWHandler {
                 handleCashReceived();
                 break;
 
+            case TD_AccountList:
+                handleAccountList(msg.getDetails());
+                break;
+
             default:
                 log.warning(id + ": unknown message type: [" + msg + "]");
                 break;
         }
     } // processMsg
+
+
+    //------------------------------------------------------------
+    // handleAccountList
+    protected void handleAccountList(String accountList) { log.info(id + ": show accounts list [" + accountList + "]"); } // handleAccountList
 
 
     //------------------------------------------------------------

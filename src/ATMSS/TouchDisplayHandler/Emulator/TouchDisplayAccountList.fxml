@@ -12,9 +12,9 @@
             <children>
                 <Text fx:id="accounts_title" text="Accounts" AnchorPane.leftAnchor="265" AnchorPane.topAnchor="100"><font><Font size="36.0" /></font></Text>
 
-                <Button mnemonicParsing="false" onAction="#handleAccountClick" prefHeight="70.0" prefWidth="300.0" text="" AnchorPane.bottomAnchor="140.0" AnchorPane.rightAnchor="0.0" ><font><Font size="24.0" /></font></Button>
-                <Button mnemonicParsing="false" onAction="#handleAccountClick" prefHeight="70.0" prefWidth="300.0" text="" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="0.0" ><font><Font size="24.0" /></font></Button>
-                <Button mnemonicParsing="false" onAction="#handleAccountClick" prefHeight="70.0" prefWidth="300.0" text="" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" ><font><Font size="24.0" /></font></Button>
+                <Button fx:id="firstAcc" mnemonicParsing="false" onAction="#handleAccountClick" prefHeight="70.0" prefWidth="300.0" text="" AnchorPane.bottomAnchor="140.0" AnchorPane.rightAnchor="0.0" ><font><Font size="24.0" /></font></Button>
+                <Button fx:id="secondAcc" mnemonicParsing="false" onAction="#handleAccountClick" prefHeight="70.0" prefWidth="300.0" text="" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="0.0" ><font><Font size="24.0" /></font></Button>
+                <Button fx:id="thirdAcc" mnemonicParsing="false" onAction="#handleAccountClick" prefHeight="70.0" prefWidth="300.0" text="" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" ><font><Font size="24.0" /></font></Button>
             </children>
         </AnchorPane>
     </children>

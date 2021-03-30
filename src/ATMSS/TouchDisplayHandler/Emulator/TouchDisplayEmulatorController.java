@@ -32,6 +32,9 @@ public class TouchDisplayEmulatorController {
     public Text totalCash;
     public Text insertCashTitle;
     public TextField cardNumber;
+    public Button firstAcc;
+    public Button secondAcc;
+    public Button thirdAcc;
 
 
     //------------------------------------------------------------
@@ -147,7 +150,8 @@ public class TouchDisplayEmulatorController {
         touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_PLAY, "button"));
 
         Button btn = (Button) actionEvent.getSource();
-        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.ACCOUNT, btn.getText()));
+        String accIndex = btn.getId().equals("firstAcc") ? "0" : (btn.getId().equals("secondAcc") ? "1" : "2");
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.ACCOUNT, accIndex));
 
     } // handleAccountClick
 
@@ -267,6 +271,19 @@ public class TouchDisplayEmulatorController {
         int prevAmount = Integer.parseInt(totalCash.getText());
         totalCash.setText(String.valueOf(prevAmount + nominal));
     } // handleIncreaseDenomination
+
+
+    //------------------------------------------------------------
+    // handleSetAccountList
+    public void handleSetAccountList(String accountList) {
+        String[] accounts = accountList.split("/");
+        /** There is a NullPointerException because this function is being executed before the display loads */
+        /**
+         * firstAcc.setText(accounts[0]);
+         * secondAcc.setText(accounts[1]);
+         * thirdAcc.setText(accounts[2]);
+         */
+    } // handleSetAccountList
 
 
     //------------------------------------------------------------

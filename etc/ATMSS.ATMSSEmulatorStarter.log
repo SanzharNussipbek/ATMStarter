@@ -1,60 +1,50 @@
-210329-19:26:14 [INFO] -- 
-210329-19:26:14 [INFO] -- 
-210329-19:26:14 [INFO] -- ============================================================
-210329-19:26:14 [INFO] -- ATMSSStarter: Application Starting...
-210329-19:26:16 [INFO] -- timer: starting...
-210329-19:26:16 [INFO] -- ATMSS: starting...
-210329-19:26:16 [INFO] -- CardReaderHandler: starting...
-210329-19:26:16 [INFO] -- KeypadHandler: starting...
-210329-19:26:16 [INFO] -- TouchDisplayHandler: starting...
-210329-19:26:16 [INFO] -- CollectorHandler: starting...
-210329-19:26:16 [INFO] -- BuzzerHandler: starting...
-210329-19:26:16 [INFO] -- TouchDisplayHandler: update display -- Welcome
-210329-19:26:16 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayWelcome.fxml
-210329-19:26:20 [INFO] -- CardInserted: 4107-7014-4107-7014
-210329-19:26:20 [INFO] -- TouchDisplayHandler: update display -- Pin
-210329-19:26:20 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayPin.fxml
-210329-19:26:20 [INFO] -- KeyPressed: 5
-210329-19:26:20 [INFO] -- TouchDisplayHandler: update pin text
-210329-19:26:21 [INFO] -- KeyPressed: 5
-210329-19:26:21 [INFO] -- TouchDisplayHandler: update pin text
-210329-19:26:21 [INFO] -- KeyPressed: 5
-210329-19:26:21 [INFO] -- TouchDisplayHandler: update pin text
-210329-19:26:21 [INFO] -- KeyPressed: 5
-210329-19:26:21 [INFO] -- TouchDisplayHandler: update pin text
-210329-19:26:21 [INFO] -- KeyPressed: 5
-210329-19:26:21 [INFO] -- TouchDisplayHandler: update pin text
-210329-19:26:21 [INFO] -- KeyPressed: 5
-210329-19:26:21 [INFO] -- TouchDisplayHandler: update pin text
-210329-19:26:21 [INFO] -- KeyPressed: 5
-210329-19:26:21 [INFO] -- TouchDisplayHandler: update pin text
-210329-19:26:22 [INFO] -- KeyPressed: Enter
-210329-19:26:22 [INFO] -- Authorize account: Card Number: 4107-7014-4107-7014, Password: [555555]
-210329-19:26:22 [INFO] -- TouchDisplayHandler: update display -- AccountList
-210329-19:26:22 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayAccountList.fxml
-210329-19:26:22 [INFO] -- TouchDisplayHandler: account clicked
-210329-19:26:22 [INFO] -- ATMSS: Account chosen: []
-210329-19:26:22 [INFO] -- TouchDisplayHandler: update display -- MainMenu
-210329-19:26:22 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayMainMenu.fxml
-210329-19:26:23 [INFO] -- TouchDisplayHandler: menu item clicked
-210329-19:26:23 [INFO] -- ATMSS: Main Menu Item clicked [DEPOSIT]
-210329-19:26:23 [INFO] -- TouchDisplayHandler: update display -- InsertCash
-210329-19:26:23 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayInsertCash.fxml
-210329-19:26:23 [INFO] -- CollectorHandler: ready to receive cash
-210329-19:26:24 [INFO] -- CollectorHandler: increase number of denomination 1000
-210329-19:26:24 [INFO] -- CollectorHandler: insert cash HKD$1000
-210329-19:26:24 [INFO] -- ATMSS: cash deposit received HKD$1000
-210329-19:26:24 [INFO] -- TouchDisplayHandler: cash received
-210329-19:26:24 [INFO] -- CollectorHandler: reset
-210329-19:26:26 [INFO] -- 
-210329-19:26:26 [INFO] -- 
-210329-19:26:26 [INFO] -- ============================================================
-210329-19:26:26 [INFO] -- ATMSSStarter: Application Stopping...
-210329-19:26:26 [INFO] -- CardReaderHandler: terminating...
-210329-19:26:26 [INFO] -- timer: received terminate!
-210329-19:26:26 [INFO] -- timer: terminating...
-210329-19:26:26 [INFO] -- BuzzerHandler: terminating...
-210329-19:26:26 [INFO] -- KeypadHandler: terminating...
-210329-19:26:26 [INFO] -- ATMSS: terminating...
-210329-19:26:26 [INFO] -- CollectorHandler: terminating...
-210329-19:26:26 [INFO] -- TouchDisplayHandler: terminating...
+210330-14:47:49 [INFO] -- 
+210330-14:47:49 [INFO] -- 
+210330-14:47:49 [INFO] -- ============================================================
+210330-14:47:49 [INFO] -- ATMSSStarter: Application Starting...
+210330-14:47:53 [INFO] -- BuzzerHandler: starting...
+210330-14:47:53 [INFO] -- TouchDisplayHandler: starting...
+210330-14:47:53 [INFO] -- KeypadHandler: starting...
+210330-14:47:53 [INFO] -- CollectorHandler: starting...
+210330-14:47:53 [INFO] -- CardReaderHandler: starting...
+210330-14:47:53 [INFO] -- timer: starting...
+210330-14:47:53 [INFO] -- ATMSS: starting...
+210330-14:47:53 [INFO] -- TouchDisplayHandler: update display -- Welcome
+210330-14:47:53 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayWelcome.fxml
+210330-14:47:57 [INFO] -- CardInserted: 4107-7014-4107-7014
+210330-14:47:57 [INFO] -- TouchDisplayHandler: update display -- Pin
+210330-14:47:57 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayPin.fxml
+210330-14:47:58 [INFO] -- KeyPressed: 3
+210330-14:47:58 [INFO] -- TouchDisplayHandler: update pin text
+210330-14:47:58 [INFO] -- KeyPressed: 3
+210330-14:47:58 [INFO] -- TouchDisplayHandler: update pin text
+210330-14:47:58 [INFO] -- KeyPressed: 3
+210330-14:47:58 [INFO] -- TouchDisplayHandler: update pin text
+210330-14:47:58 [INFO] -- KeyPressed: 3
+210330-14:47:58 [INFO] -- TouchDisplayHandler: update pin text
+210330-14:47:58 [INFO] -- KeyPressed: 3
+210330-14:47:58 [INFO] -- TouchDisplayHandler: update pin text
+210330-14:47:58 [INFO] -- KeyPressed: 3
+210330-14:47:58 [INFO] -- TouchDisplayHandler: update pin text
+210330-14:47:59 [INFO] -- KeyPressed: Enter
+210330-14:47:59 [INFO] -- Authorize account: Card Number: 4107-7014-4107-7014, Password: [333333]
+210330-14:47:59 [INFO] -- TouchDisplayHandler: update display -- AccountList
+210330-14:47:59 [INFO] -- TouchDisplayHandler: show accounts list [1111-1111-1111-1111/2222-2222-2222-2222/3333-3333-3333-3333]
+210330-14:47:59 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayAccountList.fxml
+210330-14:48:02 [INFO] -- TouchDisplayHandler: account clicked
+210330-14:48:02 [INFO] -- ATMSS: Account chosen: [1]
+210330-14:48:02 [INFO] -- ATMSS: Current Account: [1111-1111-1111-1111]
+210330-14:48:02 [INFO] -- TouchDisplayHandler: update display -- MainMenu
+210330-14:48:02 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayMainMenu.fxml
+210330-14:48:10 [INFO] -- 
+210330-14:48:10 [INFO] -- 
+210330-14:48:10 [INFO] -- ============================================================
+210330-14:48:10 [INFO] -- ATMSSStarter: Application Stopping...
+210330-14:48:10 [INFO] -- ATMSS: terminating...
+210330-14:48:10 [INFO] -- KeypadHandler: terminating...
+210330-14:48:10 [INFO] -- CollectorHandler: terminating...
+210330-14:48:10 [INFO] -- CardReaderHandler: terminating...
+210330-14:48:10 [INFO] -- TouchDisplayHandler: terminating...
+210330-14:48:10 [INFO] -- BuzzerHandler: terminating...
+210330-14:48:10 [INFO] -- timer: received terminate!
+210330-14:48:10 [INFO] -- timer: terminating...

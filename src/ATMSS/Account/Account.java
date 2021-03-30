@@ -1,46 +1,29 @@
 package ATMSS.Account;
 
 public class Account {
-    private String cardNum = null;
-    private String pin = null;
+    private String accountNo;
+    private Double amount;
 
-    public Account(String cardNum, String pin) {
-        this.cardNum = cardNum;
-        this.pin = pin;
+    public Account(String accountNo, Double amount) {
+        this.accountNo = accountNo;
+        this.amount = amount;
     }
 
-    public Account(String cardNum) {
-        this.cardNum = cardNum;
+    public Account(String accountNo) {
+        this.accountNo = accountNo;
     }
 
     public Account() {}
 
-    public boolean isValid() {
-        return this.hasValidCard() && this.hasValidPin();
+    public void setAmount(Double amount) {
+        setAmount(amount);
     }
 
-    public boolean hasValidCard() {
-        return this.getCardNum().length() == 19;
-    }
+    public String getAccountNo() { return this.accountNo; }
 
-    public boolean hasValidPin() {
-        return this.getPin().length() == 6;
-    }
+    public Double getAmount() { return this.getAmount(); }
 
     public String toString() {
-        return "Card Number: " + this.getCardNum() + ", Password: [" + this.getPin() + "]";
+        return "Account No.: " + this.accountNo + ", Amount: HKD$" + this.amount;
     }
-
-    public void reset() {
-        this.setPin(null);
-        this.setCardNum(null);
-    }
-
-    public void setPin(String pin) {this.pin = pin;}
-
-    public void setCardNum(String cardNum) {this.cardNum = cardNum;}
-
-    public String getCardNum() {return this.cardNum;}
-
-    public String getPin() {return this.pin;}
 }

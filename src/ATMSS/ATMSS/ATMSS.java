@@ -1,16 +1,10 @@
 package ATMSS.ATMSS;
 
 import ATMSS.Account.Account;
+import ATMSS.User.User;
 import AppKickstarter.AppKickstarter;
 import AppKickstarter.misc.*;
 import AppKickstarter.timer.Timer;
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 
 
 //======================================================================
@@ -24,7 +18,7 @@ public class ATMSS extends AppThread {
     private MBox dispenserMBox;
     private MBox printerMBox;
     private MBox buzzerMBox;
-    private Account userAccount;
+    private User user;
     private enum State {
     	WELCOME,
 		PIN,
@@ -32,8 +26,7 @@ public class ATMSS extends AppThread {
 		MAIN_MENU,
 		AMOUNT_INPUT,
 		CARD_INPUT,
-		WITHDRAW,
-		TRANSFER,
+		ACCOUNT_LIST,
 	}
 	private enum Operation {
     	WITHDRAW,
@@ -69,9 +62,9 @@ public class ATMSS extends AppThread {
 		printerMBox = appKickstarter.getThread("PrinterHandler").getMBox();
 		buzzerMBox = appKickstarter.getThread("BuzzerHandler").getMBox();
 
-		userAccount = new Account();
+		user = new User();
 		isLoggedIn = false;
-		state = State.WELCOME;
+		updateState(State.WELCOME);
 		operation = Operation.NONE;
 
 		initWelcomeScreen();
@@ -121,7 +114,7 @@ public class ATMSS extends AppThread {
 					break;
 
 				case ACCOUNT:
-					handleAccountClick(msg);
+					handleAccountClick(msg.getDetails());
 					break;
 
 				case CANCEL:
@@ -153,6 +146,11 @@ public class ATMSS extends AppThread {
 		appKickstarter.unregThread(this);
 		log.info(id + ": terminating...");
     } // run
+
+
+	private void updateState(State newState) {
+    	state = newState;
+	}
 
 
 	private void handleAmountInput(String amount) {
@@ -187,7 +185,7 @@ public class ATMSS extends AppThread {
 		log.info(id + ": received card number: " + cardNumber);
 		transferCard = cardNumber;
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AmountInput"));
-		state = State.AMOUNT_INPUT;
+		updateState(State.AMOUNT_INPUT);
 	} // handleReceiveTransferCard
 
 
@@ -196,7 +194,7 @@ public class ATMSS extends AppThread {
 	private void handleWithdrawAmount(String value) {
 		if (value.equals("Other")) {
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AmountInput"));
-			state = State.AMOUNT_INPUT;
+			updateState(State.AMOUNT_INPUT);
 			return;
 		}
 
@@ -206,9 +204,15 @@ public class ATMSS extends AppThread {
 
 	//------------------------------------------------------------
 	// handleAccountClick
-	private void handleAccountClick(Msg msg) {
-		log.info(id + ": Account chosen: [" + msg.getDetails() + "]");
+	private void handleAccountClick(String accIndex) {
+		log.info(id + ": Account chosen: [" + accIndex + "]");
+		/** Change later when there is back-end */
+		/** Account chosenAcc = user.getAccounts()[Integer.parseInt(accIndex)]; */
+		Account chosenAcc = new Account("1111-1111-1111-1111", 1000.0);
+		user.setCurrentAcc(chosenAcc);
+		log.info(id + ": Current Account: [" + user.getCurrentAcc().getAccountNo() + "]");
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "MainMenu"));
+		updateState(State.MAIN_MENU);
 	} // handleAccountClick
 
 
@@ -236,7 +240,7 @@ public class ATMSS extends AppThread {
 			case "TRANSFER":
 				touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "CardInput"));
 				operation = Operation.TRANSFER;
-				state = State.CARD_INPUT;
+				updateState(State.CARD_INPUT);
 				break;
 
 			case "CANCEL":
@@ -277,19 +281,22 @@ public class ATMSS extends AppThread {
 	private void handleCardInserted(Msg msg) {
 		log.info("CardInserted: " + msg.getDetails());
 		buzz("beep");
-		userAccount.setCardNum(msg.getDetails());
+		user.setCardNum(msg.getDetails());
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Pin"));
-		state = State.PIN;
+		updateState(State.PIN);
 	} // handleCardInserted
 
 
 	//------------------------------------------------------------
 	// handleSetAccountPin
 	private void handleSetAccountPin(String pinNum) {
-		if (userAccount.getPin() == null) {
-			userAccount.setPin(pinNum);
-		} else if(userAccount.getPin().length() < 6) {
-			userAccount.setPin(userAccount.getPin() + pinNum);
+		if (user.getPin() == null) {
+			user.setPin(pinNum);
+			return;
+		}
+
+		if(user.getPin().length() < 6) {
+			user.setPin(user.getPin() + pinNum);
 		}
 	} // handleCardInserted
 
@@ -298,17 +305,20 @@ public class ATMSS extends AppThread {
 	// handleAuth
 	private void handleAuth() {
 		buzz("beep");
-		if (!userAccount.isValid()) {
-			log.info("Invalid PIN: " + userAccount.getPin());
-			userAccount.setPin(null);
+		if (!user.isValid()) {
+			log.info("Invalid PIN: " + user.getPin());
+			user.setPin(null);
 			handleErase();
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Incorrect Pin"));
-			state = State.INCORRECT_PIN;
+			updateState(State.INCORRECT_PIN);
 			return;
 		}
-		log.info("Authorize account: " + userAccount.toString());
-		state = State.MAIN_MENU;
+		log.info("Authorize account: " + user.toString());
+		updateState(State.ACCOUNT_LIST);
+		// user.setAccounts(bams.getAccounts(user.getCardNum(), user.getPin());
+		String accounts = "1111-1111-1111-1111/2222-2222-2222-2222/3333-3333-3333-3333";
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AccountList"));
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_AccountList, accounts));
 	} // handleAuth
 
 
@@ -316,7 +326,7 @@ public class ATMSS extends AppThread {
 	// handleCancel
 	private void handleCancel() {
 		buzz("beep");
-		userAccount.reset();
+		user.reset();
 		cardReaderMBox.send(new Msg(id, mbox, Msg.Type.CR_EjectCard, ""));
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Welcome"));
 		if (state == State.PIN || state == State.INCORRECT_PIN) {

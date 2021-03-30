@@ -136,23 +136,31 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
         Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-			try {
-				log.info(id + ": loading fxml: " + fxmlFName);
+				try {
+					log.info(id + ": loading fxml: " + fxmlFName);
 
-				Parent root;
-				FXMLLoader loader = new FXMLLoader();
-				loader.setLocation(TouchDisplayEmulator.class.getResource(fxmlFName));
-				root = loader.load();
-				touchDisplayEmulatorController = (TouchDisplayEmulatorController) loader.getController();
-				touchDisplayEmulatorController.initialize(id, atmssStarter, log, touchDisplayEmulator);
-				myStage.setScene(new Scene(root, WIDTH, HEIGHT));
-			} catch (Exception e) {
-				log.severe(id + ": failed to load " + fxmlFName);
-				e.printStackTrace();
-			}
+					Parent root;
+					FXMLLoader loader = new FXMLLoader();
+					loader.setLocation(TouchDisplayEmulator.class.getResource(fxmlFName));
+					root = loader.load();
+					touchDisplayEmulatorController = (TouchDisplayEmulatorController) loader.getController();
+					touchDisplayEmulatorController.initialize(id, atmssStarter, log, touchDisplayEmulator);
+					myStage.setScene(new Scene(root, WIDTH, HEIGHT));
+				} catch (Exception e) {
+					log.severe(id + ": failed to load " + fxmlFName);
+					e.printStackTrace();
+				}
 			}
 		});
     } // reloadStage
+
+
+	//------------------------------------------------------------
+	// handleAccountList
+	protected void handleAccountList(String accountList) {
+    	log.info(id + ": show accounts list [" + accountList + "]");
+    	touchDisplayEmulatorController.handleSetAccountList(accountList);
+    } // handleAccountList
 
 
 	//------------------------------------------------------------

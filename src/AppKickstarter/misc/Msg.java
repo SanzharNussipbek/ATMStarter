@@ -93,6 +93,7 @@ public class Msg {
         /** Append PIN Text*/			    TD_AppendPinText,
         /** Append Amount Text*/            TD_AppendAmountText,
         /** Clear PIN Text*/			    TD_ClearPinText,
+        TD_AccountList,
         /** Card inserted */			    CR_CardInserted,
         /** Card removed */			        CR_CardRemoved,
         /** Eject card */			        CR_EjectCard,
