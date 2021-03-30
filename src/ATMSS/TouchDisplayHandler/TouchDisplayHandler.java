@@ -92,10 +92,6 @@ public class TouchDisplayHandler extends HWHandler {
                 handleAccountList(msg.getDetails());
                 break;
 
-            case TD_GetBalance:
-                atmss.send(new Msg(id, mbox, Msg.Type.TD_GetBalance, msg.getDetails()));
-                break;
-
             case TD_SendBalance:
                 handleSetBalance(msg.getDetails());
                 break;

@@ -32,6 +32,7 @@ public class ATMSS extends AppThread {
     	WITHDRAW,
 		DEPOSIT,
 		TRANSFER,
+		BALANCE,
 		NONE,
 	}
 	private boolean isLoggedIn;
@@ -311,6 +312,8 @@ public class ATMSS extends AppThread {
 
 			case "BALANCE":
 				touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Balance"));
+				touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_SendBalance, "1000.0"));
+				updateOperation(Operation.BALANCE);
 				break;
 
 			case "TRANSFER":

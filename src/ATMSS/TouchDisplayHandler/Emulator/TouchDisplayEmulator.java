@@ -90,7 +90,7 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 				break;
 
 			case "Balance":
-				handleShowBalance();
+				reloadStage("TouchDisplayBalance.fxml");
 				break;
 
 			case "AccountInput":
@@ -175,17 +175,15 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
     } // reloadStage
 
 
-	protected void handleShowBalance() {
-    	reloadStage("TouchDisplayBalance.fxml");
-		touchDisplayEmulatorController.enquireBalance();
-	}
-
-
 	//------------------------------------------------------------
 	// handleSetBalance
 	protected void handleSetBalance(String balance) {
     	log.info(id + ": show balance [" + balance + "]");
-    	touchDisplayEmulatorController.setBalance(balance);
+		Platform.runLater(new Runnable() {
+			public void run() {
+				touchDisplayEmulatorController.setBalance(balance);
+			}
+		});
     } // handleSetBalance
 
 
@@ -193,7 +191,11 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 	// handleAccountList
 	protected void handleAccountList(String accountList) {
     	log.info(id + ": show accounts list [" + accountList + "]");
-    	touchDisplayEmulatorController.handleSetAccountList(accountList);
+		Platform.runLater(new Runnable() {
+			public void run() {
+    			touchDisplayEmulatorController.handleSetAccountList(accountList);
+			}
+		});
     } // handleAccountList
 
 
