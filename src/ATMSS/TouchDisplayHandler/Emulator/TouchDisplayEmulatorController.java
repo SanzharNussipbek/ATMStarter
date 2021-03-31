@@ -60,9 +60,11 @@ public class TouchDisplayEmulatorController {
     } // td_mouseClick
 
 
+    //------------------------------------------------------------
+    // handleCashReceived
     public void handleCashReceived() {
         insertCashTitle.setText("Cash Received");
-    }
+    } // handleCashReceived
 
 
     //------------------------------------------------------------
@@ -99,38 +101,38 @@ public class TouchDisplayEmulatorController {
     // handleMenuItemClick
     public void handleMenuItemClick(ActionEvent actionEvent) {
         log.info(id + ": menu item clicked");
-        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_PLAY, "button"));
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_Play, "button"));
 
         Button btn = (Button) actionEvent.getSource();
         String btnTxt = btn.getText();
 
-        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.MAIN_MENU_ITEM, btnTxt));
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.MainMenuItem, btnTxt));
     } // handleMenuItemClick
 
 
     //------------------------------------------------------------
     // handleAnotherServiceClick
     public void handleAnotherServiceClick(ActionEvent actionEvent) {
-        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_PLAY, "button"));
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_Play, "button"));
 
         Button btn = (Button) actionEvent.getSource();
         String btnTxt = btn.getText();
 
         log.info(id + ": another service choice [" + btnTxt + "]");
-        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.AnotherService, btnTxt));
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.TD_AnotherService, btnTxt));
     } // handleAnotherServiceClick
 
 
     //------------------------------------------------------------
     // handleReceiptChoiceClick
     public void handleReceiptChoiceClick(ActionEvent actionEvent) {
-        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_PLAY, "button"));
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_Play, "button"));
 
         Button btn = (Button) actionEvent.getSource();
         String btnTxt = btn.getText();
 
         log.info(id + ": receipt choice [" + btnTxt + "]");
-        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.Receipt, btnTxt));
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.PR_Receipt, btnTxt));
     } // handleReceiptChoiceClick
 
 
@@ -152,11 +154,11 @@ public class TouchDisplayEmulatorController {
     // handleAccountClick
     public void handleAccountClick(ActionEvent actionEvent) {
         log.info(id + ": account clicked");
-        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_PLAY, "button"));
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_Play, "button"));
 
         Button btn = (Button) actionEvent.getSource();
         String accIndex = btn.getId().equals("firstAcc") ? "0" : (btn.getId().equals("secondAcc") ? "1" : "2");
-        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.ACCOUNT, accIndex));
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.AccountItem, accIndex));
 
     } // handleAccountClick
 
@@ -165,13 +167,13 @@ public class TouchDisplayEmulatorController {
     // handleWithdrawAmountClick
     public void handleWithdrawAmountClick(ActionEvent actionEvent) {
         log.info(id + ": withdraw amount clicked");
-        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_PLAY, "button"));
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_Play, "button"));
 
         Button btn = (Button) actionEvent.getSource();
         String btnTxt = btn.getText();
         if (!btnTxt.equals("Other")) btnTxt = btnTxt.substring(4);
 
-        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.WITHDRAW_AMOUNT, btnTxt));
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.WithdrawAmount, btnTxt));
     } // handleWithdrawAmountClick
 
 
@@ -187,7 +189,7 @@ public class TouchDisplayEmulatorController {
     // amountButtonPressed
     public void amountButtonPressed(ActionEvent actionEvent) {
         Button btn = (Button) actionEvent.getSource();
-        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_PLAY, "button"));
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_Play, "button"));
 
         switch (btn.getId()) {
 

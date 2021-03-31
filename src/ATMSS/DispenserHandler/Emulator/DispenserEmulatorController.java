@@ -41,12 +41,12 @@ public class DispenserEmulatorController {
     // buttonPressed
     public void buttonPressed(ActionEvent actionEvent) {
         Button btn = (Button) actionEvent.getSource();
-        dispenserMBox.send(new Msg(id, dispenserMBox, Msg.Type.BZ_PLAY, "button"));
+        dispenserMBox.send(new Msg(id, dispenserMBox, Msg.Type.BZ_Play, "button"));
 
         switch (btn.getText()) {
             case "Take Out Cash":
                 if (!dispenserStatusField.getText().equals("Dispenser open")) return;
-                dispenserMBox.send(new Msg(id, dispenserMBox, Msg.Type.TakeOutCash, ""));
+                dispenserMBox.send(new Msg(id, dispenserMBox, Msg.Type.DP_TakeOutCash, ""));
                 dispenserTextArea.appendText("Cash taken out\n");
                 dispenserStatusField.setText("Dispenser closed");
                 break;

@@ -19,20 +19,20 @@ public class DispenserHandler extends HWHandler {
     // processMsg
     protected void processMsg(Msg msg) {
         switch (msg.getType()) {
-            case DispenseCash:
+            case DP_DispenseCash:
                 handleDispenseCash(msg.getDetails());
                 break;
 
-            case TakeOutCash:
-                atmss.send(new Msg(id, mbox, Msg.Type.TakeOutCash, msg.getDetails()));
+            case DP_TakeOutCash:
+                atmss.send(new Msg(id, mbox, Msg.Type.DP_TakeOutCash, msg.getDetails()));
                 break;
 
             case Reset:
                 handleReset();
                 break;
 
-            case BZ_PLAY:
-                atmss.send(new Msg(id, mbox, Msg.Type.BZ_PLAY, msg.getDetails()));
+            case BZ_Play:
+                atmss.send(new Msg(id, mbox, Msg.Type.BZ_Play, msg.getDetails()));
                 break;
 
             default:

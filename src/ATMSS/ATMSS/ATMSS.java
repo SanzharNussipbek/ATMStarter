@@ -105,7 +105,7 @@ public class ATMSS extends AppThread {
 					handleCardInserted(msg);
 					break;
 
-				case BZ_PLAY:
+				case BZ_Play:
 					buzz(msg.getDetails());
 					break;
 
@@ -121,28 +121,24 @@ public class ATMSS extends AppThread {
 					quit = true;
 					break;
 
-				case MAIN_MENU_ITEM:
+				case MainMenuItem:
 					handleMainMenuItemClick(msg);
 					break;
 
-				case ACCOUNT:
+				case AccountItem:
 					handleAccountClick(msg.getDetails());
 					break;
 
-				case CANCEL:
+				case Cancel:
 					handleCancel();
 					break;
 
-				case WITHDRAW_AMOUNT:
+				case WithdrawAmount:
 					handleWithdrawAmount(msg.getDetails());
 					break;
 
 				case TD_SendCard:
 					handleReceiveTransferAcc(msg.getDetails());
-					break;
-
-				case TD_MainMenu:
-					touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "MainMenu"));
 					break;
 
 				case AmountInput:
@@ -153,15 +149,15 @@ public class ATMSS extends AppThread {
 					touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_SendBalance, "1000.0"));
 					break;
 
-				case Receipt:
+				case PR_Receipt:
 					handleReceipt(msg.getDetails());
 					break;
 
-				case AnotherService:
+				case TD_AnotherService:
 					handleAnotherService(msg.getDetails());
 					break;
 
-				case TakeOutCash:
+				case DP_TakeOutCash:
 					touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "WithdrawSuccess"));
 					break;
 
@@ -191,19 +187,25 @@ public class ATMSS extends AppThread {
 	} // updateOperation
 
 
+	//------------------------------------------------------------
+	// restart
 	private void restart() {
     	updateState(State.WELCOME);
     	updateOperation(Operation.NONE);
-	}
+	} // restart
 
 
+	//------------------------------------------------------------
+	// now
 	public static String now() {
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return sdf.format(cal.getTime());
-	}
+	} // now
 
 
+	//------------------------------------------------------------
+	// generateReceipt
 	private String generateReceipt() {
     	String receipt = "";
     	receipt += "\n============================\n\n";
@@ -214,26 +216,30 @@ public class ATMSS extends AppThread {
 
     	receipt += "\n============================\n";
     	return receipt;
-	}
+	} // generateReceipt
 
 
+	//------------------------------------------------------------
+	// handleReceipt
 	private void handleReceipt(String choice) {
     	if (choice.equals("YES")) {
 			log.info(id + ": print receipt");
 			String receipt = generateReceipt();
-			printerMBox.send(new Msg(id, mbox, Msg.Type.PR_PRINT, receipt));
+			printerMBox.send(new Msg(id, mbox, Msg.Type.PR_Print, receipt));
 		}
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AnotherService"));
-	}
+	} // handleReceipt
 
 
+	//------------------------------------------------------------
+	// handleAnotherService
 	private void handleAnotherService(String choice) {
 		if (choice.equals("YES")) {
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "MainMenu"));
 			return;
 		}
 		handleCancel();
-	}
+	} // handleAnotherService
 
 
 	//------------------------------------------------------------
@@ -257,15 +263,17 @@ public class ATMSS extends AppThread {
 	} // handleAmountInput
 
 
+	//------------------------------------------------------------
+	// handleDeposit
 	private void handleDeposit(String amount) {
 		log.info(id + ": cash deposit received HKD$" + amount);
 		collectorMBox.send(new Msg(id, mbox, Msg.Type.Reset, ""));
-		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.CashReceived, ""));
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.CL_CashReceived, ""));
 		boolean depositSuccess = true;
 		if (depositSuccess) {
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "DepositSuccess"));
 		}
-	}
+	} // handleDeposit
 
 
 	//------------------------------------------------------------
@@ -306,7 +314,7 @@ public class ATMSS extends AppThread {
 
 		log.info(id + ": withdraw amount HKD$" + value);
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "TakeOutCash"));
-		dispenserMBox.send(new Msg(id, mbox, Msg.Type.DispenseCash, value));
+		dispenserMBox.send(new Msg(id, mbox, Msg.Type.DP_DispenseCash, value));
 	} // handleWithdrawAmount
 
 
@@ -511,7 +519,7 @@ public class ATMSS extends AppThread {
 	//------------------------------------------------------------
 	// buzz
 	private void buzz(String variant) {
-		buzzerMBox.send(new Msg(id, mbox, Msg.Type.BZ_PLAY, variant));
+		buzzerMBox.send(new Msg(id, mbox, Msg.Type.BZ_Play, variant));
 	} // buzz
 
 

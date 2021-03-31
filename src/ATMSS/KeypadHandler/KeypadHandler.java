@@ -21,7 +21,7 @@ public class KeypadHandler extends HWHandler {
         switch (msg.getType()) {
             case KP_KeyPressed:
                 atmss.send(new Msg(id, mbox, Msg.Type.KP_KeyPressed, msg.getDetails()));
-                atmss.send(new Msg(id, mbox, Msg.Type.BZ_PLAY, "button"));
+                atmss.send(new Msg(id, mbox, Msg.Type.BZ_Play, "button"));
                 break;
 
             default:

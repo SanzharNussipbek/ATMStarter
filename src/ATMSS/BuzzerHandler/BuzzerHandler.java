@@ -23,7 +23,7 @@ public class BuzzerHandler extends HWHandler {
     // processMsg
     protected void processMsg(Msg msg) {
         switch (msg.getType()) {
-            case BZ_PLAY:
+            case BZ_Play:
                 play(msg.getDetails());
                 break;
 
@@ -35,31 +35,7 @@ public class BuzzerHandler extends HWHandler {
 
     //------------------------------------------------------------
     // play
-    private void play(String audio) {
-        String audiofile = "etc\\sounds\\" + audio + ".wav";
-        playSound(audiofile);
+    protected void play(String audio) {
+        log.info(id + ": play sound");
     } // play
-
-
-    //------------------------------------------------------------
-    // playSound
-    private void playSound(String audiofile) {
-        InputStream in = null;
-        try {
-            in = new FileInputStream(audiofile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        // create an audiostream from the inputstream
-        AudioStream audioStream = null;
-        try {
-            audioStream = new AudioStream(in);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // play the audio clip with the audioplayer class
-        AudioPlayer.player.start(audioStream);
-    } // playSound
 }

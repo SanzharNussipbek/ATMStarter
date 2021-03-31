@@ -37,10 +37,11 @@ public class PrinterEmulatorController {
     // buttonPressed
     public void buttonPressed(ActionEvent actionEvent) {
         Button btn = (Button) actionEvent.getSource();
-        printerMBox.send(new Msg(id, printerMBox, Msg.Type.BZ_PLAY, "button"));
+        printerMBox.send(new Msg(id, printerMBox, Msg.Type.BZ_Play, "button"));
 
         switch (btn.getText()) {
             case "Take out receipt":
+                if (printerOutput.getText().length() == 0) return;
                 log.info(id + ": receipt taken");
                 printerOutput.setText("");
                 break;
@@ -55,7 +56,7 @@ public class PrinterEmulatorController {
     //------------------------------------------------------------
     // print
     public void print(String receipt) {
-        printerMBox.send(new Msg(id, printerMBox, Msg.Type.BZ_PLAY, "beep"));
+        printerMBox.send(new Msg(id, printerMBox, Msg.Type.BZ_Play, "beep"));
         printerOutput.appendText(receipt);
     } // print
 } // print

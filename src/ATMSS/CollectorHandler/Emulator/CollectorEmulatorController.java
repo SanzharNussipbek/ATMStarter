@@ -46,11 +46,12 @@ public class CollectorEmulatorController {
     // buttonPressed
     public void buttonPressed(ActionEvent actionEvent) {
         Button btn = (Button) actionEvent.getSource();
-        collectorMBox.send(new Msg(id, collectorMBox, Msg.Type.BZ_PLAY, "button"));
+        collectorMBox.send(new Msg(id, collectorMBox, Msg.Type.BZ_Play, "button"));
+        if (!collectorStatusField.getText().equals(STATUS_READY)) return;
 
         switch (btn.getId()) {
             case "insertCash":
-               handleInsertCash();
+                handleInsertCash();
                 break;
 
             case "decrease100":
@@ -87,8 +88,6 @@ public class CollectorEmulatorController {
     //------------------------------------------------------------
     // handleInsertCash
     public void handleInsertCash() {
-        if (!collectorStatusField.getText().equals(STATUS_READY)) return;
-
         int value = Integer.parseInt(totalCash.getText());
         log.info(id + ": insert cash HKD$" + value);
 

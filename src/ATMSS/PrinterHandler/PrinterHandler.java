@@ -19,12 +19,12 @@ public class PrinterHandler extends HWHandler {
     // processMsg
     protected void processMsg(Msg msg) {
         switch (msg.getType()) {
-            case PR_PRINT:
+            case PR_Print:
                 handlePrint(msg);
                 break;
 
-            case BZ_PLAY:
-                atmss.send(new Msg(id, mbox, Msg.Type.BZ_PLAY, msg.getDetails()));
+            case BZ_Play:
+                atmss.send(new Msg(id, mbox, Msg.Type.BZ_Play, msg.getDetails()));
                 break;
 
             default:

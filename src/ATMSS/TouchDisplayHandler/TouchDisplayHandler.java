@@ -40,24 +40,24 @@ public class TouchDisplayHandler extends HWHandler {
                 handleClearPinText();
                 break;
 
-            case BZ_PLAY:
-                atmss.send(new Msg(id, mbox, Msg.Type.BZ_PLAY, msg.getDetails()));
+            case BZ_Play:
+                atmss.send(new Msg(id, mbox, Msg.Type.BZ_Play, msg.getDetails()));
                 break;
 
-            case MAIN_MENU_ITEM:
-                atmss.send(new Msg(id, mbox, Msg.Type.MAIN_MENU_ITEM, msg.getDetails()));
+            case MainMenuItem:
+                atmss.send(new Msg(id, mbox, Msg.Type.MainMenuItem, msg.getDetails()));
                 break;
 
-            case ACCOUNT:
-                atmss.send(new Msg(id, mbox, Msg.Type.ACCOUNT, msg.getDetails()));
+            case AccountItem:
+                atmss.send(new Msg(id, mbox, Msg.Type.AccountItem, msg.getDetails()));
                 break;
 
-            case CANCEL:
-                atmss.send(new Msg(id, mbox, Msg.Type.CANCEL, msg.getDetails()));
+            case Cancel:
+                atmss.send(new Msg(id, mbox, Msg.Type.Cancel, msg.getDetails()));
                 break;
 
-            case WITHDRAW_AMOUNT:
-                atmss.send(new Msg(id, mbox, Msg.Type.WITHDRAW_AMOUNT, msg.getDetails()));
+            case WithdrawAmount:
+                atmss.send(new Msg(id, mbox, Msg.Type.WithdrawAmount, msg.getDetails()));
                 break;
 
             case TD_GetAmount:
@@ -76,15 +76,11 @@ public class TouchDisplayHandler extends HWHandler {
                 atmss.send(new Msg(id, mbox, Msg.Type.TD_SendCard, msg.getDetails()));
                 break;
 
-            case TD_MainMenu:
-                atmss.send(new Msg(id, mbox, Msg.Type.TD_MainMenu, msg.getDetails()));
-                break;
-
             case AmountInput:
                 atmss.send(new Msg(id, mbox, Msg.Type.AmountInput, msg.getDetails()));
                 break;
 
-            case CashReceived:
+            case CL_CashReceived:
                 handleCashReceived();
                 break;
 
@@ -96,12 +92,12 @@ public class TouchDisplayHandler extends HWHandler {
                 handleSetBalance(msg.getDetails());
                 break;
 
-            case Receipt:
-                atmss.send(new Msg(id, mbox, Msg.Type.Receipt, msg.getDetails()));
+            case PR_Receipt:
+                atmss.send(new Msg(id, mbox, Msg.Type.PR_Receipt, msg.getDetails()));
                 break;
 
-            case AnotherService:
-                atmss.send(new Msg(id, mbox, Msg.Type.AnotherService, msg.getDetails()));
+            case TD_AnotherService:
+                atmss.send(new Msg(id, mbox, Msg.Type.TD_AnotherService, msg.getDetails()));
                 break;
 
             default:
