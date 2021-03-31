@@ -11,6 +11,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
+import javax.xml.soap.Text;
+
 
 //======================================================================
 // DispenserEmulatorController
@@ -20,6 +22,8 @@ public class DispenserEmulatorController {
     private Logger log;
     private DispenserEmulator dispenserEmulator;
     private MBox dispenserMBox;
+    public TextArea dispenserTextArea;
+    public TextField dispenserStatusField;
 
 
     //------------------------------------------------------------
@@ -37,11 +41,34 @@ public class DispenserEmulatorController {
     // buttonPressed
     public void buttonPressed(ActionEvent actionEvent) {
         Button btn = (Button) actionEvent.getSource();
+        dispenserMBox.send(new Msg(id, dispenserMBox, Msg.Type.BZ_PLAY, "button"));
 
         switch (btn.getText()) {
+            case "Take Out Cash":
+                if (!dispenserStatusField.getText().equals("Dispenser open")) return;
+                dispenserMBox.send(new Msg(id, dispenserMBox, Msg.Type.TakeOutCash, ""));
+                dispenserTextArea.appendText("Cash taken out\n");
+                dispenserStatusField.setText("Dispenser closed");
+                break;
+
             default:
                 log.warning(id + ": unknown button: [" + btn.getText() + "]");
                 break;
         }
     } // buttonPressed
+
+
+    //------------------------------------------------------------
+    // handleDispenseCash
+    protected void handleDispenseCash(String amount) {
+        dispenserTextArea.appendText("Dispensing HKD$" + amount +"\nCash is out\n");
+        dispenserStatusField.setText("Dispenser open");
+    } // handleDispenseCash
+
+    //------------------------------------------------------------
+    // clear
+    protected void clear() {
+        dispenserTextArea.setText("");
+        dispenserStatusField.setText("Dispenser closed");
+    } // clear
 } // DispenserEmulatorController

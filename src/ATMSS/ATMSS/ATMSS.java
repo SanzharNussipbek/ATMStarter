@@ -158,6 +158,10 @@ public class ATMSS extends AppThread {
 					handleAnotherService(msg.getDetails());
 					break;
 
+				case TakeOutCash:
+					touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "WithdrawSuccess"));
+					break;
+
 				default:
 					log.warning(id + ": unknown message type: [" + msg + "]");
 					break;
@@ -276,6 +280,8 @@ public class ATMSS extends AppThread {
 		}
 
 		log.info(id + ": withdraw amount HKD$" + value);
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "TakeOutCash"));
+		dispenserMBox.send(new Msg(id, mbox, Msg.Type.DispenseCash, value));
 	} // handleWithdrawAmount
 
 

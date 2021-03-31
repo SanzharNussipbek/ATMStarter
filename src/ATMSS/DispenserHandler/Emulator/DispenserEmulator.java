@@ -49,5 +49,21 @@ public class DispenserEmulator extends DispenserHandler {
         });
         myStage.show();
     } // DispenserEmulator
+
+
+    //------------------------------------------------------------
+    // handleDispenseCash
+    protected void handleDispenseCash(String amount) {
+        log.info(id + ": dispense cash HKD$" + amount);
+        dispenserEmulatorController.handleDispenseCash(amount);
+    } // handleDispenseCash
+
+
+    //------------------------------------------------------------
+    // handleReset
+    protected void handleReset() {
+        log.info(id + ": reset");
+        dispenserEmulatorController.clear();
+    } // handleDispenseCash
 } // DispenserEmulator
 

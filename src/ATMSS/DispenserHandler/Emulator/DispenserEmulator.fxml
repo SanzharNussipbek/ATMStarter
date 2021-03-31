@@ -12,12 +12,12 @@
         <TextArea fx:id="dispenserTextArea" editable="false" layoutX="20.0" layoutY="169.0" AnchorPane.bottomAnchor="120" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20" />
         <AnchorPane prefHeight="30.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.bottomAnchor="70.0">
             <children>
-                <Button mnemonicParsing="false" onAction="#buttonPressed" prefHeight="30.0" maxWidth="-Infinity" text="Remove Cash" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"><font><Font size="12.0" /></font></Button>
+                <Button mnemonicParsing="false" onAction="#buttonPressed" prefHeight="30.0" maxWidth="-Infinity" text="Take Out Cash" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"><font><Font size="12.0" /></font></Button>
             </children>
         </AnchorPane>
         <AnchorPane prefHeight="30.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.bottomAnchor="20.0">
             <children>
-                <TextField fx:id="dispenserStatusField" editable="false" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" />
+                <TextField fx:id="dispenserStatusField" text="Dispenser closed" editable="false" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" />
             </children>
         </AnchorPane>
     </children>

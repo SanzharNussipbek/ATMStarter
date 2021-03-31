@@ -116,5 +116,7 @@ public class Msg {
         TD_SendBalance,
         Receipt,
         AnotherService,
+        DispenseCash,
+        TakeOutCash,
     } // Type
 } // Msg

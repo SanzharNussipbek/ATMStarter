@@ -105,8 +105,8 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 				reloadStage("TouchDisplayRemoveCard.fxml");
 				break;
 
-			case "RemoveCash":
-				reloadStage("TouchDisplayRemoveCash.fxml");
+			case "TakeOutCash":
+				reloadStage("TouchDisplayTakeOutCash.fxml");
 				break;
 
 			case "AnotherService":
