@@ -43,6 +43,7 @@ public class ATMSS extends AppThread {
 	private Operation operation;
 	private String transferAcc;
 	private String transferAmount;
+	private int authTries;
 
     //------------------------------------------------------------
     // ATMSS
@@ -67,6 +68,7 @@ public class ATMSS extends AppThread {
 		buzzerMBox = appKickstarter.getThread("BuzzerHandler").getMBox();
 
 		user = new User();
+		authTries = 0;
 		isLoggedIn = false;
 		updateState(State.WELCOME);
 		updateOperation(Operation.NONE);
@@ -416,10 +418,17 @@ public class ATMSS extends AppThread {
 	// handleAuth
 	private void handleAuth() {
 		buzz("beep");
-		if (!user.isValid()) {
-			log.info("Invalid PIN: " + user.getPin());
+		boolean validator = user.isValid();
+		if (!validator) {
+			authTries++;
+			log.info(id + ": Invalid PIN(try no. " + authTries + "):" + user.getPin());
 			user.setPin(null);
 			handleErase();
+			if (authTries >= 3) {
+				log.info(id + ": Three tries were expired!");
+				handleCancel();
+				return;
+			}
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Incorrect Pin"));
 			updateState(State.INCORRECT_PIN);
 			return;
