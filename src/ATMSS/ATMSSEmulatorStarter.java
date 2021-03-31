@@ -82,7 +82,7 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
 				touchDisplayEmulator.start();
 //				collectorEmulator.start();
 				dispenserEmulator.start();
-//				printerEmulator.start();
+				printerEmulator.start();
 			} catch (Exception e) {
 				System.out.println("Emulators: start failed");
 				e.printStackTrace();
@@ -106,7 +106,7 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
 			new Thread(touchDisplayEmulator).start();
 //			new Thread(collectorEmulator).start();
 			new Thread(dispenserEmulator).start();
-//			new Thread(printerEmulator).start();
+			new Thread(printerEmulator).start();
 			new Thread(buzzerEmulator).start();
 		} // start
 	} // Emulators

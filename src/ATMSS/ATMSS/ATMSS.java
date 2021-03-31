@@ -6,6 +6,9 @@ import AppKickstarter.AppKickstarter;
 import AppKickstarter.misc.*;
 import AppKickstarter.timer.Timer;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 
 //======================================================================
 // ATMSS
@@ -194,9 +197,31 @@ public class ATMSS extends AppThread {
 	}
 
 
+	public static String now() {
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return sdf.format(cal.getTime());
+	}
+
+
+	private String generateReceipt() {
+    	String receipt = "";
+    	receipt += "\n============================\n\n";
+    	receipt += "                           RECEIPT\n";
+
+    	receipt += "\nOperation: " + operation + "\n";
+    	receipt += "\nDate&Time: " + now() + "\n";
+
+    	receipt += "\n============================\n";
+    	return receipt;
+	}
+
+
 	private void handleReceipt(String choice) {
     	if (choice.equals("YES")) {
 			log.info(id + ": print receipt");
+			String receipt = generateReceipt();
+			printerMBox.send(new Msg(id, mbox, Msg.Type.PR_PRINT, receipt));
 		}
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AnotherService"));
 	}
