@@ -165,6 +165,15 @@ public class ATMSS extends AppThread {
 					touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "WithdrawSuccess"));
 					break;
 
+				case BAMS_Login:
+				case BAMS_Accounts:
+				case BAMS_Deposit:
+				case BAMS_Enquiry:
+				case BAMS_Transfer:
+				case BAMS_Withdraw:
+					log.info(id + ": BAMS: [" + msg + "]");
+					break;
+
 				default:
 					log.warning(id + ": unknown message type: [" + msg + "]");
 					break;
