@@ -21,6 +21,7 @@ public class ATMSS extends AppThread {
     private MBox dispenserMBox;
     private MBox printerMBox;
     private MBox buzzerMBox;
+    private MBox bamsMBox;
     private User user;
     private enum State {
     	WELCOME,
@@ -66,6 +67,7 @@ public class ATMSS extends AppThread {
 		dispenserMBox = appKickstarter.getThread("DispenserHandler").getMBox();
 		printerMBox = appKickstarter.getThread("PrinterHandler").getMBox();
 		buzzerMBox = appKickstarter.getThread("BuzzerHandler").getMBox();
+		bamsMBox = appKickstarter.getThread("BAMSHandler").getMBox();
 
 		user = new User();
 		authTries = 0;
@@ -386,6 +388,7 @@ public class ATMSS extends AppThread {
 		dispenserMBox.send(new Msg(id, mbox, Msg.Type.Poll, ""));
 		printerMBox.send(new Msg(id, mbox, Msg.Type.Poll, ""));
 		buzzerMBox.send(new Msg(id, mbox, Msg.Type.Poll, ""));
+		bamsMBox.send(new Msg(id, mbox, Msg.Type.Poll, ""));
 	} // handleTimesUp
 
 

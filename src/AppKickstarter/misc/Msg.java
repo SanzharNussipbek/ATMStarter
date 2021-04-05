@@ -117,5 +117,11 @@ public class Msg {
         /** Account */                      AccountItem,
         /** Withdraw Amount */              WithdrawAmount,
         /** Amount Input */                 AmountInput,
+        /** BAMS Login */                   BAMS_Login,
+        /** BAMS Enquiry */                 BAMS_Enquiry,
+        /** BAMS Accounts */                BAMS_Accounts,
+        /** BAMS Withdraw */                BAMS_Withdraw,
+        /** BAMS Deposit */                 BAMS_Deposit,
+        /** BAMS Transfer */                BAMS_Transfer,
     } // Type
 } // Msg

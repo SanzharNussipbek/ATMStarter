@@ -1,5 +1,7 @@
 package ATMSS;
 
+import ATMSS.BAMSHandler.AtmBAMSHandler;
+import ATMSS.BAMSHandler.Emulator.AtmBAMSEmulator;
 import ATMSS.BuzzerHandler.BuzzerHandler;
 import ATMSS.BuzzerHandler.Emulator.BuzzerEmulator;
 import ATMSS.DispenserHandler.DispenserHandler;
@@ -63,6 +65,7 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
 			DispenserEmulator dispenserEmulator = null;
 			PrinterEmulator printerEmulator = null;
 			BuzzerEmulator buzzerEmulator = null;
+			AtmBAMSEmulator bamsEmulator = null;
 
 			// create emulators
 			try {
@@ -75,6 +78,7 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
 				dispenserEmulator = new DispenserEmulator("DispenserHandler", atmssEmulatorStarter);
 				printerEmulator = new PrinterEmulator("PrinterHandler", atmssEmulatorStarter);
 				buzzerEmulator = new BuzzerEmulator("BuzzerHandler", atmssEmulatorStarter);
+				bamsEmulator = new AtmBAMSEmulator("BAMSHandler", atmssEmulatorStarter, URL_PREFIX);
 
 				// start emulator GUIs
 				keypadEmulator.start();
@@ -84,6 +88,7 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
 				dispenserEmulator.start();
 				printerEmulator.start();
 				buzzerEmulator.start();
+				bamsEmulator.start();
 			} catch (Exception e) {
 				System.out.println("Emulators: start failed");
 				e.printStackTrace();
@@ -98,6 +103,7 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
 			atmssEmulatorStarter.setDispenserHandler(dispenserEmulator);
 			atmssEmulatorStarter.setPrinterHandler(printerEmulator);
 			atmssEmulatorStarter.setBuzzerHandler(buzzerEmulator);
+			atmssEmulatorStarter.setBAMSHandler(bamsEmulator);
 
 			// start threads
 			new Thread(timer).start();
@@ -109,6 +115,7 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
 			new Thread(dispenserEmulator).start();
 			new Thread(printerEmulator).start();
 			new Thread(buzzerEmulator).start();
+			new Thread(bamsEmulator).start();
 		} // start
 	} // Emulators
 
@@ -141,6 +148,9 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
 	}
 	private void setBuzzerHandler(BuzzerHandler buzzerHandler) {
 		this.buzzerHandler = buzzerHandler;
+	}
+	private void setBAMSHandler(AtmBAMSHandler bamsHandler) {
+		this.bamsHandler = bamsHandler;
 	}
 
 } // ATMSSEmulatorStarter
