@@ -42,7 +42,7 @@ public class AtmBAMSEmulator extends AtmBAMSHandler {
         log.info(id + ": enquiry [" + details + "]");
         String[] values = details.split("/");
         double result = bams.enquiry(values[0], values[1], values[2]);
-        atmss.send(new Msg(id, mbox, Msg.Type.BAMS_Login, String.valueOf(result)));
+        atmss.send(new Msg(id, mbox, Msg.Type.BAMS_Enquiry, String.valueOf(result)));
     } // handleEnquiry
 
 
@@ -52,7 +52,7 @@ public class AtmBAMSEmulator extends AtmBAMSHandler {
         log.info(id + ": accounts [" + details + "]");
         String[] values = details.split("/");
         String result = bams.getAccounts(values[0], values[1]);
-        atmss.send(new Msg(id, mbox, Msg.Type.BAMS_Login, result));
+        atmss.send(new Msg(id, mbox, Msg.Type.BAMS_Accounts, result));
     } // handleAccounts
 
 
@@ -61,8 +61,14 @@ public class AtmBAMSEmulator extends AtmBAMSHandler {
     protected void handleWithdraw(String details) throws BAMSInvalidReplyException, IOException {
         log.info(id + ": withdraw [" + details + "]");
         String[] values = details.split("/");
+        double amount = Double.valueOf(values[3]);
+        double currentAmount = bams.enquiry(values[0], values[1], values[2]);
+        if (amount > currentAmount) {
+            atmss.send(new Msg(id, mbox, Msg.Type.BAMS_Withdraw, "NOK"));
+            return;
+        }
         int outAmount = bams.withdraw(values[0], values[1], values[2], values[3]);
-        atmss.send(new Msg(id, mbox, Msg.Type.BAMS_Login, String.valueOf(outAmount)));
+        atmss.send(new Msg(id, mbox, Msg.Type.BAMS_Withdraw, String.valueOf(outAmount)));
     } // handleWithdraw
 
 
@@ -71,8 +77,8 @@ public class AtmBAMSEmulator extends AtmBAMSHandler {
     protected void handleDeposit(String details) throws BAMSInvalidReplyException, IOException {
         log.info(id + ": deposit [" + details + "]");
         String[] values = details.split("/");
-        double depAmount = bams.withdraw(values[0], values[1], values[2], values[3]);
-        atmss.send(new Msg(id, mbox, Msg.Type.BAMS_Login, String.valueOf(depAmount)));
+        double depAmount = bams.deposit(values[0], values[1], values[2], values[3]);
+        atmss.send(new Msg(id, mbox, Msg.Type.BAMS_Deposit, String.valueOf(depAmount)));
     } // handleDeposit
 
 
@@ -81,8 +87,14 @@ public class AtmBAMSEmulator extends AtmBAMSHandler {
     protected void handleTransfer(String details) throws BAMSInvalidReplyException, IOException {
         log.info(id + ": transfer [" + details + "]");
         String[] values = details.split("/");
+        double amount = Double.valueOf(values[4]);
+        double currentAmount = bams.enquiry(values[0], values[2], values[3]);
+        if (amount > currentAmount) {
+            atmss.send(new Msg(id, mbox, Msg.Type.BAMS_Transfer, "NOK"));
+            return;
+        }
         double transAmount = bams.transfer(values[0], values[1], values[2], values[3], values[4]);
-        atmss.send(new Msg(id, mbox, Msg.Type.BAMS_Login, String.valueOf(transAmount)));
+        atmss.send(new Msg(id, mbox, Msg.Type.BAMS_Transfer, String.valueOf(transAmount)));
     } // handleTransfer
 
 

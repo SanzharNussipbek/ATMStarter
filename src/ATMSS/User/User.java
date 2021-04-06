@@ -5,10 +5,11 @@ import ATMSS.Account.Account;
 public class User {
     private String cardNum = null;
     private String pin = null;
-    private Account[] accounts = null;
-    private Account currentAcc = null;
+    private String[] accounts = null;
+    private String currentAcc = null;
+    private String credential = null;
 
-    public User(String cardNum, String pin, Account[] accounts) {
+    public User(String cardNum, String pin, String[] accounts) {
         this.cardNum = cardNum;
         this.pin = pin;
         this.accounts = accounts;
@@ -23,29 +24,23 @@ public class User {
         this.cardNum = cardNum;
     }
 
-    public User() {}
-
-    public boolean isValid() {
-        return this.hasValidCard() && this.hasValidPin();
-    }
-
-    public boolean hasValidCard() {
-        return this.getCardNum().length() == 19;
-    }
-
-    public boolean hasValidPin() {
-        return this.getPin().length() == 6;
+    public User() {
+        this.credential = "OK";
     }
 
     public String toString() {
-        String text = "Card Number: " + this.getCardNum()
-                + ", Password: [" + this.getPin() + "]";
+        String text = "\nCard Number: " + this.getCardNum()
+                + "\nPIN: [" + this.getPin() + "]";
         if (this.accounts != null) {
-            text += ", Accounts: ";
+            text += "\nAccounts: [";
             for (int i = 0; i < this.accounts.length; i++) {
-                text += this.accounts[i].toString();
-                text += i == this.accounts.length - 1 ? "." : ", ";
+                text += this.accounts[i];
+                text += i == this.accounts.length - 1 ? "." : "/";
             }
+            text += "]";
+        }
+        if (this.currentAcc != null) {
+            text += "\nCurrent Acc: [" + this.currentAcc + "]";
         }
         return text;
     }
@@ -54,36 +49,46 @@ public class User {
         this.setPin(null);
         this.setCardNum(null);
         this.setAccounts(null);
+        this.setCurrentAcc(null);
+        this.setCredential(null);
     }
 
-    public void setCurrentAcc(Account acc) { this.currentAcc = acc; }
+    public void setCurrentAcc(String acc) { this.currentAcc = acc; }
 
-    public void setAccounts(Account[] accounts) { this.accounts = accounts; }
+    public void setAccounts(String[] accounts) { this.accounts = accounts; }
 
     public void setPin(String pin) {this.pin = pin;}
 
     public void setCardNum(String cardNum) {this.cardNum = cardNum;}
 
+    public void setCredential(String credential) {
+        this.credential = credential;
+    }
+
+    public String getCredential() {
+        return credential;
+    }
+
     public String getCardNum() {return this.cardNum;}
 
     public String getPin() {return this.pin;}
 
-    public Account[] getAccounts() { return this.accounts; }
+    public String[] getAccounts() { return this.accounts; }
 
-    public Account getCurrentAcc() { return this.currentAcc; }
+    public String getCurrentAcc() { return this.currentAcc; }
 
     public String getAccountsString() {
         String result = "";
         for (int i = 0; i < this.accounts.length; i++) {
-            result += this.accounts[i].getAccountNo();
+            result += this.accounts[i];
             result += i == this.accounts.length - 1 ? "" : "/";
         }
         return result;
     }
 
     public boolean hasAccount(String accountNo) {
-        for (Account acc : this.getAccounts()) {
-            if (acc.getAccountNo().equals(accountNo)) {
+        for (String acc : this.getAccounts()) {
+            if (acc.equals(accountNo)) {
                 return true;
             }
         }

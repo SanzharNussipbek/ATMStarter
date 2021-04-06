@@ -129,6 +129,10 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 				reloadStage("TouchDisplayWithdrawSuccess.fxml");
 				break;
 
+			case "WithdrawError":
+				reloadStage("TouchDisplayWithdrawError.fxml");
+				break;
+
 			case "DepositSuccess":
 				reloadStage("TouchDisplayDepositSuccess.fxml");
 				break;
@@ -139,6 +143,10 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 
 			case "TransactionError":
 				reloadStage("TouchDisplayTransactionError.fxml");
+				break;
+
+			case "TransferError":
+				reloadStage("TouchDisplayTransferError.fxml");
 				break;
 
 			default:

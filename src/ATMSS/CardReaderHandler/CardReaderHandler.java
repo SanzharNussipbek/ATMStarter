@@ -29,6 +29,7 @@ public class CardReaderHandler extends HWHandler {
 
             case CR_CardRemoved:
                 handleCardRemove();
+                atmss.send(new Msg(id, mbox, Msg.Type.CR_CardRemoved, msg.getDetails()));
                 break;
 
             case BZ_Play:
@@ -58,6 +59,6 @@ public class CardReaderHandler extends HWHandler {
     //------------------------------------------------------------
     // handleCardRemove
     protected void handleCardRemove() {
-	log.info(id + ": card removed");
+	    log.info(id + ": card removed");
     } // handleCardRemove
 } // CardReaderHandler

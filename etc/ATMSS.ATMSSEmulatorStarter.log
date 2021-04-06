@@ -1,18 +1,96 @@
-210406-00:35:34 [INFO] -- 
-210406-00:35:34 [INFO] -- 
-210406-00:35:34 [INFO] -- ============================================================
-210406-00:35:34 [INFO] -- ATMSSStarter: Application Starting...
-210406-00:35:36 [INFO] -- PrinterHandler: starting...
-210406-00:35:36 [INFO] -- BuzzerHandler: starting...
-210406-00:35:36 [INFO] -- timer: starting...
-210406-00:35:36 [INFO] -- CardReaderHandler: starting...
-210406-00:35:36 [INFO] -- ATMSS: starting...
-210406-00:35:36 [INFO] -- KeypadHandler: starting...
-210406-00:35:36 [INFO] -- BAMSHandler: starting...
-210406-00:35:36 [INFO] -- DispenserHandler: starting...
-210406-00:35:36 [INFO] -- CollectorHandler: starting...
-210406-00:35:36 [INFO] -- TouchDisplayHandler: starting...
-210406-00:35:36 [INFO] -- BAMSHandler: login [1111-1111-1111-1111/111111]
-210406-00:35:36 [INFO] -- TouchDisplayHandler: update display -- Welcome
-210406-00:35:37 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayWelcome.fxml
-210406-00:35:38 [INFO] -- ATMSS: BAMS: [BAMSHandler (BAMS_Login) -- OK]
+210407-01:13:09 [INFO] -- 
+210407-01:13:09 [INFO] -- 
+210407-01:13:09 [INFO] -- ============================================================
+210407-01:13:09 [INFO] -- ATMSSStarter: Application Starting...
+210407-01:13:10 [INFO] -- BAMSHandler: starting...
+210407-01:13:10 [INFO] -- timer: starting...
+210407-01:13:10 [INFO] -- TouchDisplayHandler: starting...
+210407-01:13:10 [INFO] -- DispenserHandler: starting...
+210407-01:13:10 [INFO] -- KeypadHandler: starting...
+210407-01:13:10 [INFO] -- CollectorHandler: starting...
+210407-01:13:10 [INFO] -- BuzzerHandler: starting...
+210407-01:13:10 [INFO] -- PrinterHandler: starting...
+210407-01:13:10 [INFO] -- ATMSS: starting...
+210407-01:13:10 [INFO] -- CardReaderHandler: starting...
+210407-01:13:10 [INFO] -- TouchDisplayHandler: update display -- Welcome
+210407-01:13:11 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayWelcome.fxml
+210407-01:13:15 [INFO] -- BuzzerHandler: play sound: [button]
+210407-01:13:16 [INFO] -- BuzzerHandler: play sound: [button]
+210407-01:13:16 [INFO] -- CardInserted: 1111-1111-1111-1111
+210407-01:13:16 [INFO] -- TouchDisplayHandler: update display -- Pin
+210407-01:13:16 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayPin.fxml
+210407-01:13:16 [INFO] -- BuzzerHandler: play sound: [beep]
+210407-01:13:17 [INFO] -- KeyPressed: 2
+210407-01:13:17 [INFO] -- TouchDisplayHandler: update pin text
+210407-01:13:17 [INFO] -- BuzzerHandler: play sound: [button]
+210407-01:13:18 [INFO] -- KeyPressed: Erase
+210407-01:13:18 [INFO] -- TouchDisplayHandler: clear pin text
+210407-01:13:18 [INFO] -- BuzzerHandler: play sound: [button]
+210407-01:13:18 [INFO] -- KeyPressed: 1
+210407-01:13:18 [INFO] -- TouchDisplayHandler: update pin text
+210407-01:13:18 [INFO] -- BuzzerHandler: play sound: [button]
+210407-01:13:19 [INFO] -- KeyPressed: 1
+210407-01:13:19 [INFO] -- TouchDisplayHandler: update pin text
+210407-01:13:19 [INFO] -- BuzzerHandler: play sound: [button]
+210407-01:13:19 [INFO] -- KeyPressed: 1
+210407-01:13:19 [INFO] -- TouchDisplayHandler: update pin text
+210407-01:13:19 [INFO] -- BuzzerHandler: play sound: [button]
+210407-01:13:19 [INFO] -- KeyPressed: 1
+210407-01:13:19 [INFO] -- TouchDisplayHandler: update pin text
+210407-01:13:19 [INFO] -- BuzzerHandler: play sound: [button]
+210407-01:13:19 [INFO] -- KeyPressed: 1
+210407-01:13:19 [INFO] -- TouchDisplayHandler: update pin text
+210407-01:13:19 [INFO] -- BuzzerHandler: play sound: [button]
+210407-01:13:19 [INFO] -- KeyPressed: 1
+210407-01:13:19 [INFO] -- BuzzerHandler: play sound: [button]
+210407-01:13:19 [INFO] -- TouchDisplayHandler: update pin text
+210407-01:13:20 [INFO] -- KeyPressed: Enter
+210407-01:13:20 [INFO] -- BuzzerHandler: play sound: [button]
+210407-01:13:20 [INFO] -- BAMSHandler: login [1111-1111-1111-1111/111111]
+210407-01:13:23 [INFO] -- Authorize account: 
+Card Number: 1111-1111-1111-1111
+PIN: [111111]
+210407-01:13:23 [INFO] -- BuzzerHandler: play sound: [beep]
+210407-01:13:23 [INFO] -- BAMSHandler: accounts [1111-1111-1111-1111/OK]
+210407-01:13:25 [INFO] -- TouchDisplayHandler: update display -- AccountList
+210407-01:13:25 [INFO] -- TouchDisplayHandler: show accounts list [111-111111-111/222-222222-222/333-333333-333]
+210407-01:13:25 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayAccountList.fxml
+210407-01:13:26 [INFO] -- TouchDisplayHandler: account clicked
+210407-01:13:26 [INFO] -- BuzzerHandler: play sound: [button]
+210407-01:13:26 [INFO] -- ATMSS: Account chosen: [1]
+210407-01:13:26 [INFO] -- ATMSS: Current Account: [222-222222-222]
+210407-01:13:26 [INFO] -- ATMSS: 
+Card Number: 1111-1111-1111-1111
+PIN: [111111]
+Accounts: [111-111111-111/222-222222-222/333-333333-333.]
+Current Acc: [222-222222-222]
+210407-01:13:26 [INFO] -- TouchDisplayHandler: update display -- MainMenu
+210407-01:13:26 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayMainMenu.fxml
+210407-01:13:26 [INFO] -- TouchDisplayHandler: menu item clicked
+210407-01:13:26 [INFO] -- BuzzerHandler: play sound: [button]
+210407-01:13:26 [INFO] -- ATMSS: Main Menu Item clicked [BALANCE]
+210407-01:13:26 [INFO] -- BAMSHandler: enquiry [1111-1111-1111-1111/222-222222-222/OK]
+210407-01:13:28 [INFO] -- TouchDisplayHandler: update display -- Balance
+210407-01:13:28 [INFO] -- TouchDisplayHandler: show balance [26222.0]
+210407-01:13:28 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayBalance.fxml
+210407-01:13:29 [INFO] -- TouchDisplayHandler: receipt choice [YES]
+210407-01:13:29 [INFO] -- ATMSS: print receipt
+210407-01:13:29 [INFO] -- BuzzerHandler: play sound: [button]
+210407-01:13:29 [INFO] -- TouchDisplayHandler: update display -- AnotherService
+210407-01:13:29 [INFO] -- TouchDisplayHandler: loading fxml: TouchDisplayAnotherService.fxml
+210407-01:13:29 [INFO] -- BuzzerHandler: play sound: [beep]
+210407-01:13:33 [INFO] -- 
+210407-01:13:33 [INFO] -- 
+210407-01:13:33 [INFO] -- ============================================================
+210407-01:13:33 [INFO] -- ATMSSStarter: Application Stopping...
+210407-01:13:33 [INFO] -- CardReaderHandler: terminating...
+210407-01:13:33 [INFO] -- KeypadHandler: terminating...
+210407-01:13:33 [INFO] -- DispenserHandler: terminating...
+210407-01:13:33 [INFO] -- BAMSHandler: terminating...
+210407-01:13:33 [INFO] -- timer: received terminate!
+210407-01:13:33 [INFO] -- timer: terminating...
+210407-01:13:33 [INFO] -- CollectorHandler: terminating...
+210407-01:13:33 [INFO] -- BuzzerHandler: terminating...
+210407-01:13:33 [INFO] -- ATMSS: terminating...
+210407-01:13:33 [INFO] -- PrinterHandler: terminating...
+210407-01:13:33 [INFO] -- TouchDisplayHandler: terminating...
