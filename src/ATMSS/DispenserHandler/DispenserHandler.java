@@ -18,6 +18,7 @@ public class DispenserHandler extends HWHandler {
     //------------------------------------------------------------
     // processMsg
     protected void processMsg(Msg msg) {
+        if (this.isShutdown) return;
         switch (msg.getType()) {
             case DP_DispenseCash:
                 handleDispenseCash(msg.getDetails());

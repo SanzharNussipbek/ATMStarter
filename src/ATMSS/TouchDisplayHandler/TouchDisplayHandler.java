@@ -19,6 +19,10 @@ public class TouchDisplayHandler extends HWHandler {
     //------------------------------------------------------------
     // processMsg
     protected void processMsg(Msg msg) {
+        if (msg.getType() == Msg.Type.ADMIN_MenuItem) {
+            atmss.send(new Msg(id, mbox, msg.getType(), msg.getDetails()));
+        }
+        if (this.isShutdown) return;
         switch (msg.getType()) {
             case TD_UpdateDisplay:
                 handleUpdateDisplay(msg);
@@ -74,8 +78,6 @@ public class TouchDisplayHandler extends HWHandler {
             case AmountInput:
             case PR_Receipt:
             case TD_AnotherService:
-            case ADMIN_btn:
-            case ADMIN_MenuItem:
                 atmss.send(new Msg(id, mbox, msg.getType(), msg.getDetails()));
                 break;
 
@@ -87,7 +89,7 @@ public class TouchDisplayHandler extends HWHandler {
 
 
     protected void handleAdminPassword(String value) {
-        log.info(id + ": admin password input)");
+        log.info(id + ": admin password input");
     }
 
 

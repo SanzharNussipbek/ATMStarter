@@ -52,7 +52,7 @@ public class HWHandler extends AppThread {
                     break;
 
                 default:
-                    if (!isShutdown) processMsg(msg);
+                    processMsg(msg);
                     break;
             }
         }

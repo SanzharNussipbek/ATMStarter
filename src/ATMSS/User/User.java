@@ -1,7 +1,5 @@
 package ATMSS.User;
 
-import ATMSS.Account.Account;
-
 public class User {
     private String cardNum = null;
     private String pin = null;

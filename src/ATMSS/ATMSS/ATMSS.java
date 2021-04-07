@@ -1,6 +1,5 @@
 package ATMSS.ATMSS;
 
-import ATMSS.Account.Account;
 import ATMSS.User.User;
 import AppKickstarter.AppKickstarter;
 import AppKickstarter.misc.*;
@@ -13,7 +12,7 @@ import java.util.Calendar;
 //======================================================================
 // ATMSS
 public class ATMSS extends AppThread {
-    private int pollingTime;
+    private final int pollingTime;
     private MBox cardReaderMBox;
     private MBox keypadMBox;
     private MBox touchDisplayMBox;
@@ -32,6 +31,8 @@ public class ATMSS extends AppThread {
 		ACCOUNT_INPUT,
 		ACCOUNT_LIST,
 		ADMIN,
+		ADMIN_MENU,
+		CHANGEPIN,
 	}
 	private enum Operation {
     	WITHDRAW,
@@ -40,13 +41,12 @@ public class ATMSS extends AppThread {
 		BALANCE,
 		NONE,
 	}
-	private boolean isLoggedIn;
 	private State state;
 	private Operation operation;
 	private String transferAcc;
 	private String amount;
 	private String adminPassword;
-	private String ADMIN_PASSWORD = "0000";
+	private String oldPin;
 	private int authTries;
 	private int adminTries;
 
@@ -76,10 +76,10 @@ public class ATMSS extends AppThread {
 		user = new User();
 		authTries = 0;
 		adminTries = 0;
-		isLoggedIn = false;
 		transferAcc = "";
 		amount = "";
 		adminPassword = "";
+		oldPin = "";
 		updateState(State.WELCOME);
 		updateOperation(Operation.NONE);
 
@@ -198,17 +198,20 @@ public class ATMSS extends AppThread {
 					handleTransferBAMS(msg.getDetails());
 					break;
 
+				case BAMS_ChangePin:
+					handleChangePinBAMS(msg.getDetails());
+					break;
+
+				case BAMS_Logout:
+					handleLogoutBAMS(msg.getDetails());
+					break;
+
 				case Shutdown:
 					handleShutdownReply(msg.getSender(), msg.getDetails());
 					break;
 
 				case Reset:
 					handleResetReply(msg.getSender(), msg.getDetails());
-					break;
-
-				case ADMIN_btn:
-					updateState(State.ADMIN);
-					touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AdminPassword"));
 					break;
 
 				case ADMIN_MenuItem:
@@ -227,73 +230,81 @@ public class ATMSS extends AppThread {
     } // run
 
 
-	//------------------------------------------------------------
-	// updateOperation
-	private void updateState(State newState) {
-    	state = newState;
-	} // updateOperation
+	private void handleAdmin() {
+		if (state != State.WELCOME) return;
+		updateState(State.ADMIN);
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AdminPassword"));
+	}
 
 
-	//------------------------------------------------------------
-	// updateOperation
-	private void updateOperation(Operation newOperation) {
-		operation = newOperation;
-	} // updateOperation
-
-
-	//------------------------------------------------------------
-	// restart
-	private void restart() {
-    	updateState(State.WELCOME);
-    	updateOperation(Operation.NONE);
-	} // restart
-
-
-	//------------------------------------------------------------
-	// now
-	public static String now() {
-		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		return sdf.format(cal.getTime());
-	} // now
-
-
-	//------------------------------------------------------------
-	// generateReceipt
-	private String generateReceipt() {
-    	String receipt = "";
-    	receipt += "\n============================\n\n";
-    	receipt += "                           RECEIPT\n";
-
-    	receipt += "\nOperation: " + operation + "\n";
-
-    	receipt += "\nDate&Time: " + now() + "\n";
-
-		receipt += "\nCard Number: " + user.getCardNum() + "\n";
-
-		receipt += "\nAccount Number: " + user.getCurrentAcc() + "\n";
-
-		receipt += "\nAmount: HKD$" + amount + "\n";
-
-		if (operation == Operation.TRANSFER) {
-			receipt += "\nTo: " + transferAcc + "\n";
+	private void handleAdminPasswordEnter() {
+		adminTries++;
+		String ADMIN_PASSWORD = "0000";
+		if (!adminPassword.equals(ADMIN_PASSWORD)) {
+			adminPassword = "";
+			if (adminTries >= 3) {
+				adminTries = 0;
+				handleCancel();
+				return;
+			}
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Incorrect Admin Password"));
+			return;
 		}
+		adminTries = 0;
+		adminPassword = "";
+		updateState(State.ADMIN_MENU);
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AdminMenu"));
+	}
 
-    	receipt += "\n============================\n";
-    	return receipt;
-	} // generateReceipt
+
+	/*******************************************************************************************************************
+	 *
+	 * MAIN MENU
+	 *
+	 ******************************************************************************************************************/
 
 
 	//------------------------------------------------------------
-	// handleReceipt
-	private void handleReceipt(String choice) {
-    	if (choice.equals("YES")) {
-			log.info(id + ": print receipt");
-			String receipt = generateReceipt();
-			printerMBox.send(new Msg(id, mbox, Msg.Type.PR_Print, receipt));
+	// handleMainMenuItemClick
+	private void handleMainMenuItemClick(Msg msg) {
+		log.info(id + ": Main Menu Item clicked [" + msg.getDetails() + "]");
+
+		switch (msg.getDetails()) {
+			case "WITHDRAW":
+				touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AmountList"));
+				updateOperation(Operation.WITHDRAW);
+				break;
+
+			case "DEPOSIT":
+				touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "InsertCash"));
+				collectorMBox.send(new Msg(id, mbox, Msg.Type.TD_GetAmount, "InsertCash"));
+				updateOperation(Operation.DEPOSIT);
+				break;
+
+			case "BALANCE":
+				String msgDetail = user.getCardNum() + "/" + user.getCurrentAcc() + "/" + user.getCredential();
+				bamsMBox.send(new Msg(id, mbox, Msg.Type.BAMS_Enquiry, msgDetail));
+				break;
+
+			case "TRANSFER":
+				touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AccountInput"));
+				updateOperation(Operation.TRANSFER);
+				updateState(State.ACCOUNT_INPUT);
+				break;
+
+			case "CANCEL":
+				handleCancel();
+				break;
+
+			case "CHANGE PIN":
+				showChangePinDisplay();
+				break;
+
+			default:
+				log.info(id + ": unknown menu item " + msg.getDetails());
+				break;
 		}
-		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AnotherService"));
-	} // handleReceipt
+	} // handleMainMenuItemClick
 
 
 	//------------------------------------------------------------
@@ -307,24 +318,110 @@ public class ATMSS extends AppThread {
 	} // handleAnotherService
 
 
+	/*******************************************************************************************************************
+	 *
+	 * AMOUNT INPUT
+	 *
+	 ******************************************************************************************************************/
+
+
 	//------------------------------------------------------------
-	// handleReceiveTrahandleAmountInputnsferCard
+	// handleAmountListItemClick
+	private void handleAmountListItemClick(String value) {
+		if (value.equals("Other")) {
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AmountInput"));
+			updateState(State.AMOUNT_INPUT);
+		}
+		if (operation == Operation.WITHDRAW) {
+			handleWithdrawAmount(value);
+		}
+		if (operation == Operation.TRANSFER) {
+			handleTransfer(value);
+		}
+	}// handleAmountListItemClick
+
+
+	//------------------------------------------------------------
+	// handleAmountInput
 	private void handleAmountInput(String amount) {
     	if (operation == Operation.WITHDRAW) {
     		handleWithdrawAmount(amount);
-    		return;
 		}
-
     	if (operation == Operation.TRANSFER) {
     		handleTransfer(amount);
-    		return;
 		}
-
 		if (operation == Operation.DEPOSIT) {
 			handleDeposit(amount);
-			return;
 		}
 	} // handleAmountInput
+
+
+	/*******************************************************************************************************************
+	 *
+	 * LOGOUT
+	 *
+	 ******************************************************************************************************************/
+
+
+	private void handleLogoutBAMS(String result) {
+		if (result.equals("succ")) {
+			handleLogout();
+		}
+		if (result.equals("ERROR")) {
+			log.info(id + ": error while logging out");
+		}
+	}
+
+
+	/*******************************************************************************************************************
+	 *
+	 * CHANGE PIN
+	 *
+	 ******************************************************************************************************************/
+
+
+	private void showChangePinDisplay() {
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "ChangePin"));
+		updateState(State.CHANGEPIN);
+		oldPin = user.getPin();
+		user.setPin(null);
+	}
+
+
+	private void handleChangePinBAMS(String result) {
+		if (result.equals("succ")) {
+			log.info(id + ": new pin successfully set [" + user.getPin() + "]");
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "ChangePinSuccess"));
+		}
+		if (result.equals("ERROR")) {
+			log.info(id + ": error while changing pin");
+			handleCancel();
+		}
+	}
+
+
+	/*******************************************************************************************************************
+	 *
+	 * BALANCE
+	 *
+	 ******************************************************************************************************************/
+
+
+	//------------------------------------------------------------
+	// handleShowBalance
+	private void handleShowBalance(String balance) {
+		amount = balance;
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Balance"));
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_SendBalance, balance));
+		updateOperation(Operation.BALANCE);
+	} // handleShowBalance
+
+
+	/*******************************************************************************************************************
+	 *
+	 * DEPOSIT
+	 *
+	 ******************************************************************************************************************/
 
 
 	//------------------------------------------------------------
@@ -348,6 +445,13 @@ public class ATMSS extends AppThread {
 		}
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "DepositSuccess"));
 	} // handleDepositBAMS
+
+
+	/*******************************************************************************************************************
+	 *
+	 * TRANSFER
+	 *
+	 ******************************************************************************************************************/
 
 
 	//------------------------------------------------------------
@@ -390,25 +494,11 @@ public class ATMSS extends AppThread {
 	} // handleReceiveTransferCard
 
 
-	//------------------------------------------------------------
-	// handleAmountListItemClick
-	private void handleAmountListItemClick(String value) {
-		if (value.equals("Other")) {
-			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AmountInput"));
-			updateState(State.AMOUNT_INPUT);
-			return;
-		}
-
-		if (operation == Operation.WITHDRAW) {
-			handleWithdrawAmount(value);
-			return;
-		}
-
-		if (operation == Operation.TRANSFER) {
-			handleTransfer(value);
-			return;
-		}
-	}// handleAmountListItemClick
+	/*******************************************************************************************************************
+	 *
+	 * WITHDRAW
+	 *
+	 ******************************************************************************************************************/
 
 
 	//------------------------------------------------------------
@@ -435,6 +525,29 @@ public class ATMSS extends AppThread {
 	} // handleWithdrawBAMS
 
 
+	/*******************************************************************************************************************
+	 *
+	 * ACCOUNT
+	 *
+	 ******************************************************************************************************************/
+
+
+	//------------------------------------------------------------
+	// handleAccountList
+	private void handleAccountList(String accountList) {
+		if (accountList.equals("CREDNOK")) {
+			log.info(id + ": invalid credential");
+			handleCancel();
+			return;
+		}
+		updateState(State.ACCOUNT_LIST);
+		String[] accounts = accountList.split("/");
+		user.setAccounts(accounts);
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AccountList"));
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_AccountList, accountList));
+	} // handleAccountList
+
+
 	//------------------------------------------------------------
 	// handleAccountClick
 	private void handleAccountClick(String accIndex) {
@@ -448,57 +561,220 @@ public class ATMSS extends AppThread {
 	} // handleAccountClick
 
 
-	//------------------------------------------------------------
-	// handleShowBalance
-	private void handleShowBalance(String balance) {
-    	amount = balance;
-		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Balance"));
-		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_SendBalance, balance));
-		updateOperation(Operation.BALANCE);
-	} // handleShowBalance
+	/*******************************************************************************************************************
+	 *
+	 * AUTHORIZATION
+	 *
+	 ******************************************************************************************************************/
 
 
 	//------------------------------------------------------------
-	// handleMainMenuItemClick
-	private void handleMainMenuItemClick(Msg msg) {
-		log.info(id + ": Main Menu Item clicked [" + msg.getDetails() + "]");
+	// handleCardInserted
+	private void handleCardInserted(Msg msg) {
+		log.info("CardInserted: " + msg.getDetails());
+		buzz("beep");
+		authTries = 0;
+		user.setCardNum(msg.getDetails());
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Pin"));
+		updateState(State.PIN);
+	} // handleCardInserted
 
-		switch (msg.getDetails()) {
-			case "WITHDRAW":
-				touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AmountList"));
-				updateOperation(Operation.WITHDRAW);
-				break;
 
-			case "DEPOSIT":
-				touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "InsertCash"));
-				collectorMBox.send(new Msg(id, mbox, Msg.Type.TD_GetAmount, "InsertCash"));
-				updateOperation(Operation.DEPOSIT);
-				break;
-
-			case "BALANCE":
-				String msgDetail = user.getCardNum() + "/" + user.getCurrentAcc() + "/" + user.getCredential();
-				bamsMBox.send(new Msg(id, mbox, Msg.Type.BAMS_Enquiry, msgDetail));
-				break;
-
-			case "TRANSFER":
-				touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AccountInput"));
-				updateOperation(Operation.TRANSFER);
-				updateState(State.ACCOUNT_INPUT);
-				break;
-
-			case "CANCEL":
-				handleCancel();
-				break;
-
-			case "CHANGE PIN":
-				log.info(id + ": menu item " + msg.getDetails());
-				break;
-
-			default:
-				log.info(id + ": unknown menu item " + msg.getDetails());
-				break;
+	//------------------------------------------------------------
+	// handleSetAccountPin
+	private void handleSetAccountPin(String pinNum) {
+		if (user.getPin() == null) {
+			user.setPin(pinNum);
+			return;
 		}
-	} // handleMainMenuItemClick
+		if (user.getPin().length() < 6) {
+			user.setPin(user.getPin() + pinNum);
+		}
+	} // handleCardInserted
+
+
+	//------------------------------------------------------------
+	// handleAuth
+	private void handleAuth(String credential) {
+		buzz("beep");
+		boolean validator = !credential.equals("NOK");
+		if (!validator) {
+			authTries++;
+			log.info(id + ": Invalid PIN(try no. " + authTries + "):" + user.getPin());
+			user.setPin(null);
+			handleErase();
+			if (authTries >= 3) {
+				log.info(id + ": Three tries were expired!");
+				handleCancel();
+				return;
+			}
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Incorrect Pin"));
+			updateState(State.INCORRECT_PIN);
+			return;
+		}
+		authTries = 0;
+		user.setCredential(credential);
+		log.info(id + ": Authorize account: " + user.getCardNum());
+		bamsMBox.send(new Msg(id, mbox, Msg.Type.BAMS_Accounts, user.getCardNum() + "/" + credential));
+	} // handleAuth
+
+
+	/*******************************************************************************************************************
+	 *
+	 * KEYPAD
+	 *
+	 ******************************************************************************************************************/
+
+
+	//------------------------------------------------------------
+	// handleCancel
+	private void handleCancel() {
+		buzz("beep");
+		String details = user.getCardNum() + "/" + user.getCredential();
+		bamsMBox.send(new Msg(id, mbox, Msg.Type.BAMS_Logout, details));
+	} // handleCancel
+
+
+	// handleEnter
+	private void handleEnter() {
+		if (state == State.PIN || state == State.INCORRECT_PIN) {
+			bamsMBox.send(new Msg(id, mbox, Msg.Type.BAMS_Login, user.getCardNum() + "/" + user.getPin()));
+		}
+		if (state == State.AMOUNT_INPUT) {
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_GetAmount, ""));
+		}
+		if (state == State.ACCOUNT_INPUT) {
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_GetCard, ""));
+		}
+		if (state == State.ADMIN) {
+			handleAdminPasswordEnter();
+		}
+		if (state == State.CHANGEPIN) {
+			log.info(id + ": old pin [" + oldPin + "], new pin [" + user.getPin() + "]");
+			String details = user.getCardNum() + "/" + oldPin + "/" + user.getPin() + "/" + user.getCredential();
+			bamsMBox.send(new Msg(id, mbox, Msg.Type.BAMS_ChangePin, details));
+		}
+	} // handleEnter
+
+
+	//------------------------------------------------------------
+	// handleErase
+	private void handleErase() {
+    	if (state == State.PIN || state == State.INCORRECT_PIN || state == State.CHANGEPIN) {
+    		user.setPin("");
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_ClearPinText, "TD_ClearPinText"));
+		}
+
+		if (state == State.ADMIN) {
+			adminPassword = "";
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.ADMIN_pwd, "CLEAR"));
+		}
+	} // handleErase
+
+
+	//------------------------------------------------------------
+	// handleNumkeyPress
+	private void handleNumkeyPress(Msg msg) {
+    	if (msg.getDetails().compareToIgnoreCase("00") == 0 || msg.getDetails().compareToIgnoreCase(".") == 0) return;
+
+    	if (state == State.WELCOME || state == State.MAIN_MENU) return;
+
+    	if (state == State.PIN || state == State.INCORRECT_PIN || state == State.CHANGEPIN) {
+			handleSetAccountPin(msg.getDetails());
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_AppendPinText, ""));
+		}
+    	if (state == State.AMOUNT_INPUT) {
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_AppendAmountText, msg.getDetails()));
+		}
+    	if (state == State.ACCOUNT_INPUT) {
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_CardInput, msg.getDetails()));
+		}
+    	if (state == State.ADMIN) {
+			adminPassword += msg.getDetails();
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.ADMIN_pwd, ""));
+		}
+	} // handleNumkeyPress
+
+
+    //------------------------------------------------------------
+    // processKeyPressed
+    private void processKeyPressed(Msg msg) {
+		log.info("KeyPressed: " + msg.getDetails());
+        if (msg.getDetails().compareToIgnoreCase("Cancel") == 0) {
+        	handleCancel();
+		} else if (msg.getDetails().compareToIgnoreCase("Erase") == 0) {
+			handleErase();
+		} else if (msg.getDetails().compareToIgnoreCase("Admin") == 0) {
+        	handleAdmin();
+		} else if (msg.getDetails().compareToIgnoreCase("Enter") == 0) {
+			handleEnter();
+		} else {
+			handleNumkeyPress(msg);
+		}
+    } // processKeyPressed
+
+
+	/*******************************************************************************************************************
+	 *
+	 * PRINTER
+	 *
+	 ******************************************************************************************************************/
+
+
+	//------------------------------------------------------------
+	// generateReceipt
+	private String generateReceipt() {
+		String receipt = "\n============================\n\n";
+		receipt += "                           RECEIPT\n";
+		receipt += "\nOperation: " + operation + "\n";
+		receipt += "\nDate&Time: " + now() + "\n";
+		receipt += "\nCard Number: " + user.getCardNum() + "\n";
+		receipt += "\nAccount Number: " + user.getCurrentAcc() + "\n";
+		receipt += "\nAmount: HKD$" + amount + "\n";
+		receipt += operation == Operation.TRANSFER ? "\nTo: " + transferAcc + "\n" : "";
+		receipt += "\n============================\n";
+		return receipt;
+	} // generateReceipt
+
+
+	//------------------------------------------------------------
+	// handleReceipt
+	private void handleReceipt(String choice) {
+		if (choice.equals("YES")) {
+			log.info(id + ": print receipt");
+			String receipt = generateReceipt();
+			printerMBox.send(new Msg(id, mbox, Msg.Type.PR_Print, receipt));
+		}
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AnotherService"));
+	} // handleReceipt
+
+
+	/*******************************************************************************************************************
+	 *
+	 * MISCELLANEOUS
+	 *
+	 ******************************************************************************************************************/
+
+
+	private void handleLogout() {
+		restart();
+		user.reset();
+		transferAcc = "";
+		amount = "";
+		authTries = 0;
+		adminTries = 0;
+		adminPassword = "";
+		oldPin = "";
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Welcome"));
+		if (state == State.ADMIN) {
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.ADMIN_pwd, "CLEAR"));
+		} else {
+			cardReaderMBox.send(new Msg(id, mbox, Msg.Type.CR_EjectCard, ""));
+		}
+		if (state == State.PIN || state == State.INCORRECT_PIN) {
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_ClearPinText, "TD_ClearPinText"));
+		}
+	}
 
 
 	private void handleCommand(String btn) {
@@ -515,7 +791,7 @@ public class ATMSS extends AppThread {
 
 
 	private void handleShutdownReply(String sender, String result) {
-    	log.info(id + ": Shutdown result: [" + result + " | " + sender + "]");
+		log.info(id + ": Shutdown result: [" + result + " | " + sender + "]");
 	}
 
 
@@ -541,200 +817,25 @@ public class ATMSS extends AppThread {
 
 
 	//------------------------------------------------------------
-	// handleCardInserted
-	private void handleCardInserted(Msg msg) {
-		log.info("CardInserted: " + msg.getDetails());
-		buzz("beep");
-		resetAuthTries();
-		user.setCardNum(msg.getDetails());
-		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Pin"));
-		updateState(State.PIN);
-	} // handleCardInserted
+	// updateOperation
+	private void updateState(State newState) {
+		state = newState;
+	} // updateOperation
 
 
 	//------------------------------------------------------------
-	// handleSetAccountPin
-	private void handleSetAccountPin(String pinNum) {
-		if (user.getPin() == null) {
-			user.setPin(pinNum);
-			return;
-		}
-
-		if(user.getPin().length() < 6) {
-			user.setPin(user.getPin() + pinNum);
-		}
-	} // handleCardInserted
+	// updateOperation
+	private void updateOperation(Operation newOperation) {
+		operation = newOperation;
+	} // updateOperation
 
 
 	//------------------------------------------------------------
-	// resetAuthTries
-	private void resetAuthTries() { authTries = 0; } // resetAuthTries
-
-
-	//------------------------------------------------------------
-	// handleAuth
-	private void handleAuth(String credential) {
-		buzz("beep");
-		boolean validator = !credential.equals("NOK");
-		if (!validator) {
-			authTries++;
-			log.info(id + ": Invalid PIN(try no. " + authTries + "):" + user.getPin());
-			user.setPin(null);
-			handleErase();
-			if (authTries >= 3) {
-				log.info(id + ": Three tries were expired!");
-				handleCancel();
-				return;
-			}
-			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Incorrect Pin"));
-			updateState(State.INCORRECT_PIN);
-			return;
-		}
-		resetAuthTries();
-		user.setCredential(credential);
-		log.info(id + ": Authorize account: " + user.getCardNum());
-		bamsMBox.send(new Msg(id, mbox, Msg.Type.BAMS_Accounts, user.getCardNum() + "/" + credential));
-	} // handleAuth
-
-
-	private void handleAccountList(String accountList) {
-    	if (accountList.equals("CREDNOK")) {
-			log.info(id + ": invalid credential");
-    		handleCancel();
-    		return;
-		}
-		updateState(State.ACCOUNT_LIST);
-    	String[] accounts = accountList.split("/");
-    	user.setAccounts(accounts);
-		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AccountList"));
-		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_AccountList, accountList));
-	}
-
-
-	private void handleAdminPasswordEnter() {
-		adminTries++;
-		if (!adminPassword.equals(ADMIN_PASSWORD)) {
-			adminPassword = "";
-			if (adminTries >= 3) {
-				adminTries = 0;
-				handleCancel();
-				return;
-			}
-			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Incorrect Admin Password"));
-			return;
-		}
-		adminTries = 0;
-		adminPassword = "";
-		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AdminMenu"));
-	}
-
-
-	//------------------------------------------------------------
-	// handleCancel
-	private void handleCancel() {
-		buzz("beep");
-		restart();
-		user.reset();
-		transferAcc = "";
-		amount = "";
-		authTries = 0;
-		adminTries = 0;
-		adminPassword = "";
-		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Welcome"));
-		if (state == State.ADMIN) {
-			cardReaderMBox.send(new Msg(id, mbox, Msg.Type.CR_EjectCard, ""));
-			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.ADMIN_pwd, "CLEAR"));
-		}
-		if (state == State.PIN || state == State.INCORRECT_PIN) {
-			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_ClearPinText, "TD_ClearPinText"));
-		}
-	} // handleCancel
-
-
-	// handleEnter
-	private void handleEnter() {
-		if (state == State.PIN || state == State.INCORRECT_PIN) {
-			bamsMBox.send(new Msg(id, mbox, Msg.Type.BAMS_Login, user.getCardNum() + "/" + user.getPin()));
-		}
-		if (state == State.AMOUNT_INPUT) {
-			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_GetAmount, ""));
-		}
-		if (state == State.ACCOUNT_INPUT) {
-			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_GetCard, ""));
-		}
-		if (state == State.ADMIN) {
-			handleAdminPasswordEnter();
-		}
-	} // handleEnter
-
-
-	//------------------------------------------------------------
-	// handleErase
-	private void handleErase() {
-    	if (state == State.PIN || state == State.INCORRECT_PIN) {
-    		user.setPin("");
-			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_ClearPinText, "TD_ClearPinText"));
-			return;
-		}
-
-		if (state == State.ADMIN) {
-			adminPassword = "";
-			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.ADMIN_pwd, "CLEAR"));
-			return;
-		}
-	} // handleErase
-
-
-	//------------------------------------------------------------
-	// handleNumkeyPress
-	private void handleNumkeyPress(Msg msg) {
-    	if (msg.getDetails().compareToIgnoreCase("00") == 0) return;
-
-    	if (state == State.WELCOME || state == State.MAIN_MENU) return;
-
-    	if (state == State.PIN || state == State.INCORRECT_PIN) {
-			handleSetAccountPin(msg.getDetails());
-			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_AppendPinText, ""));
-			return;
-		}
-
-    	if (state == State.AMOUNT_INPUT) {
-			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_AppendAmountText, msg.getDetails()));
-			return;
-		}
-
-    	if (state == State.ACCOUNT_INPUT) {
-			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_CardInput, msg.getDetails()));
-			return;
-		}
-
-    	if (state == State.ADMIN) {
-			adminPassword += msg.getDetails();
-			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.ADMIN_pwd, ""));
-			return;
-		}
-	} // handleNumkeyPress
-
-
-    //------------------------------------------------------------
-    // processKeyPressed
-    private void processKeyPressed(Msg msg) {
-		log.info("KeyPressed: " + msg.getDetails());
-		// *** The following is an example only!! ***
-        if (msg.getDetails().compareToIgnoreCase("Cancel") == 0) {
-        	handleCancel();
-		} else if (msg.getDetails().compareToIgnoreCase("Erase") == 0) {
-			handleErase();
-		} else if (msg.getDetails().compareToIgnoreCase("???") == 0) {
-
-		} else if (msg.getDetails().compareToIgnoreCase("Enter") == 0) {
-			handleEnter();
-		} else if (msg.getDetails().compareToIgnoreCase(".") == 0) {
-
-		} else {
-			handleNumkeyPress(msg);
-		}
-    } // processKeyPressed
+	// restart
+	private void restart() {
+		updateState(State.WELCOME);
+		updateOperation(Operation.NONE);
+	} // restart
 
 
 	//------------------------------------------------------------
@@ -749,4 +850,13 @@ public class ATMSS extends AppThread {
     private void processMouseClicked(Msg msg) {
 		log.info("MouseCLicked: " + msg.getDetails());
 	} // processMouseClicked
+
+
+	//------------------------------------------------------------
+	// now
+	public static String now() {
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return sdf.format(cal.getTime());
+	} // now
 } // CardReaderHandler

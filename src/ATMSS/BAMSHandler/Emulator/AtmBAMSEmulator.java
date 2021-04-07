@@ -37,6 +37,16 @@ public class AtmBAMSEmulator extends AtmBAMSHandler {
 
 
     //------------------------------------------------------------
+    // handleLogout
+    protected void handleLogout(String details) throws BAMSInvalidReplyException, IOException {
+        log.info(id + ": logout [" + details + "]");
+        String[] values = details.split("/");
+        String result = bams.logout(values[0], values[1]);
+        atmss.send(new Msg(id, mbox, Msg.Type.BAMS_Logout, result));
+    } // handleLogout
+
+
+    //------------------------------------------------------------
     // handleEnquiry
     protected void handleEnquiry(String details) throws BAMSInvalidReplyException, IOException {
         log.info(id + ": enquiry [" + details + "]");
@@ -96,6 +106,16 @@ public class AtmBAMSEmulator extends AtmBAMSHandler {
         double transAmount = bams.transfer(values[0], values[1], values[2], values[3], values[4]);
         atmss.send(new Msg(id, mbox, Msg.Type.BAMS_Transfer, String.valueOf(transAmount)));
     } // handleTransfer
+
+
+    //------------------------------------------------------------
+    // handleChangePin
+    protected void handleChangePin(String details) throws BAMSInvalidReplyException, IOException {
+        log.info(id + ": change pin [" + details + "]");
+        String[] values = details.split("/");
+        String result = bams.chgPinReq(values[0], values[1], values[2], values[3]);
+        atmss.send(new Msg(id, mbox, Msg.Type.BAMS_ChangePin, result));
+    } // handleChangePin
 
 
     //------------------------------------------------------------

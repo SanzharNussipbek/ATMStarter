@@ -1,5 +1,8 @@
 package ATMSS.BAMSHandler;
 
+import ATMSS.BAMSHandler.BAMSHandler;
+import ATMSS.BAMSHandler.BAMSInvalidReplyException;
+
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.logging.*;
@@ -17,13 +20,15 @@ public class TestBAMSHandler {
         BAMSHandler bams = new BAMSHandler(urlPrefix, initLogger());	// with logger
 
         try {
-//            testLogin(bams);
-//            testGetAcc(bams);
-//            testEnquiry(bams);
-//            testWithdraw(bams);
-//            testDeposit(bams);
-//            testTransfer(bams);
-//            testEnquiry(bams);
+            testLogin(bams);
+            testGetAcc(bams);
+            testWithdraw(bams);
+            testDeposit(bams);
+            testEnquiry(bams);
+            testTransfer(bams);
+            testAccStmtReq(bams);
+            testChqBookReq(bams);
+            testChgPinReq(bams);
         } catch (Exception e) {
             System.out.println("TestBAMSHandler: Exception caught: " + e.getMessage());
             e.printStackTrace();
@@ -90,6 +95,36 @@ public class TestBAMSHandler {
         System.out.println("transAmount: " + transAmount);
         System.out.println();
     } // testTransfer
+
+
+    //------------------------------------------------------------
+    // testAccStmtReq
+    static void testAccStmtReq(BAMSHandler bams) throws BAMSInvalidReplyException, IOException {
+        System.out.println("AccStmtReq:");
+        String result = bams.accStmtReq("12345678-4", "111-222-334","cred-6");
+        System.out.println("result: " + result);
+        System.out.println();
+    } // testAccStmtReq
+
+
+    //------------------------------------------------------------
+    // testChqBookReq
+    static void testChqBookReq(BAMSHandler bams) throws BAMSInvalidReplyException, IOException {
+        System.out.println("ChqBookReq:");
+        String result = bams.chqBookReq("12345678-4", "111-222-334","cred-7");
+        System.out.println("result: " + result);
+        System.out.println();
+    } // testChqBookReq
+
+
+    //------------------------------------------------------------
+    // testChgPinReq
+    static void testChgPinReq(BAMSHandler bams) throws BAMSInvalidReplyException, IOException {
+        System.out.println("ChgPinReq:");
+        String result = bams.chgPinReq("12345678-4", "456123789", "987321654", "cred-8");
+        System.out.println("result: " + result);
+        System.out.println();
+    } // testChgPinReq
 
 
     //------------------------------------------------------------

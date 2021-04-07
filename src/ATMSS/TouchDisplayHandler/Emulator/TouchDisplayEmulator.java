@@ -69,6 +69,10 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 				handleIncorrectAdminPassword();
 				break;
 
+			case "ChangePin":
+				handleChangePin();
+				break;
+
 			case "Welcome":
 			case "Pin":
 			case "BlankScreen":
@@ -92,6 +96,7 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 			case "TransferError":
 			case "AdminPassword":
 			case "AdminMenu":
+			case "ChangePinSuccess":
 				String filename = "TouchDisplay" + msg.getDetails() + ".fxml";
 				reloadStage(filename);
 				break;
@@ -128,6 +133,19 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 			}
 		});
     } // reloadStage
+
+
+	//------------------------------------------------------------
+	// handleChangePin
+	protected void handleChangePin() {
+		log.info(id + ": Change Pin");
+		reloadStage("TouchDisplayPin.fxml");
+		Platform.runLater(new Runnable() {
+			public void run() {
+				touchDisplayEmulatorController.handleNewPin();
+			}
+		});
+	} // handleChangePin
 
 
 	//------------------------------------------------------------
@@ -230,4 +248,6 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 		log.info(id + ": Incorrect Pin");
 		touchDisplayEmulatorController.handleIncorrectPin();
 	} // handleIncorrectPin
+
+
 } // TouchDisplayEmulator

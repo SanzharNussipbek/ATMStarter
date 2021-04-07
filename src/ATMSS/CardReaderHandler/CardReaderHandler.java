@@ -18,6 +18,7 @@ public class CardReaderHandler extends HWHandler {
     //------------------------------------------------------------
     // processMsg
     protected void processMsg(Msg msg) {
+        if (this.isShutdown) return;
         switch (msg.getType()) {
             case CR_CardInserted:
                 atmss.send(new Msg(id, mbox, Msg.Type.CR_CardInserted, msg.getDetails()));

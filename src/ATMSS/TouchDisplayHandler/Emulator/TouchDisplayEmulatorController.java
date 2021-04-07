@@ -63,6 +63,12 @@ public class TouchDisplayEmulatorController {
     } // td_mouseClick
 
 
+    public void handleNewPin() {
+        pin_title.setText("Please enter NEW PIN:");
+        pin_title.setTranslateX(-25);
+    }
+
+
     public void handleSetAdminPassword(String value) {
         if (value.equals("CLEAR")) {
             adminPassword.setText("");
@@ -129,13 +135,6 @@ public class TouchDisplayEmulatorController {
 
         touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.MainMenuItem, btnTxt));
     } // handleMenuItemClick
-
-
-    public void handleAdminBtnClick(ActionEvent actionEvent) {
-        log.info(id + ": admin button clicked");
-        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_Play, "button"));
-        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.ADMIN_btn, ""));
-    }
 
 
     public void handleAdminMenuItemClick(ActionEvent actionEvent) {

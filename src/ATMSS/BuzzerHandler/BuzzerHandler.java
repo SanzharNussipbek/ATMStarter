@@ -22,6 +22,7 @@ public class BuzzerHandler extends HWHandler {
     //------------------------------------------------------------
     // processMsg
     protected void processMsg(Msg msg) {
+        if (this.isShutdown) return;
         switch (msg.getType()) {
             case BZ_Play:
                 play(msg.getDetails());

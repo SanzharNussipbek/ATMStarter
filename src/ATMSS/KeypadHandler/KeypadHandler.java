@@ -18,6 +18,7 @@ public class KeypadHandler extends HWHandler {
     //------------------------------------------------------------
     // processMsg
     protected void processMsg(Msg msg) {
+        if (this.isShutdown) return;
         switch (msg.getType()) {
             case KP_KeyPressed:
                 atmss.send(new Msg(id, mbox, Msg.Type.KP_KeyPressed, msg.getDetails()));

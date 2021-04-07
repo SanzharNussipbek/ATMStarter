@@ -17,6 +17,7 @@ public class AtmBAMSHandler extends HWHandler {
     //------------------------------------------------------------
     // processMsg
     protected void processMsg(Msg msg) {
+        if (this.isShutdown) return;
         try {
             switch (msg.getType()) {
                 case BAMS_Login:
@@ -41,6 +42,14 @@ public class AtmBAMSHandler extends HWHandler {
 
                 case BAMS_Transfer:
                     handleTransfer(msg.getDetails());
+                    break;
+
+                case BAMS_ChangePin:
+                    handleChangePin(msg.getDetails());
+                    break;
+
+                case BAMS_Logout:
+                    handleLogout(msg.getDetails());
                     break;
 
                 default:
@@ -93,4 +102,18 @@ public class AtmBAMSHandler extends HWHandler {
     protected void handleTransfer(String details) throws BAMSInvalidReplyException, IOException {
         log.info(id + ": transfer");
     } // handleTransfer
+
+
+    //------------------------------------------------------------
+    // handleChangePin
+    protected void handleChangePin(String details) throws BAMSInvalidReplyException, IOException {
+        log.info(id + ": change pin");
+    } // handleChangePin
+
+
+    //------------------------------------------------------------
+    // handleLogout
+    protected void handleLogout(String details) throws BAMSInvalidReplyException, IOException {
+        log.info(id + ": logout");
+    } // handleLogout
 }

@@ -14,7 +14,8 @@ if (!$conn) {
 
 $req = json_decode($_POST["BAMSReq"], false);
 
-function validateCred($conn, $userCred, $cardNo) {
+function validateCred($conn, $userCred, $cardNo)
+{
   $query = "SELECT CREDENTIAL FROM CARD WHERE CARD_NUMBER='$cardNo'";
   if ($result = mysqli_query($conn, $query)) {
     $cred = $result->fetch_row()[0];
@@ -132,11 +133,61 @@ if (strcmp($req->msgType, "LoginReq") === 0) {
     $query1 = "UPDATE ACCOUNT SET AMOUNT=AMOUNT-$req->amount WHERE CARD_NUMBER='$req->cardNo' AND ACCOUNT_NO='$req->fromAcc'";
     $query2 = "UPDATE ACCOUNT SET AMOUNT=AMOUNT+$req->amount WHERE CARD_NUMBER='$req->cardNo' AND ACCOUNT_NO='$req->toAcc'";
     if (mysqli_query($conn, $query1) && mysqli_query($conn, $query2)) {
-
     } else {
       $reply->cred = "FAIL";
     }
   }
+} else if (strcmp($req->msgType, "ChgPinReq") === 0) {
+  $reply->msgType = "ChgPinReply";
+  $reply->cardNo = $req->cardNo;
+  $reply->oldPin = $req->oldPin;
+  $reply->newPin = $req->newPin;
+  $reply->cred = $req->cred;
+  $reply->result = "succ";
+  if (!validateCred($conn, $req->cred, $req->cardNo)) {
+    $reply->result = "ERROR";
+  } else {
+    $query1 = "UPDATE CARD SET PIN=$req->newPin WHERE CARD_NUMBER='$req->cardNo' AND PIN='$req->oldPin'";
+    if (mysqli_query($conn, $query1)) {
+      $reply->result = "succ";
+    } else {
+      $reply->result = "ERROR";
+    }
+  }
+} else if (strcmp($req->msgType, "LogoutReq") === 0) {
+  $reply->msgType = "LogoutReply";
+  $reply->cardNo = $req->cardNo;
+  $reply->cred = $req->cred;
+  $reply->result = "succ";
+  if (!validateCred($conn, $req->cred, $req->cardNo)) {
+    $reply->result = "ERROR";
+  } else {
+    $query1 = "UPDATE CARD SET CREDENTIAL=NULL WHERE CARD_NUMBER='$req->cardNo' AND CREDENTIAL='$req->cred'";
+    if (mysqli_query($conn, $query1)) {
+      $reply->result = "succ";
+    } else {
+      $reply->result = "ERROR";
+    }
+  }
+} else if (strcmp($req->msgType, "AccStmtReq") === 0) {
+  $reply->msgType = "AccStmtReply";
+  $reply->cardNo = $req->cardNo;
+  $reply->accNo = $req->accNo;
+  $reply->cred = $req->cred;
+  $reply->result = "succ";
+} else if (strcmp($req->msgType, "ChqBookReq") === 0) {
+  $reply->msgType = "ChqBookReply";
+  $reply->cardNo = $req->cardNo;
+  $reply->accNo = $req->accNo;
+  $reply->cred = $req->cred;
+  $reply->result = "succ";
+} else if (strcmp($req->msgType, "ChgLangReq") === 0) {
+  $reply->msgType = "ChgLangReply";
+  $reply->cardNo = $req->cardNo;
+  $reply->oldLang = $req->oldLang;
+  $reply->newLang = $req->newLang;
+  $reply->cred = $req->cred;
+  $reply->result = "succ";
 }
 
 echo json_encode($reply);

@@ -125,9 +125,10 @@ public class Msg {
         /** BAMS Withdraw */                BAMS_Withdraw,
         /** BAMS Deposit */                 BAMS_Deposit,
         /** BAMS Transfer */                BAMS_Transfer,
-        ADMIN_btn,
+        BAMS_ChangePin,
+        BAMS_Logout,
         ADMIN_MenuItem,
         ADMIN_pwd,
-        ADMIN,
+        TD_NewPin,
     } // Type
 } // Msg
