@@ -24,6 +24,8 @@ public class TouchDisplayEmulatorController {
     public TextField cardPin;
     public Text pin_title;
     public Text pin_subtitle;
+    public Text password_title;
+    public Text password_subtitle;
     public Text menu_title;
     public TextField amount;
     public TextField denomination100Input;
@@ -36,6 +38,7 @@ public class TouchDisplayEmulatorController {
     public Button secondAcc;
     public Button thirdAcc;
     public Text balance;
+    public TextField adminPassword;
 
 
     //------------------------------------------------------------
@@ -59,6 +62,14 @@ public class TouchDisplayEmulatorController {
         touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.TD_MouseClicked, x + " " + y));
     } // td_mouseClick
 
+
+    public void handleSetAdminPassword(String value) {
+        if (value.equals("CLEAR")) {
+            adminPassword.setText("");
+            return;
+        }
+        adminPassword.appendText("* ");
+    }
 
     //------------------------------------------------------------
     // handleCashReceived
@@ -91,10 +102,20 @@ public class TouchDisplayEmulatorController {
     //------------------------------------------------------------
     // handleIncorrectPin
     protected void handleIncorrectPin() {
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_Play, "beep"));
         pin_title.setText("Incorrect PIN");
         pin_title.setTranslateX(10);
         pin_subtitle.setVisible(true);
     } // handleIncorrectPin
+
+
+    protected void handleIncorrectAdminPassword() {
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_Play, "beep"));
+        password_title.setText("Incorrect Password");
+        password_title.setTranslateX(40);
+        password_subtitle.setVisible(true);
+        adminPassword.setText("");
+    }
 
 
     //------------------------------------------------------------
@@ -108,6 +129,24 @@ public class TouchDisplayEmulatorController {
 
         touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.MainMenuItem, btnTxt));
     } // handleMenuItemClick
+
+
+    public void handleAdminBtnClick(ActionEvent actionEvent) {
+        log.info(id + ": admin button clicked");
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_Play, "button"));
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.ADMIN_btn, ""));
+    }
+
+
+    public void handleAdminMenuItemClick(ActionEvent actionEvent) {
+        log.info(id + ": admin menu item clicked");
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.BZ_Play, "beep"));
+
+        Button btn = (Button) actionEvent.getSource();
+        String btnTxt = btn.getText();
+
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.ADMIN_MenuItem, btnTxt));
+    }
 
 
     //------------------------------------------------------------
@@ -159,7 +198,6 @@ public class TouchDisplayEmulatorController {
         Button btn = (Button) actionEvent.getSource();
         String accIndex = btn.getId().equals("firstAcc") ? "0" : (btn.getId().equals("secondAcc") ? "1" : "2");
         touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.AccountItem, accIndex));
-
     } // handleAccountClick
 
 

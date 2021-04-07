@@ -3,11 +3,14 @@ package ATMSS.HWHandler;
 import AppKickstarter.AppKickstarter;
 import AppKickstarter.misc.*;
 
+import java.util.Random;
+
 
 //======================================================================
 // HWHandler
 public class HWHandler extends AppThread {
     protected MBox atmss = null;
+    protected boolean isShutdown = false;
 
     //------------------------------------------------------------
     // HWHandler
@@ -36,8 +39,21 @@ public class HWHandler extends AppThread {
                     quit = true;
                     break;
 
+                case Shutdown:
+                    isShutdown = true;
+                    String result = new Random().nextDouble() <= 0.9 ? "SUCCESS" : "FAILED";
+                    atmss.send(new Msg(id, mbox, Msg.Type.Shutdown, result));
+                    break;
+
+                case Reset:
+                    isShutdown = false;
+                    String resetResult = new Random().nextDouble() <= 0.9 ? "HEALTHY" : "FAILURE";
+                    atmss.send(new Msg(id, mbox, Msg.Type.Reset, resetResult));
+                    break;
+
                 default:
-                    processMsg(msg);
+                    if (!isShutdown) processMsg(msg);
+                    break;
             }
         }
 

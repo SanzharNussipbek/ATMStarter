@@ -20,10 +20,6 @@ public class TouchDisplayHandler extends HWHandler {
     // processMsg
     protected void processMsg(Msg msg) {
         switch (msg.getType()) {
-            case TD_MouseClicked:
-                atmss.send(new Msg(id, mbox, Msg.Type.TD_MouseClicked, msg.getDetails()));
-                break;
-
             case TD_UpdateDisplay:
                 handleUpdateDisplay(msg);
                 break;
@@ -40,26 +36,6 @@ public class TouchDisplayHandler extends HWHandler {
                 handleClearPinText();
                 break;
 
-            case BZ_Play:
-                atmss.send(new Msg(id, mbox, Msg.Type.BZ_Play, msg.getDetails()));
-                break;
-
-            case MainMenuItem:
-                atmss.send(new Msg(id, mbox, Msg.Type.MainMenuItem, msg.getDetails()));
-                break;
-
-            case AccountItem:
-                atmss.send(new Msg(id, mbox, Msg.Type.AccountItem, msg.getDetails()));
-                break;
-
-            case Cancel:
-                atmss.send(new Msg(id, mbox, Msg.Type.Cancel, msg.getDetails()));
-                break;
-
-            case AmountList:
-                atmss.send(new Msg(id, mbox, Msg.Type.AmountList, msg.getDetails()));
-                break;
-
             case TD_GetAmount:
                 handleGetAmount();
                 break;
@@ -70,14 +46,6 @@ public class TouchDisplayHandler extends HWHandler {
 
             case TD_GetCard:
                 handleGetCard();
-                break;
-
-            case TD_SendCard:
-                atmss.send(new Msg(id, mbox, Msg.Type.TD_SendCard, msg.getDetails()));
-                break;
-
-            case AmountInput:
-                atmss.send(new Msg(id, mbox, Msg.Type.AmountInput, msg.getDetails()));
                 break;
 
             case CL_CashReceived:
@@ -92,12 +60,23 @@ public class TouchDisplayHandler extends HWHandler {
                 handleSetBalance(msg.getDetails());
                 break;
 
-            case PR_Receipt:
-                atmss.send(new Msg(id, mbox, Msg.Type.PR_Receipt, msg.getDetails()));
+            case ADMIN_pwd:
+                handleAdminPassword(msg.getDetails());
                 break;
 
+            case TD_MouseClicked:
+            case BZ_Play:
+            case MainMenuItem:
+            case AccountItem:
+            case Cancel:
+            case AmountList:
+            case TD_SendCard:
+            case AmountInput:
+            case PR_Receipt:
             case TD_AnotherService:
-                atmss.send(new Msg(id, mbox, Msg.Type.TD_AnotherService, msg.getDetails()));
+            case ADMIN_btn:
+            case ADMIN_MenuItem:
+                atmss.send(new Msg(id, mbox, msg.getType(), msg.getDetails()));
                 break;
 
             default:
@@ -105,6 +84,11 @@ public class TouchDisplayHandler extends HWHandler {
                 break;
         }
     } // processMsg
+
+
+    protected void handleAdminPassword(String value) {
+        log.info(id + ": admin password input)");
+    }
 
 
     //------------------------------------------------------------

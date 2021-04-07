@@ -12,14 +12,12 @@
 			<children>
 				<Text fx:id="menu_title" text="ATM" AnchorPane.leftAnchor="265" AnchorPane.topAnchor="100"><font><Font size="36.0" /></font></Text>
 
-<!--				<Rectangle translateZ="-Infinity" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="480.0" onMouseClicked="#td_mouseClick" stroke="BLACK" strokeType="OUTSIDE" width="640" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0" />-->
-
 				<Button  mnemonicParsing="false" onAction="#handleMenuItemClick" prefHeight="70.0" prefWidth="300.0" text="TRANSFER" AnchorPane.bottomAnchor="140.0" AnchorPane.leftAnchor="0.0" ><font><Font size="24.0" /></font></Button>
 				<Button mnemonicParsing="false" onAction="#handleMenuItemClick" prefHeight="70.0" prefWidth="300.0" text="DEPOSIT" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="0.0" ><font><Font size="24.0" /></font></Button>
 				<Button mnemonicParsing="false" onAction="#handleMenuItemClick" prefHeight="70.0" prefWidth="300.0" text="WITHDRAW" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" ><font><Font size="24.0" /></font></Button>
 
 				<Button mnemonicParsing="false" onAction="#handleMenuItemClick" prefHeight="70.0" prefWidth="300.0" text="BALANCE" AnchorPane.bottomAnchor="140.0" AnchorPane.rightAnchor="0.0" ><font><Font size="24.0" /></font></Button>
-				<Button mnemonicParsing="false" onAction="#handleMenuItemClick" prefHeight="70.0" prefWidth="300.0" text="???" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="0.0" ><font><Font size="24.0" /></font></Button>
+				<Button mnemonicParsing="false" onAction="#handleMenuItemClick" prefHeight="70.0" prefWidth="300.0" text="CHANGE PIN" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="0.0" ><font><Font size="24.0" /></font></Button>
 				<Button mnemonicParsing="false" onAction="#handleMenuItemClick" prefHeight="70.0" prefWidth="300.0" text="CANCEL" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" ><font><Font size="24.0" /></font></Button>
 
 			</children>

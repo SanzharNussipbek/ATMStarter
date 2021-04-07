@@ -90,6 +90,8 @@ public class Msg {
         /** Health poll acknowledgement */	PollAck,
         /** Cancel */                       Cancel,
         /** Reset */                        Reset,
+        /** Shutdown */                     Shutdown,
+        /** Shutdown Clicked*/              TD_ShutdownClicked,
         /** Update Display */			    TD_UpdateDisplay,
         /** Mouse Clicked */			    TD_MouseClicked,
         /** Append PIN Text*/			    TD_AppendPinText,
@@ -123,5 +125,9 @@ public class Msg {
         /** BAMS Withdraw */                BAMS_Withdraw,
         /** BAMS Deposit */                 BAMS_Deposit,
         /** BAMS Transfer */                BAMS_Transfer,
+        ADMIN_btn,
+        ADMIN_MenuItem,
+        ADMIN_pwd,
+        ADMIN,
     } // Type
 } // Msg

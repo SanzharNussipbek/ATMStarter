@@ -61,92 +61,39 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 		log.info(id + ": update display -- " + msg.getDetails());
 
 		switch (msg.getDetails()) {
-			case "Welcome":
-				reloadStage("TouchDisplayWelcome.fxml");
-				break;
-
-			case "Pin":
-				reloadStage("TouchDisplayPin.fxml");
-				break;
-
 			case "Incorrect Pin":
 				handleIncorrectPin();
 				break;
 
+			case "Incorrect Admin Password":
+				handleIncorrectAdminPassword();
+				break;
+
+			case "Welcome":
+			case "Pin":
 			case "BlankScreen":
-				reloadStage("TouchDisplayEmulator.fxml");
-				break;
-
 			case "MainMenu":
-				reloadStage("TouchDisplayMainMenu.fxml");
-				break;
-
 			case "AccountList":
-				reloadStage("TouchDisplayAccountList.fxml");
-				break;
-
 			case "AmountInput":
-				reloadStage("TouchDisplayAmountInput.fxml");
-				break;
-
 			case "AmountList":
-				reloadStage("TouchDisplayAmountList.fxml");
-				break;
-
 			case "Balance":
-				reloadStage("TouchDisplayBalance.fxml");
-				break;
-
 			case "AccountInput":
-				reloadStage("TouchDisplayAccountInput.fxml");
-				break;
-
 			case "InvalidAccount":
-				reloadStage("TouchDisplayInvalidAccount.fxml");
-				break;
-
 			case "RemoveCard":
-				reloadStage("TouchDisplayRemoveCard.fxml");
-				break;
-
 			case "TakeOutCash":
-				reloadStage("TouchDisplayTakeOutCash.fxml");
-				break;
-
 			case "AnotherService":
-				reloadStage("TouchDisplayAnotherService.fxml");
-				break;
-
 			case "ReceiptChoice":
-				reloadStage("TouchDisplayReceiptChoice.fxml");
-				break;
-
 			case "InsertCash":
-				reloadStage("TouchDisplayInsertCash.fxml");
-				break;
-
 			case "WithdrawSuccess":
-				reloadStage("TouchDisplayWithdrawSuccess.fxml");
-				break;
-
 			case "WithdrawError":
-				reloadStage("TouchDisplayWithdrawError.fxml");
-				break;
-
 			case "DepositSuccess":
-				reloadStage("TouchDisplayDepositSuccess.fxml");
-				break;
-
 			case "TransactionSuccess":
-				reloadStage("TouchDisplayTransactionSuccess.fxml");
-				break;
-
 			case "TransactionError":
-				reloadStage("TouchDisplayTransactionError.fxml");
-				break;
-
 			case "TransferError":
-				reloadStage("TouchDisplayTransferError.fxml");
+			case "AdminPassword":
+			case "AdminMenu":
+				String filename = "TouchDisplay" + msg.getDetails() + ".fxml";
+				reloadStage(filename);
 				break;
 
 			default:
@@ -181,6 +128,20 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 			}
 		});
     } // reloadStage
+
+
+	//------------------------------------------------------------
+	// handleIncorrectAdminPassword
+	protected void handleIncorrectAdminPassword() {
+		log.info(id + ": Incorrect Admin Password");
+		touchDisplayEmulatorController.handleIncorrectAdminPassword();
+	} // handleIncorrectAdminPassword
+
+
+	protected void handleAdminPassword(String value) {
+		log.info(id + ": admin password input)");
+		touchDisplayEmulatorController.handleSetAdminPassword(value);
+	}
 
 
 	//------------------------------------------------------------

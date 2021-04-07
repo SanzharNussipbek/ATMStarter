@@ -31,6 +31,7 @@ public class ATMSS extends AppThread {
 		AMOUNT_INPUT,
 		ACCOUNT_INPUT,
 		ACCOUNT_LIST,
+		ADMIN,
 	}
 	private enum Operation {
     	WITHDRAW,
@@ -44,7 +45,10 @@ public class ATMSS extends AppThread {
 	private Operation operation;
 	private String transferAcc;
 	private String amount;
+	private String adminPassword;
+	private String ADMIN_PASSWORD = "0000";
 	private int authTries;
+	private int adminTries;
 
     //------------------------------------------------------------
     // ATMSS
@@ -71,9 +75,11 @@ public class ATMSS extends AppThread {
 
 		user = new User();
 		authTries = 0;
+		adminTries = 0;
 		isLoggedIn = false;
 		transferAcc = "";
 		amount = "";
+		adminPassword = "";
 		updateState(State.WELCOME);
 		updateOperation(Operation.NONE);
 
@@ -190,6 +196,23 @@ public class ATMSS extends AppThread {
 
 				case BAMS_Transfer:
 					handleTransferBAMS(msg.getDetails());
+					break;
+
+				case Shutdown:
+					handleShutdownReply(msg.getSender(), msg.getDetails());
+					break;
+
+				case Reset:
+					handleResetReply(msg.getSender(), msg.getDetails());
+					break;
+
+				case ADMIN_btn:
+					updateState(State.ADMIN);
+					touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AdminPassword"));
+					break;
+
+				case ADMIN_MenuItem:
+					handleCommand(msg.getDetails());
 					break;
 
 				default:
@@ -467,11 +490,38 @@ public class ATMSS extends AppThread {
 				handleCancel();
 				break;
 
+			case "CHANGE PIN":
+				log.info(id + ": menu item " + msg.getDetails());
+				break;
+
 			default:
 				log.info(id + ": unknown menu item " + msg.getDetails());
 				break;
 		}
 	} // handleMainMenuItemClick
+
+
+	private void handleCommand(String btn) {
+		Msg.Type command = btn.equals("SHUTDOWN") ? Msg.Type.Shutdown : Msg.Type.Reset;
+		cardReaderMBox.send(new Msg(id, mbox, command, ""));
+		keypadMBox.send(new Msg(id, mbox, command, ""));
+		touchDisplayMBox.send(new Msg(id, mbox, command, ""));
+		collectorMBox.send(new Msg(id, mbox, command, ""));
+		dispenserMBox.send(new Msg(id, mbox, command, ""));
+		printerMBox.send(new Msg(id, mbox, command, ""));
+		buzzerMBox.send(new Msg(id, mbox, command, ""));
+		bamsMBox.send(new Msg(id, mbox, command, ""));
+	}
+
+
+	private void handleShutdownReply(String sender, String result) {
+    	log.info(id + ": Shutdown result: [" + result + " | " + sender + "]");
+	}
+
+
+	private void handleResetReply(String sender, String result) {
+		log.info(id + ": Reset result: [" + result + " | " + sender + "]");
+	}
 
 
 	//------------------------------------------------------------
@@ -561,6 +611,24 @@ public class ATMSS extends AppThread {
 	}
 
 
+	private void handleAdminPasswordEnter() {
+		adminTries++;
+		if (!adminPassword.equals(ADMIN_PASSWORD)) {
+			adminPassword = "";
+			if (adminTries >= 3) {
+				adminTries = 0;
+				handleCancel();
+				return;
+			}
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Incorrect Admin Password"));
+			return;
+		}
+		adminTries = 0;
+		adminPassword = "";
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AdminMenu"));
+	}
+
+
 	//------------------------------------------------------------
 	// handleCancel
 	private void handleCancel() {
@@ -569,8 +637,14 @@ public class ATMSS extends AppThread {
 		user.reset();
 		transferAcc = "";
 		amount = "";
-		cardReaderMBox.send(new Msg(id, mbox, Msg.Type.CR_EjectCard, ""));
+		authTries = 0;
+		adminTries = 0;
+		adminPassword = "";
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Welcome"));
+		if (state == State.ADMIN) {
+			cardReaderMBox.send(new Msg(id, mbox, Msg.Type.CR_EjectCard, ""));
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.ADMIN_pwd, "CLEAR"));
+		}
 		if (state == State.PIN || state == State.INCORRECT_PIN) {
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_ClearPinText, "TD_ClearPinText"));
 		}
@@ -588,6 +662,9 @@ public class ATMSS extends AppThread {
 		if (state == State.ACCOUNT_INPUT) {
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_GetCard, ""));
 		}
+		if (state == State.ADMIN) {
+			handleAdminPasswordEnter();
+		}
 	} // handleEnter
 
 
@@ -597,6 +674,13 @@ public class ATMSS extends AppThread {
     	if (state == State.PIN || state == State.INCORRECT_PIN) {
     		user.setPin("");
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_ClearPinText, "TD_ClearPinText"));
+			return;
+		}
+
+		if (state == State.ADMIN) {
+			adminPassword = "";
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.ADMIN_pwd, "CLEAR"));
+			return;
 		}
 	} // handleErase
 
@@ -621,6 +705,12 @@ public class ATMSS extends AppThread {
 
     	if (state == State.ACCOUNT_INPUT) {
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_CardInput, msg.getDetails()));
+			return;
+		}
+
+    	if (state == State.ADMIN) {
+			adminPassword += msg.getDetails();
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.ADMIN_pwd, ""));
 			return;
 		}
 	} // handleNumkeyPress
