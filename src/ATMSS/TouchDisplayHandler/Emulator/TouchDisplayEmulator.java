@@ -89,6 +89,10 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 				reloadStage("TouchDisplayAmountInput.fxml");
 				break;
 
+			case "AmountList":
+				reloadStage("TouchDisplayAmountList.fxml");
+				break;
+
 			case "Balance":
 				reloadStage("TouchDisplayBalance.fxml");
 				break;
@@ -115,10 +119,6 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 
 			case "ReceiptChoice":
 				reloadStage("TouchDisplayReceiptChoice.fxml");
-				break;
-
-			case "WithdrawAmount":
-				reloadStage("TouchDisplayWithdrawAmountList.fxml");
 				break;
 
 			case "InsertCash":

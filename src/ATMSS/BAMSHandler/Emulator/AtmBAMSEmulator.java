@@ -88,7 +88,7 @@ public class AtmBAMSEmulator extends AtmBAMSHandler {
         log.info(id + ": transfer [" + details + "]");
         String[] values = details.split("/");
         double amount = Double.valueOf(values[4]);
-        double currentAmount = bams.enquiry(values[0], values[2], values[3]);
+        double currentAmount = bams.enquiry(values[0], values[2], values[1]);
         if (amount > currentAmount) {
             atmss.send(new Msg(id, mbox, Msg.Type.BAMS_Transfer, "NOK"));
             return;

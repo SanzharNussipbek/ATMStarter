@@ -115,7 +115,7 @@ public class Msg {
         /** Cash Taken Out */               DP_TakeOutCash,
         /** Main Menu Item */               MainMenuItem,
         /** Account */                      AccountItem,
-        /** Withdraw Amount */              WithdrawAmount,
+        /** Amount List*/                   AmountList,
         /** Amount Input */                 AmountInput,
         /** BAMS Login */                   BAMS_Login,
         /** BAMS Enquiry */                 BAMS_Enquiry,

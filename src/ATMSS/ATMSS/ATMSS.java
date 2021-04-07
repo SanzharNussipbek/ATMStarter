@@ -140,16 +140,16 @@ public class ATMSS extends AppThread {
 					handleCancel();
 					break;
 
-				case WithdrawAmount:
-					handleWithdrawAmount(msg.getDetails());
-					break;
-
 				case TD_SendCard:
 					handleReceiveTransferAcc(msg.getDetails());
 					break;
 
 				case AmountInput:
 					handleAmountInput(msg.getDetails());
+					break;
+
+				case AmountList:
+					handleAmountListItemClick(msg.getDetails());
 					break;
 
 				case TD_GetBalance:
@@ -354,8 +354,7 @@ public class ATMSS extends AppThread {
 	// handleReceiveTransferCard
 	private void handleReceiveTransferAcc(String accountNo) {
 		log.info(id + ": received account number: " + accountNo);
-		boolean accountExists = user.hasAccount(accountNo);
-		if (!accountExists) {
+		if (!user.hasAccount(accountNo)) {
 			handleCancel();
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "InvalidAccount"));
 			updateState(State.WELCOME);
@@ -363,21 +362,36 @@ public class ATMSS extends AppThread {
 			return;
 		}
 		transferAcc = accountNo;
-		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AmountInput"));
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AmountList"));
 		updateState(State.AMOUNT_INPUT);
 	} // handleReceiveTransferCard
 
 
 	//------------------------------------------------------------
-	// handleWithdrawAmount
-	private void handleWithdrawAmount(String value) {
+	// handleAmountListItemClick
+	private void handleAmountListItemClick(String value) {
 		if (value.equals("Other")) {
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AmountInput"));
 			updateState(State.AMOUNT_INPUT);
 			return;
 		}
 
-		amount = value;
+		if (operation == Operation.WITHDRAW) {
+			handleWithdrawAmount(value);
+			return;
+		}
+
+		if (operation == Operation.TRANSFER) {
+			handleTransfer(value);
+			return;
+		}
+	}// handleAmountListItemClick
+
+
+	//------------------------------------------------------------
+	// handleWithdrawAmount
+	private void handleWithdrawAmount(String value) {
+    	amount = value;
 		log.info(id + ": withdraw amount HKD$" + value);
 		String msgDetail = user.getCardNum() + "/" + user.getCurrentAcc() + "/" + user.getCredential() + "/" + value;
 		bamsMBox.send(new Msg(id, mbox, Msg.Type.BAMS_Withdraw, msgDetail));
@@ -428,7 +442,7 @@ public class ATMSS extends AppThread {
 
 		switch (msg.getDetails()) {
 			case "WITHDRAW":
-				touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "WithdrawAmount"));
+				touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AmountList"));
 				updateOperation(Operation.WITHDRAW);
 				break;
 
@@ -527,12 +541,18 @@ public class ATMSS extends AppThread {
 			return;
 		}
 		resetAuthTries();
-		log.info("Authorize account: " + user.toString());
+		user.setCredential(credential);
+		log.info(id + ": Authorize account: " + user.getCardNum());
 		bamsMBox.send(new Msg(id, mbox, Msg.Type.BAMS_Accounts, user.getCardNum() + "/" + credential));
 	} // handleAuth
 
 
 	private void handleAccountList(String accountList) {
+    	if (accountList.equals("CREDNOK")) {
+			log.info(id + ": invalid credential");
+    		handleCancel();
+    		return;
+		}
 		updateState(State.ACCOUNT_LIST);
     	String[] accounts = accountList.split("/");
     	user.setAccounts(accounts);

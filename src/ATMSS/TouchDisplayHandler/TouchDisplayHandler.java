@@ -56,8 +56,8 @@ public class TouchDisplayHandler extends HWHandler {
                 atmss.send(new Msg(id, mbox, Msg.Type.Cancel, msg.getDetails()));
                 break;
 
-            case WithdrawAmount:
-                atmss.send(new Msg(id, mbox, Msg.Type.WithdrawAmount, msg.getDetails()));
+            case AmountList:
+                atmss.send(new Msg(id, mbox, Msg.Type.AmountList, msg.getDetails()));
                 break;
 
             case TD_GetAmount:
