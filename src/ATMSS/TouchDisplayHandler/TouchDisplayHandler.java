@@ -23,9 +23,10 @@ public class TouchDisplayHandler extends HWHandler {
             atmss.send(new Msg(id, mbox, msg.getType(), msg.getDetails()));
         }
         if (this.isShutdown) return;
+        String details = msg.getDetails();
         switch (msg.getType()) {
             case TD_UpdateDisplay:
-                handleUpdateDisplay(msg);
+                handleUpdateDisplay(details);
                 break;
 
             case TD_AppendPinText:
@@ -33,7 +34,7 @@ public class TouchDisplayHandler extends HWHandler {
                 break;
 
             case TD_AppendAmountText:
-                handleAppendAmountText(msg);
+                handleAppendAmountText(details);
                 break;
 
             case TD_ClearPinText:
@@ -45,7 +46,7 @@ public class TouchDisplayHandler extends HWHandler {
                 break;
 
             case TD_CardInput:
-                handleCardInput(msg);
+                handleCardInput(details);
                 break;
 
             case TD_GetCard:
@@ -57,15 +58,15 @@ public class TouchDisplayHandler extends HWHandler {
                 break;
 
             case TD_AccountList:
-                handleAccountList(msg.getDetails());
+                handleAccountList(details);
                 break;
 
             case TD_SendBalance:
-                handleSetBalance(msg.getDetails());
+                handleSetBalance(details);
                 break;
 
             case ADMIN_pwd:
-                handleAdminPassword(msg.getDetails());
+                handleAdminPassword(details);
                 break;
 
             case TD_MouseClicked:
@@ -78,7 +79,7 @@ public class TouchDisplayHandler extends HWHandler {
             case AmountInput:
             case PR_Receipt:
             case TD_AnotherService:
-                atmss.send(new Msg(id, mbox, msg.getType(), msg.getDetails()));
+                atmss.send(new Msg(id, mbox, msg.getType(), details));
                 break;
 
             default:
@@ -110,7 +111,7 @@ public class TouchDisplayHandler extends HWHandler {
 
     //------------------------------------------------------------
     // handleCardInput
-    protected void handleCardInput(Msg msg) { log.info(id + ": card input"); } // handleCardInput
+    protected void handleCardInput(String inputValue) { log.info(id + ": card input"); } // handleCardInput
 
 
     //------------------------------------------------------------
@@ -129,8 +130,8 @@ public class TouchDisplayHandler extends HWHandler {
 
     //------------------------------------------------------------
     // handleUpdateDisplay
-    protected void handleUpdateDisplay(Msg msg) {
-	    log.info(id + ": update display -- " + msg.getDetails());
+    protected void handleUpdateDisplay(String displayName) {
+	    log.info(id + ": update display -- " + displayName);
     } // handleUpdateDisplay
 
 
@@ -142,7 +143,7 @@ public class TouchDisplayHandler extends HWHandler {
 
     //------------------------------------------------------------
     // handleAppendAmountText
-    protected void handleAppendAmountText(Msg msg) {
+    protected void handleAppendAmountText(String value) {
         log.info(id + ": update amount text");
     } // handleAppendAmountText
 

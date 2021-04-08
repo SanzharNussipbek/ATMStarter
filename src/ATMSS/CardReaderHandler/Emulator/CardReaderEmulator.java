@@ -12,16 +12,34 @@ import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
 
-//======================================================================
-// CardReaderEmulator
+/**
+ * Card Reader Emulator for the Card Reader hardware of ATM class
+ * Extends CardReaderHandler class
+ */
 public class CardReaderEmulator extends CardReaderHandler {
+	/**
+	 * Instance of the ATMSSStarter
+	 */
     private ATMSSStarter atmssStarter;
-    private String id;
-    private Stage myStage;
+	/**
+	 * ID of the current thread
+	 */
+	private String id;
+	/**
+	 * Stage of the emulator
+	 */
+	private Stage myStage;
+	/**
+	 * Instance of the Emulator Controller
+	 */
     private CardReaderEmulatorController cardReaderEmulatorController;
 
-    //------------------------------------------------------------
-    // CardReaderEmulator
+
+	/**
+	 * Constructor of the class
+	 * @param id ID of the current thread
+	 * @param atmssStarter ATMSSStarter instance
+	 */
     public CardReaderEmulator(String id, ATMSSStarter atmssStarter) {
 		super(id, atmssStarter);
 		this.atmssStarter = atmssStarter;
@@ -29,9 +47,11 @@ public class CardReaderEmulator extends CardReaderHandler {
     } // CardReaderEmulator
 
 
-    //------------------------------------------------------------
-    // start
-    public void start() throws Exception {
+	/**
+	 * Function to start the emulator
+	 * @throws Exception Throws Exception
+	 */
+	public void start() throws Exception {
 		Parent root;
 		myStage = new Stage();
 		FXMLLoader loader = new FXMLLoader();
@@ -52,30 +72,30 @@ public class CardReaderEmulator extends CardReaderHandler {
     } // CardReaderEmulator
 
 
-    //------------------------------------------------------------
-    // handleCardInsert
-    protected void handleCardInsert() {
-        // fixme
+	/**
+	 * Handle Insertion of the card to the card reader
+	 */
+	protected void handleCardInsert() {
 		super.handleCardInsert();
 		cardReaderEmulatorController.appendTextArea("Card Inserted");
 		cardReaderEmulatorController.updateCardStatus("Card Inserted");
     } // handleCardInsert
 
 
-    //------------------------------------------------------------
-    // handleCardEject
+	/**
+	 * Handle Ejection of the card from the card reader
+	 */
     protected void handleCardEject() {
-        // fixme
 		super.handleCardEject();
 		cardReaderEmulatorController.appendTextArea("Card Ejected");
 		cardReaderEmulatorController.updateCardStatus("Card Ejected");
     } // handleCardEject
 
 
-    //------------------------------------------------------------
-    // handleCardRemove
+	/**
+	 * Handle Removal of the card from the card reader
+	 */
     protected void handleCardRemove() {
-		// fixme
 		super.handleCardRemove();
 		cardReaderEmulatorController.appendTextArea("Card Removed");
 		cardReaderEmulatorController.updateCardStatus("Card Reader Empty");

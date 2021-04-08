@@ -2,7 +2,6 @@ package ATMSS.KeypadHandler.Emulator;
 
 import ATMSS.ATMSSStarter;
 import ATMSS.KeypadHandler.KeypadHandler;
-
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,16 +11,34 @@ import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
 
-//======================================================================
-// KeypadEmulator
+/**
+ * Keypad Emulator for the Keypad hardware of ATM class
+ * Extends KeypadHandler class
+ */
 public class KeypadEmulator extends KeypadHandler {
-    private ATMSSStarter atmssStarter;
-    private String id;
-    private Stage myStage;
+	/**
+	 * Instance of the ATMSSStarter
+	 */
+	private ATMSSStarter atmssStarter;
+	/**
+	 * ID of the current thread
+	 */
+	private String id;
+	/**
+	 * Stage of the emulator
+	 */
+	private Stage myStage;
+	/**
+	 * Instance of the Emulator Controller
+	 */
     private KeypadEmulatorController keypadEmulatorController;
 
-    //------------------------------------------------------------
-    // KeypadEmulator
+
+	/**
+	 * Constructor of the class
+	 * @param id ID of the current thread
+	 * @param atmssStarter ATMSSStarter instance
+	 */
     public KeypadEmulator(String id, ATMSSStarter atmssStarter) {
 		super(id, atmssStarter);
 		this.atmssStarter = atmssStarter;
@@ -29,8 +46,10 @@ public class KeypadEmulator extends KeypadHandler {
     } // KeypadEmulator
 
 
-    //------------------------------------------------------------
-    // start
+	/**
+	 * Function to start the emulator
+	 * @throws Exception Throws Exception
+	 */
     public void start() throws Exception {
 		Parent root;
 		myStage = new Stage();

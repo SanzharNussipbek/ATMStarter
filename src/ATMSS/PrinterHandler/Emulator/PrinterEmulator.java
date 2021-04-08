@@ -2,8 +2,6 @@ package ATMSS.PrinterHandler.Emulator;
 
 import ATMSS.ATMSSStarter;
 import ATMSS.PrinterHandler.PrinterHandler;
-import ATMSS.PrinterHandler.Emulator.PrinterEmulatorController;
-import AppKickstarter.misc.Msg;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,16 +10,34 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
-//======================================================================
-// PrinterEmulator
+/**
+ * Printer Emulator for the Printer hardware of ATM class
+ * Extends PrinterHandler class
+ */
 public class PrinterEmulator extends PrinterHandler {
+    /**
+     * Instance of the ATMSSStarter
+     */
     private ATMSSStarter atmssStarter;
+    /**
+     * ID of the current thread
+     */
     private String id;
+    /**
+     * Stage of the emulator
+     */
     private Stage myStage;
+    /**
+     * Instance of the Emulator Controller
+     */
     private PrinterEmulatorController printerEmulatorController;
 
-    //------------------------------------------------------------
-    // PrinterEmulator
+
+    /**
+     * Constructor of the class
+     * @param id ID of the current thread
+     * @param atmssStarter ATMSSStarter instance
+     */
     public PrinterEmulator(String id, ATMSSStarter atmssStarter) {
         super(id, atmssStarter);
         this.atmssStarter = atmssStarter;
@@ -29,8 +45,10 @@ public class PrinterEmulator extends PrinterHandler {
     } // PrinterEmulator
 
 
-    //------------------------------------------------------------
-    // start
+    /**
+     * Function to start the emulator
+     * @throws Exception Throws Exception
+     */
     public void start() throws Exception {
         Parent root;
         myStage = new Stage();
@@ -52,10 +70,12 @@ public class PrinterEmulator extends PrinterHandler {
     } // PrinterEmulator
 
 
-    //------------------------------------------------------------
-    // handlePrint
-    public void handlePrint(Msg msg) {
-        printerEmulatorController.print(msg.getDetails());
+    /**
+     * Handle Printing the receipt
+     * @param receipt Receipt text
+     */
+    public void handlePrint(String receipt) {
+        printerEmulatorController.print(receipt);
     } // handlePrint
 } // PrinterEmulator
 

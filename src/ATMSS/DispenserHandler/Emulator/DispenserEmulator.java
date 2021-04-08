@@ -2,7 +2,6 @@ package ATMSS.DispenserHandler.Emulator;
 
 import ATMSS.ATMSSStarter;
 import ATMSS.DispenserHandler.DispenserHandler;
-import ATMSS.DispenserHandler.Emulator.DispenserEmulatorController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,16 +10,33 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
-//======================================================================
-// DispenserEmulator
+/**
+ * Dispenser Emulator for the Dispenser hardware of ATM class
+ * Extends DispenserHandler class
+ */
 public class DispenserEmulator extends DispenserHandler {
+    /**
+     * Instance of the ATMSSStarter
+     */
     private ATMSSStarter atmssStarter;
+    /**
+     * ID of the current thread
+     */
     private String id;
+    /**
+     * Stage of the emulator
+     */
     private Stage myStage;
+    /**
+     * Instance of the Emulator Controller
+     */
     private DispenserEmulatorController dispenserEmulatorController;
 
-    //------------------------------------------------------------
-    // DispenserEmulator
+    /**
+     * Constructor of the class
+     * @param id ID of the current thread
+     * @param atmssStarter ATMSSStarter instance
+     */
     public DispenserEmulator(String id, ATMSSStarter atmssStarter) {
         super(id, atmssStarter);
         this.atmssStarter = atmssStarter;
@@ -28,8 +44,10 @@ public class DispenserEmulator extends DispenserHandler {
     } // DispenserEmulator
 
 
-    //------------------------------------------------------------
-    // start
+    /**
+     * Function to start the emulator
+     * @throws Exception Throws Exception
+     */
     public void start() throws Exception {
         Parent root;
         myStage = new Stage();
@@ -51,16 +69,18 @@ public class DispenserEmulator extends DispenserHandler {
     } // DispenserEmulator
 
 
-    //------------------------------------------------------------
-    // handleDispenseCash
+    /**
+     * Handle dispensing of the cash
+     */
     protected void handleDispenseCash(String amount) {
         log.info(id + ": dispense cash HKD$" + amount);
         dispenserEmulatorController.handleDispenseCash(amount);
     } // handleDispenseCash
 
 
-    //------------------------------------------------------------
-    // handleReset
+    /**
+     * Reset the emulator and controller
+     */
     protected void handleReset() {
         log.info(id + ": reset");
         dispenserEmulatorController.clear();

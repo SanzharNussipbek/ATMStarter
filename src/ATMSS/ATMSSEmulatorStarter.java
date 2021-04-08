@@ -47,14 +47,14 @@ public class ATMSSEmulatorStarter extends ATMSSStarter {
     public static class Emulators extends Application {
         private static ATMSSEmulatorStarter atmssEmulatorStarter;
 
-	//----------------------------------------
-	// start
+		//----------------------------------------
+		// start
         public void start() {
             launch();
 	} // start
 
-	//----------------------------------------
-	// start
+		//----------------------------------------
+		// start
         public void start(Stage primaryStage) {
 			Timer timer = null;
 			ATMSS atmss = null;

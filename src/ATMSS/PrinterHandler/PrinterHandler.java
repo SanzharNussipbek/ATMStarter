@@ -21,7 +21,7 @@ public class PrinterHandler extends HWHandler {
         if (this.isShutdown) return;
         switch (msg.getType()) {
             case PR_Print:
-                handlePrint(msg);
+                handlePrint(msg.getDetails());
                 break;
 
             case BZ_Play:
@@ -35,7 +35,7 @@ public class PrinterHandler extends HWHandler {
 
     //------------------------------------------------------------
     // handlePrint
-    public void handlePrint(Msg msg) {
+    public void handlePrint(String receipt) {
         log.info(id + ": printer output");
     } // handlePrint
 } // PrinterHandler

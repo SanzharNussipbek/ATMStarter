@@ -91,7 +91,6 @@ public class Msg {
         /** Cancel */                       Cancel,
         /** Reset */                        Reset,
         /** Shutdown */                     Shutdown,
-        /** Shutdown Clicked*/              TD_ShutdownClicked,
         /** Update Display */			    TD_UpdateDisplay,
         /** Mouse Clicked */			    TD_MouseClicked,
         /** Append PIN Text*/			    TD_AppendPinText,
@@ -125,10 +124,9 @@ public class Msg {
         /** BAMS Withdraw */                BAMS_Withdraw,
         /** BAMS Deposit */                 BAMS_Deposit,
         /** BAMS Transfer */                BAMS_Transfer,
-        BAMS_ChangePin,
-        BAMS_Logout,
-        ADMIN_MenuItem,
-        ADMIN_pwd,
-        TD_NewPin,
+        /** BAMS Change Pin */              BAMS_ChangePin,
+        /** BAMS Logout */                  BAMS_Logout,
+        /** Admin Menu Item */              ADMIN_MenuItem,
+        /** Admin Password */               ADMIN_pwd,
     } // Type
 } // Msg

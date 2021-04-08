@@ -18,38 +18,39 @@ public class AtmBAMSHandler extends HWHandler {
     // processMsg
     protected void processMsg(Msg msg) {
         if (this.isShutdown) return;
+        String details = msg.getDetails();
         try {
             switch (msg.getType()) {
                 case BAMS_Login:
-                    handleLogin(msg.getDetails());
+                    handleLogin(details);
                     break;
 
                 case BAMS_Enquiry:
-                    handleEnquiry(msg.getDetails());
+                    handleEnquiry(details);
                     break;
 
                 case BAMS_Accounts:
-                    handleAccounts(msg.getDetails());
+                    handleAccounts(details);
                     break;
 
                 case BAMS_Withdraw:
-                    handleWithdraw(msg.getDetails());
+                    handleWithdraw(details);
                     break;
 
                 case BAMS_Deposit:
-                    handleDeposit(msg.getDetails());
+                    handleDeposit(details);
                     break;
 
                 case BAMS_Transfer:
-                    handleTransfer(msg.getDetails());
+                    handleTransfer(details);
                     break;
 
                 case BAMS_ChangePin:
-                    handleChangePin(msg.getDetails());
+                    handleChangePin(details);
                     break;
 
                 case BAMS_Logout:
-                    handleLogout(msg.getDetails());
+                    handleLogout(details);
                     break;
 
                 default:

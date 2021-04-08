@@ -9,11 +9,20 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 
-//======================================================================
-// ATMSS
+/**
+ * ATM Software System Class
+ * Binds all emulators together and is responsible for the operation of whole system
+ */
 public class ATMSS extends AppThread {
+	/**
+	 * Time period after which polling message will be send
+	 */
     private final int pollingTime;
-    private MBox cardReaderMBox;
+
+	/**
+	 * Message Boxes for the emulators
+	 */
+	private MBox cardReaderMBox;
     private MBox keypadMBox;
     private MBox touchDisplayMBox;
     private MBox collectorMBox;
@@ -21,7 +30,16 @@ public class ATMSS extends AppThread {
     private MBox printerMBox;
     private MBox buzzerMBox;
     private MBox bamsMBox;
-    private User user;
+
+	/**
+	 * User instance to save card and account information of the current session
+	 */
+	private User user;
+
+	/**
+	 * Enum for the state of the system
+	 * Is being changed all over the class
+	 */
     private enum State {
     	WELCOME,
 		PIN,
@@ -34,6 +52,11 @@ public class ATMSS extends AppThread {
 		ADMIN_MENU,
 		CHANGEPIN,
 	}
+
+	/**
+	 * Enum for the operation state of the system
+	 * Is being changed all over the class
+	 */
 	private enum Operation {
     	WITHDRAW,
 		DEPOSIT,
@@ -41,8 +64,20 @@ public class ATMSS extends AppThread {
 		BALANCE,
 		NONE,
 	}
+
+	/**
+	 * State enum instance
+	 */
 	private State state;
+
+	/**
+	 * Operation enum instance
+	 */
 	private Operation operation;
+
+	/**
+	 * Variable buffers to save intermediate information
+	 */
 	private String transferAcc;
 	private String amount;
 	private String adminPassword;
@@ -50,16 +85,22 @@ public class ATMSS extends AppThread {
 	private int authTries;
 	private int adminTries;
 
-    //------------------------------------------------------------
-    // ATMSS
+
+	/**
+	 * ATM-SS Constructor
+	 * @param id Id of the running thread
+	 * @param appKickstarter AppKickstarter instance
+	 * @throws Exception Throws Exception
+	 */
     public ATMSS(String id, AppKickstarter appKickstarter) throws Exception {
 		super(id, appKickstarter);
 		pollingTime = Integer.parseInt(appKickstarter.getProperty("ATMSS.PollingTime"));
     } // ATMSS
 
 
-	//------------------------------------------------------------
-	// init
+	/**
+	 * Initialize global variables
+	 */
 	private void init() {
 		Timer.setTimer(id, mbox, pollingTime);
 		log.info(id + ": starting...");
@@ -87,58 +128,47 @@ public class ATMSS extends AppThread {
 	} // init
 
 
-	//------------------------------------------------------------
-	// initWelcomeScreen
+	/**
+	 * Initialize Welcome screen
+	 */
 	private void initWelcomeScreen() {
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Welcome"));
 	} // initWelcomeScreen
 
 
-    //------------------------------------------------------------
-    // run
-    public void run() {
+	/**
+	 * Run ATM System Software
+	 * Analyzes incoming messages and executes function according to the message type and sender
+	 */
+	public void run() {
 		init();
 
 		for (boolean quit = false; !quit;) {
 			Msg msg = mbox.receive();
+			String details = msg.getDetails();
+			String sender = msg.getSender();
 
 			log.fine(id + ": message received: [" + msg + "].");
 
 			switch (msg.getType()) {
-				case TD_MouseClicked:
-					processMouseClicked(msg);
-					break;
-
-				case KP_KeyPressed:
-					processKeyPressed(msg);
-					break;
-
-				case CR_CardInserted:
-					handleCardInserted(msg);
-					break;
-
-				case BZ_Play:
-					buzz(msg.getDetails());
-					break;
-
 				case TimesUp:
-					handleTimesUp(msg);
+					handleTimesUp(details);
 					break;
 
 				case PollAck:
-					log.info("PollAck: " + msg.getDetails());
+					log.info("PollAck: " + details);
 					break;
 
 				case Terminate:
 					quit = true;
 					break;
 
-				case MainMenuItem:
-					handleMainMenuItemClick(msg);
+				case Shutdown:
+					handleShutdownReply(sender, details);
 					break;
 
-				case AccountItem:
-					handleAccountClick(msg.getDetails());
+				case Reset:
+					handleResetReply(sender, details);
 					break;
 
 				case Cancel:
@@ -146,76 +176,92 @@ public class ATMSS extends AppThread {
 					handleCancel();
 					break;
 
+				case CR_CardInserted:
+					handleCardInserted(details);
+					break;
+
+				case TD_MouseClicked:
+					processMouseClicked(details);
+					break;
+
 				case TD_SendCard:
-					handleReceiveTransferAcc(msg.getDetails());
-					break;
-
-				case AmountInput:
-					handleAmountInput(msg.getDetails());
-					break;
-
-				case AmountList:
-					handleAmountListItemClick(msg.getDetails());
+					handleReceiveTransferAcc(details);
 					break;
 
 				case TD_GetBalance:
 					touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_SendBalance, "1000.0"));
 					break;
 
-				case PR_Receipt:
-					handleReceipt(msg.getDetails());
+				case TD_AnotherService:
+					handleAnotherService(details);
 					break;
 
-				case TD_AnotherService:
-					handleAnotherService(msg.getDetails());
+				case KP_KeyPressed:
+					processKeyPressed(details);
+					break;
+
+				case BZ_Play:
+					buzz(details);
+					break;
+
+				case PR_Receipt:
+					handleReceipt(details);
 					break;
 
 				case DP_TakeOutCash:
 					touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "WithdrawSuccess"));
 					break;
 
+				case MainMenuItem:
+					handleMainMenuItemClick(details);
+					break;
+
+				case AccountItem:
+					handleAccountClick(details);
+					break;
+
+				case AmountInput:
+					handleAmountInput(details);
+					break;
+
+				case AmountList:
+					handleAmountListItemClick(details);
+					break;
+
 				case BAMS_Login:
-					handleAuth(msg.getDetails());
+					handleAuth(details);
 					break;
 
 				case BAMS_Accounts:
-					handleAccountList(msg.getDetails());
+					handleAccountList(details);
 					break;
 
 				case BAMS_Enquiry:
-					handleShowBalance(msg.getDetails());
+					handleShowBalance(details);
 					break;
 
 				case BAMS_Withdraw:
-					handleWithdrawBAMS(msg.getDetails());
+					handleWithdrawBAMS(details);
 					break;
 
 				case BAMS_Deposit:
-					handleDepositBAMS(msg.getDetails());
+					handleDepositBAMS(details);
 					break;
 
 				case BAMS_Transfer:
-					handleTransferBAMS(msg.getDetails());
+					handleTransferBAMS(details);
 					break;
 
 				case BAMS_ChangePin:
-					handleChangePinBAMS(msg.getDetails());
+					handleChangePinBAMS(details);
 					break;
 
 				case BAMS_Logout:
-					handleLogoutBAMS(msg.getDetails());
-					break;
-
-				case Shutdown:
-					handleShutdownReply(msg.getSender(), msg.getDetails());
-					break;
-
-				case Reset:
-					handleResetReply(msg.getSender(), msg.getDetails());
+					handleLogoutBAMS(details);
 					break;
 
 				case ADMIN_MenuItem:
-					handleCommand(msg.getDetails());
+					handleCommand(details);
 					break;
 
 				default:
@@ -230,13 +276,22 @@ public class ATMSS extends AppThread {
     } // run
 
 
-	private void handleAdmin() {
+	/**
+	 * Handle Admin button click on Keypad
+	 * Update state to ADMIN and change the display to password input
+	 */
+	private void handleAdminClick() {
 		if (state != State.WELCOME) return;
 		updateState(State.ADMIN);
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AdminPassword"));
 	}
 
 
+	/**
+	 * Handle Password input for Admin
+	 * If password is not correct, increment admintries and update display
+	 * Otherwise, login the admin and change display to Admin Menu
+	 */
 	private void handleAdminPasswordEnter() {
 		adminTries++;
 		String ADMIN_PASSWORD = "0000";
@@ -257,19 +312,14 @@ public class ATMSS extends AppThread {
 	}
 
 
-	/*******************************************************************************************************************
-	 *
-	 * MAIN MENU
-	 *
-	 ******************************************************************************************************************/
+	/**
+	 * Handle click of a menu item in Main Menu screen
+	 * @param clickedMenuItem Clicked Menu Item name
+	 */
+	private void handleMainMenuItemClick(String clickedMenuItem) {
+		log.info(id + ": Main Menu Item clicked [" + clickedMenuItem + "]");
 
-
-	//------------------------------------------------------------
-	// handleMainMenuItemClick
-	private void handleMainMenuItemClick(Msg msg) {
-		log.info(id + ": Main Menu Item clicked [" + msg.getDetails() + "]");
-
-		switch (msg.getDetails()) {
+		switch (clickedMenuItem) {
 			case "WITHDRAW":
 				touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AmountList"));
 				updateOperation(Operation.WITHDRAW);
@@ -301,14 +351,16 @@ public class ATMSS extends AppThread {
 				break;
 
 			default:
-				log.info(id + ": unknown menu item " + msg.getDetails());
+				log.info(id + ": unknown menu item " + clickedMenuItem);
 				break;
 		}
 	} // handleMainMenuItemClick
 
 
-	//------------------------------------------------------------
-	// handleAnotherService
+	/**
+	 * Handle selection of Another Service in AnotherService display
+	 * @param choice Choice name
+	 */
 	private void handleAnotherService(String choice) {
 		if (choice.equals("YES")) {
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "MainMenu"));
@@ -318,68 +370,58 @@ public class ATMSS extends AppThread {
 	} // handleAnotherService
 
 
-	/*******************************************************************************************************************
-	 *
-	 * AMOUNT INPUT
-	 *
-	 ******************************************************************************************************************/
-
-
-	//------------------------------------------------------------
-	// handleAmountListItemClick
-	private void handleAmountListItemClick(String value) {
-		if (value.equals("Other")) {
+	/**
+	 * Handle amount item click in AmountList screen
+	 * @param selectedAmount Selected Amount
+	 */
+	private void handleAmountListItemClick(String selectedAmount) {
+		if (selectedAmount.equals("Other")) {
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "AmountInput"));
 			updateState(State.AMOUNT_INPUT);
 		}
-		if (operation == Operation.WITHDRAW) {
-			handleWithdrawAmount(value);
+		else if (operation == Operation.WITHDRAW) {
+			handleWithdrawAmount(selectedAmount);
 		}
-		if (operation == Operation.TRANSFER) {
-			handleTransfer(value);
+		else if (operation == Operation.TRANSFER) {
+			handleTransfer(selectedAmount);
 		}
 	}// handleAmountListItemClick
 
 
-	//------------------------------------------------------------
-	// handleAmountInput
+	/**
+	 * Handle user's input for amount
+	 * @param amount Received Amount value
+	 */
 	private void handleAmountInput(String amount) {
     	if (operation == Operation.WITHDRAW) {
     		handleWithdrawAmount(amount);
 		}
-    	if (operation == Operation.TRANSFER) {
+    	else if (operation == Operation.TRANSFER) {
     		handleTransfer(amount);
 		}
-		if (operation == Operation.DEPOSIT) {
+		else if (operation == Operation.DEPOSIT) {
 			handleDeposit(amount);
 		}
 	} // handleAmountInput
 
 
-	/*******************************************************************************************************************
-	 *
-	 * LOGOUT
-	 *
-	 ******************************************************************************************************************/
-
-
+	/**
+	 * Handle the result of BAMS Logout function
+	 * @param result The result of the logout function of BAMS Emulator
+	 */
 	private void handleLogoutBAMS(String result) {
 		if (result.equals("succ")) {
 			handleLogout();
 		}
-		if (result.equals("ERROR")) {
+		else if (result.equals("ERROR")) {
 			log.info(id + ": error while logging out");
 		}
-	}
+	} // handleLogoutBAMS
 
 
-	/*******************************************************************************************************************
-	 *
-	 * CHANGE PIN
-	 *
-	 ******************************************************************************************************************/
-
-
+	/**
+	 * Update Display to New Pin Input due to Change Pin functionality
+	 */
 	private void showChangePinDisplay() {
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "ChangePin"));
 		updateState(State.CHANGEPIN);
@@ -388,6 +430,10 @@ public class ATMSS extends AppThread {
 	}
 
 
+	/**
+	 * Handle the result of BAMS Change Pin function
+	 * @param result The result of changing pin from BAMS Emulator
+	 */
 	private void handleChangePinBAMS(String result) {
 		if (result.equals("succ")) {
 			log.info(id + ": new pin successfully set [" + user.getPin() + "]");
@@ -400,15 +446,10 @@ public class ATMSS extends AppThread {
 	}
 
 
-	/*******************************************************************************************************************
-	 *
-	 * BALANCE
-	 *
-	 ******************************************************************************************************************/
-
-
-	//------------------------------------------------------------
-	// handleShowBalance
+	/**
+	 * Handle rendering Balance screen
+	 * @param balance The balance value received from BAMS Emulator
+	 */
 	private void handleShowBalance(String balance) {
 		amount = balance;
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Balance"));
@@ -417,18 +458,13 @@ public class ATMSS extends AppThread {
 	} // handleShowBalance
 
 
-	/*******************************************************************************************************************
-	 *
-	 * DEPOSIT
-	 *
-	 ******************************************************************************************************************/
-
-
-	//------------------------------------------------------------
-	// handleDeposit
-	private void handleDeposit(String value) {
+	/**
+	 * Handle sending deposit amount to the BAMS
+	 * @param depositAmount The deposit amount received from Collector Emulator
+	 */
+	private void handleDeposit(String depositAmount) {
 		log.info(id + ": cash deposit received HKD$" + amount);
-		amount = value;
+		amount = depositAmount;
 		collectorMBox.send(new Msg(id, mbox, Msg.Type.Reset, ""));
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.CL_CashReceived, ""));
 		String msgDetail = user.getCardNum() + "/" + user.getCurrentAcc() + "/" + user.getCredential() + "/" + amount;
@@ -436,8 +472,10 @@ public class ATMSS extends AppThread {
 	} // handleDeposit
 
 
-	//------------------------------------------------------------
-	// handleDepositBAMS
+	/**
+	 * Handle the result of BAMS Deposit function
+	 * @param result The result of depositing the cash from BAMS Emulator
+	 */
 	private void handleDepositBAMS(String result) {
     	if (result.equals("NOK")) {
 			log.info(id + ": invalid amount for deposit");
@@ -447,25 +485,22 @@ public class ATMSS extends AppThread {
 	} // handleDepositBAMS
 
 
-	/*******************************************************************************************************************
-	 *
-	 * TRANSFER
-	 *
-	 ******************************************************************************************************************/
-
-
-	//------------------------------------------------------------
-	// handleTransfer
-	private void handleTransfer(String value) {
-    	amount = value;
+	/**
+	 * Handle transfer functionality using transfer amount
+	 * @param transferAmount Transfer amount received from display input
+	 */
+	private void handleTransfer(String transferAmount) {
+    	amount = transferAmount;
 		log.info(id + ": TRANSFER HKD$" + amount + " FROM [" + user.getCurrentAcc() + "] TO [" + transferAcc + "]");
 		String msgDetail = user.getCardNum() + "/" + user.getCredential() + "/" + user.getCurrentAcc() + "/" + transferAcc + "/" + amount;
 		bamsMBox.send(new Msg(id, mbox, Msg.Type.BAMS_Transfer, msgDetail));
 	} // handleTransfer
 
 
-	//------------------------------------------------------------
-	// handleTransferBAMS
+	/**
+	 * Handle the result of sending transfer query to BAMS Emulator
+	 * @param result The result received from BAMS Emulator
+	 */
 	private void handleTransferBAMS(String result) {
 		if (result.equals("NOK")) {
 			log.info(id + ": invalid transfer");
@@ -477,8 +512,12 @@ public class ATMSS extends AppThread {
 	} // handleTransferBAMS
 
 
-	//------------------------------------------------------------
-	// handleReceiveTransferCard
+	/**
+	 * Receive the account where an amount is to be trasnferred
+	 * Check for existing of the account in user's accounts
+	 * Save to the transferAccBuffer
+	 * @param accountNo The account number received from the user
+	 */
 	private void handleReceiveTransferAcc(String accountNo) {
 		log.info(id + ": received account number: " + accountNo);
 		if (!user.hasAccount(accountNo)) {
@@ -494,25 +533,24 @@ public class ATMSS extends AppThread {
 	} // handleReceiveTransferCard
 
 
-	/*******************************************************************************************************************
-	 *
-	 * WITHDRAW
-	 *
-	 ******************************************************************************************************************/
-
-
-	//------------------------------------------------------------
-	// handleWithdrawAmount
-	private void handleWithdrawAmount(String value) {
-    	amount = value;
-		log.info(id + ": withdraw amount HKD$" + value);
-		String msgDetail = user.getCardNum() + "/" + user.getCurrentAcc() + "/" + user.getCredential() + "/" + value;
+	/**
+	 * Handle the withdraw functionality
+	 * Send the query to the BAMS Emulator
+	 * @param withdrawAmount The amount received from the display
+	 */
+	private void handleWithdrawAmount(String withdrawAmount) {
+    	amount = withdrawAmount;
+		log.info(id + ": withdraw amount HKD$" + withdrawAmount);
+		String msgDetail = user.getCardNum() + "/" + user.getCurrentAcc() + "/" + user.getCredential() + "/" + withdrawAmount;
 		bamsMBox.send(new Msg(id, mbox, Msg.Type.BAMS_Withdraw, msgDetail));
 	} // handleWithdrawAmount
 
 
-	//------------------------------------------------------------
-	// handleWithdrawBAMS
+	/**
+	 * Handle the result of the withdraw from BAMS Emulator
+	 * Update display according to the result
+	 * @param result The result of the withdrawing from BAMS Emulator
+	 */
 	private void handleWithdrawBAMS(String result) {
     	if (result.equals("NOK")) {
 			cardReaderMBox.send(new Msg(id, mbox, Msg.Type.CR_EjectCard, ""));
@@ -525,15 +563,11 @@ public class ATMSS extends AppThread {
 	} // handleWithdrawBAMS
 
 
-	/*******************************************************************************************************************
-	 *
-	 * ACCOUNT
-	 *
-	 ******************************************************************************************************************/
-
-
-	//------------------------------------------------------------
-	// handleAccountList
+	/**
+	 * Handle the received account list of the user
+	 * Update display and show the accounts
+	 * @param accountList The result received from BAMS Emulator
+	 */
 	private void handleAccountList(String accountList) {
 		if (accountList.equals("CREDNOK")) {
 			log.info(id + ": invalid credential");
@@ -548,8 +582,12 @@ public class ATMSS extends AppThread {
 	} // handleAccountList
 
 
-	//------------------------------------------------------------
-	// handleAccountClick
+	/**
+	 * Handle the click of an account on the AccountList screen
+	 * Save the account in the user instance
+	 * Update display to the main menu screen
+	 * @param accIndex The index of the clicked account (e.g. 0, 1, 2)
+	 */
 	private void handleAccountClick(String accIndex) {
 		log.info(id + ": Account chosen: [" + accIndex + "]");
 		int index = Integer.parseInt(accIndex);
@@ -561,27 +599,26 @@ public class ATMSS extends AppThread {
 	} // handleAccountClick
 
 
-	/*******************************************************************************************************************
-	 *
-	 * AUTHORIZATION
-	 *
-	 ******************************************************************************************************************/
-
-
-	//------------------------------------------------------------
-	// handleCardInserted
-	private void handleCardInserted(Msg msg) {
-		log.info("CardInserted: " + msg.getDetails());
+	/**
+	 * Handle the card number inserted in the card reader
+	 * Save the card number in the user instance
+	 * Update the display to prompt for PIN
+	 * @param cardNum The card number received from CardReader Emulator
+	 */
+	private void handleCardInserted(String cardNum) {
+		log.info("CardInserted: " + cardNum);
 		buzz("beep");
 		authTries = 0;
-		user.setCardNum(msg.getDetails());
+		user.setCardNum(cardNum);
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Pin"));
 		updateState(State.PIN);
 	} // handleCardInserted
 
 
-	//------------------------------------------------------------
-	// handleSetAccountPin
+	/**
+	 * Handle single PIN number entered by the user on keypad
+	 * @param pinNum Single PIN number from keypad
+	 */
 	private void handleSetAccountPin(String pinNum) {
 		if (user.getPin() == null) {
 			user.setPin(pinNum);
@@ -593,8 +630,11 @@ public class ATMSS extends AppThread {
 	} // handleCardInserted
 
 
-	//------------------------------------------------------------
-	// handleAuth
+	/**
+	 * Handle user authorization and the result of the BAMS Login
+	 * Check the credential
+	 * @param credential The result of login from BAMS Emulator
+	 */
 	private void handleAuth(String credential) {
 		buzz("beep");
 		boolean validator = !credential.equals("NOK");
@@ -619,15 +659,11 @@ public class ATMSS extends AppThread {
 	} // handleAuth
 
 
-	/*******************************************************************************************************************
-	 *
-	 * KEYPAD
-	 *
-	 ******************************************************************************************************************/
-
-
-	//------------------------------------------------------------
-	// handleCancel
+	/**
+	 * Handle Cancel command
+	 * Is used when user pressed Cancel button on keypad
+	 * Or across the class to logout the user and end the session
+	 */
 	private void handleCancel() {
 		buzz("beep");
 		String details = user.getCardNum() + "/" + user.getCredential();
@@ -635,7 +671,9 @@ public class ATMSS extends AppThread {
 	} // handleCancel
 
 
-	// handleEnter
+	/**
+	 * Handle Enter command pressed by the user on keypad
+	 */
 	private void handleEnter() {
 		if (state == State.PIN || state == State.INCORRECT_PIN) {
 			bamsMBox.send(new Msg(id, mbox, Msg.Type.BAMS_Login, user.getCardNum() + "/" + user.getPin()));
@@ -657,8 +695,9 @@ public class ATMSS extends AppThread {
 	} // handleEnter
 
 
-	//------------------------------------------------------------
-	// handleErase
+	/**
+	 * Handle Erase command pressed by the user on keypad
+	 */
 	private void handleErase() {
     	if (state == State.PIN || state == State.INCORRECT_PIN || state == State.CHANGEPIN) {
     		user.setPin("");
@@ -672,57 +711,56 @@ public class ATMSS extends AppThread {
 	} // handleErase
 
 
-	//------------------------------------------------------------
-	// handleNumkeyPress
-	private void handleNumkeyPress(Msg msg) {
-    	if (msg.getDetails().compareToIgnoreCase("00") == 0 || msg.getDetails().compareToIgnoreCase(".") == 0) return;
+	/**
+	 * Handle the number key pressed on number values on keypad
+	 * @param numkey Received NumKey
+	 */
+	private void handleNumkeyPress(String numkey) {
+    	if (numkey.compareToIgnoreCase("00") == 0 || numkey.compareToIgnoreCase(".") == 0) return;
 
     	if (state == State.WELCOME || state == State.MAIN_MENU) return;
 
     	if (state == State.PIN || state == State.INCORRECT_PIN || state == State.CHANGEPIN) {
-			handleSetAccountPin(msg.getDetails());
+			handleSetAccountPin(numkey);
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_AppendPinText, ""));
 		}
     	if (state == State.AMOUNT_INPUT) {
-			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_AppendAmountText, msg.getDetails()));
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_AppendAmountText, numkey));
 		}
     	if (state == State.ACCOUNT_INPUT) {
-			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_CardInput, msg.getDetails()));
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_CardInput, numkey));
 		}
     	if (state == State.ADMIN) {
-			adminPassword += msg.getDetails();
+			adminPassword += numkey;
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.ADMIN_pwd, ""));
 		}
 	} // handleNumkeyPress
 
 
-    //------------------------------------------------------------
-    // processKeyPressed
-    private void processKeyPressed(Msg msg) {
-		log.info("KeyPressed: " + msg.getDetails());
-        if (msg.getDetails().compareToIgnoreCase("Cancel") == 0) {
+	/**
+	 * Handle single key pressed on keypad
+	 * @param key Received key name from KeyPad Emulator
+	 */
+	private void processKeyPressed(String key) {
+		log.info("KeyPressed: " + key);
+        if (key.compareToIgnoreCase("Cancel") == 0) {
         	handleCancel();
-		} else if (msg.getDetails().compareToIgnoreCase("Erase") == 0) {
+		} else if (key.compareToIgnoreCase("Erase") == 0) {
 			handleErase();
-		} else if (msg.getDetails().compareToIgnoreCase("Admin") == 0) {
-        	handleAdmin();
-		} else if (msg.getDetails().compareToIgnoreCase("Enter") == 0) {
+		} else if (key.compareToIgnoreCase("Admin") == 0) {
+			handleAdminClick();
+		} else if (key.compareToIgnoreCase("Enter") == 0) {
 			handleEnter();
 		} else {
-			handleNumkeyPress(msg);
+			handleNumkeyPress(key);
 		}
     } // processKeyPressed
 
 
-	/*******************************************************************************************************************
-	 *
-	 * PRINTER
-	 *
-	 ******************************************************************************************************************/
-
-
-	//------------------------------------------------------------
-	// generateReceipt
+	/**
+	 * Generate a receipt of the operation to print
+	 * @return Return the receipt text
+	 */
 	private String generateReceipt() {
 		String receipt = "\n============================\n\n";
 		receipt += "                           RECEIPT\n";
@@ -737,8 +775,11 @@ public class ATMSS extends AppThread {
 	} // generateReceipt
 
 
-	//------------------------------------------------------------
-	// handleReceipt
+	/**
+	 * Handle printing receipt
+	 * Analyzes the choice entered by the user: YES or NO
+	 * @param choice Choice name received from the TouchDisplay Emulator
+	 */
 	private void handleReceipt(String choice) {
 		if (choice.equals("YES")) {
 			log.info(id + ": print receipt");
@@ -749,15 +790,13 @@ public class ATMSS extends AppThread {
 	} // handleReceipt
 
 
-	/*******************************************************************************************************************
-	 *
-	 * MISCELLANEOUS
-	 *
-	 ******************************************************************************************************************/
-
-
+	/**
+	 * Handle logging out of the user
+	 * Reset all buffers, variables and states/operations
+	 */
 	private void handleLogout() {
-		restart();
+		updateState(State.WELCOME);
+		updateOperation(Operation.NONE);
 		user.reset();
 		transferAcc = "";
 		amount = "";
@@ -777,8 +816,12 @@ public class ATMSS extends AppThread {
 	}
 
 
-	private void handleCommand(String btn) {
-		Msg.Type command = btn.equals("SHUTDOWN") ? Msg.Type.Shutdown : Msg.Type.Reset;
+	/**
+	 * Handle admin command chosen by the user on Admin Menu
+	 * @param commandName Command name selected by the user
+	 */
+	private void handleCommand(String commandName) {
+		Msg.Type command = commandName.equals("SHUTDOWN") ? Msg.Type.Shutdown : Msg.Type.Reset;
 		cardReaderMBox.send(new Msg(id, mbox, command, ""));
 		keypadMBox.send(new Msg(id, mbox, command, ""));
 		touchDisplayMBox.send(new Msg(id, mbox, command, ""));
@@ -790,21 +833,33 @@ public class ATMSS extends AppThread {
 	}
 
 
+	/**
+	 * Handle the result of the SHUTDOWN command received by single emulator
+	 * @param sender Sender of the reply
+	 * @param result Result of the shutdown
+	 */
 	private void handleShutdownReply(String sender, String result) {
 		log.info(id + ": Shutdown result: [" + result + " | " + sender + "]");
 	}
 
 
+	/**
+	 * Handle the result of the RESET command received by single emulator
+	 * @param sender Sender of the reply
+	 * @param result Result of the shutdown
+	 */
 	private void handleResetReply(String sender, String result) {
 		log.info(id + ": Reset result: [" + result + " | " + sender + "]");
 	}
 
 
-	//------------------------------------------------------------
-	// handleTimesUp
-	private void handleTimesUp(Msg msg) {
+	/**
+	 * Handle polling message sending when polling time period comes up
+	 * @param details  The details to be printed
+	 */
+	private void handleTimesUp(String details) {
 		Timer.setTimer(id, mbox, pollingTime);
-		log.info("Poll: " + msg.getDetails());
+		log.info("Poll: " + details);
 		cardReaderMBox.send(new Msg(id, mbox, Msg.Type.Poll, ""));
 		keypadMBox.send(new Msg(id, mbox, Msg.Type.Poll, ""));
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.Poll, ""));
@@ -816,44 +871,47 @@ public class ATMSS extends AppThread {
 	} // handleTimesUp
 
 
-	//------------------------------------------------------------
-	// updateOperation
+	/**
+	 * Update the current state of the system
+	 * @param newState New state value
+	 */
 	private void updateState(State newState) {
 		state = newState;
 	} // updateOperation
 
 
-	//------------------------------------------------------------
-	// updateOperation
+	/**
+	 * Update the current operation of the system
+	 * @param newOperation New operation value
+	 */
 	private void updateOperation(Operation newOperation) {
 		operation = newOperation;
 	} // updateOperation
 
 
-	//------------------------------------------------------------
-	// restart
-	private void restart() {
-		updateState(State.WELCOME);
-		updateOperation(Operation.NONE);
-	} // restart
-
-
-	//------------------------------------------------------------
-	// buzz
+	/**
+	 * Handle buzzing of the system
+	 * @param variant The variant of the sound: Button sound or Beep sound
+	 */
 	private void buzz(String variant) {
 		buzzerMBox.send(new Msg(id, mbox, Msg.Type.BZ_Play, variant));
 	} // buzz
 
 
-    //------------------------------------------------------------
-    // processMouseClicked
-    private void processMouseClicked(Msg msg) {
-		log.info("MouseCLicked: " + msg.getDetails());
+	/**
+	 * Handle the coordinates of the mouse click on the display
+	 * @param clickDetais The coordinates
+	 */
+	private void processMouseClicked(String clickDetais) {
+		log.info("MouseCLicked: " + clickDetais);
 	} // processMouseClicked
 
 
-	//------------------------------------------------------------
-	// now
+	/**
+	 * Miscellaneous function used to get the current timestamp
+	 * Used for receipt generation
+	 * @return Returns current formatted time
+	 */
 	public static String now() {
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

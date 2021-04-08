@@ -2,8 +2,6 @@ package ATMSS.TouchDisplayHandler.Emulator;
 
 import ATMSS.ATMSSStarter;
 import ATMSS.TouchDisplayHandler.TouchDisplayHandler;
-import AppKickstarter.misc.Msg;
-
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,18 +11,39 @@ import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
 
-//======================================================================
-// TouchDisplayEmulator
+/**
+ * Touch Display Emulator for the Display hardware of ATM class
+ * Extends TouchDisplayHandler class
+ */
 public class TouchDisplayEmulator extends TouchDisplayHandler {
-    private final int WIDTH = 680;
+	/**
+	 * Fixed variables for display proportions
+	 */
+	private final int WIDTH = 680;
     private final int HEIGHT = 520;
-    private ATMSSStarter atmssStarter;
-    private String id;
-    private Stage myStage;
+	/**
+	 * Instance of the ATMSSStarter
+	 */
+	private ATMSSStarter atmssStarter;
+	/**
+	 * ID of the current thread
+	 */
+	private String id;
+	/**
+	 * Stage of the emulator
+	 */
+	private Stage myStage;
+	/**
+	 * Instance of the Emulator Controller
+	 */
     private TouchDisplayEmulatorController touchDisplayEmulatorController;
 
-    //------------------------------------------------------------
-    // TouchDisplayEmulator
+
+	/**
+	 * Constructor of the class
+	 * @param id ID of the current thread
+	 * @param atmssStarter ATMSSStarter instance
+	 */
     public TouchDisplayEmulator(String id, ATMSSStarter atmssStarter) throws Exception {
 		super(id, atmssStarter);
 		this.atmssStarter = atmssStarter;
@@ -32,8 +51,10 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
     } // TouchDisplayEmulator
 
 
-    //------------------------------------------------------------
-    // start
+	/**
+	 * Function to start the emulator
+	 * @throws Exception Throws Exception
+	 */
     public void start() throws Exception {
 		Parent root;
 		myStage = new Stage();
@@ -55,12 +76,14 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
     } // TouchDisplayEmulator
 
 
-    //------------------------------------------------------------
-    // handleUpdateDisplay
-    protected void handleUpdateDisplay(Msg msg) {
-		log.info(id + ": update display -- " + msg.getDetails());
+	/**
+	 * Handle display update
+	 * @param displayName
+	 */
+	protected void handleUpdateDisplay(String displayName) {
+		log.info(id + ": update display -- " +displayName);
 
-		switch (msg.getDetails()) {
+		switch (displayName) {
 			case "Incorrect Pin":
 				handleIncorrectPin();
 				break;
@@ -97,20 +120,22 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 			case "AdminPassword":
 			case "AdminMenu":
 			case "ChangePinSuccess":
-				String filename = "TouchDisplay" + msg.getDetails() + ".fxml";
+				String filename = "TouchDisplay" + displayName + ".fxml";
 				reloadStage(filename);
 				break;
 
 			default:
-				log.severe(id + ": update display with unknown display type -- " + msg.getDetails());
+				log.severe(id + ": update display with unknown display type -- " + displayName);
 				break;
 		}
     } // handleUpdateDisplay
 
 
-    //------------------------------------------------------------
-    // reloadStage
-    private void reloadStage(String fxmlFName) {
+	/**
+	 * Reload the display
+	 * @param fxmlFName File Name of the new display screen
+	 */
+	private void reloadStage(String fxmlFName) {
         TouchDisplayEmulator touchDisplayEmulator = this;
 
         Platform.runLater(new Runnable() {
@@ -135,8 +160,9 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
     } // reloadStage
 
 
-	//------------------------------------------------------------
-	// handleChangePin
+	/**
+	 * Handle the render of change pin screen
+	 */
 	protected void handleChangePin() {
 		log.info(id + ": Change Pin");
 		reloadStage("TouchDisplayPin.fxml");
@@ -148,22 +174,29 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 	} // handleChangePin
 
 
-	//------------------------------------------------------------
-	// handleIncorrectAdminPassword
+	/**
+	 * Handle rendering incorrect admin password text on screen
+	 */
 	protected void handleIncorrectAdminPassword() {
 		log.info(id + ": Incorrect Admin Password");
 		touchDisplayEmulatorController.handleIncorrectAdminPassword();
 	} // handleIncorrectAdminPassword
 
 
+	/**
+	 * Handle display asterisks on password key input
+	 * @param value Received character value
+	 */
 	protected void handleAdminPassword(String value) {
-		log.info(id + ": admin password input)");
+		log.info(id + ": admin password input");
 		touchDisplayEmulatorController.handleSetAdminPassword(value);
 	}
 
 
-	//------------------------------------------------------------
-	// handleSetBalance
+	/**
+	 * Handle setting balance value on Balance screen
+	 * @param balance Received Balance value
+	 */
 	protected void handleSetBalance(String balance) {
     	log.info(id + ": show balance [" + balance + "]");
 		Platform.runLater(new Runnable() {
@@ -174,8 +207,10 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
     } // handleSetBalance
 
 
-	//------------------------------------------------------------
-	// handleAccountList
+	/**
+	 * Handle rendering account list on AccountList screen
+	 * @param accountList Received account list in one string separated by slash character
+	 */
 	protected void handleAccountList(String accountList) {
     	log.info(id + ": show accounts list [" + accountList + "]");
 		Platform.runLater(new Runnable() {
@@ -186,64 +221,74 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
     } // handleAccountList
 
 
-	//------------------------------------------------------------
-	// handleCashReceived
+	/**
+	 * Handle rendering cash received text on screen
+	 */
 	protected void handleCashReceived() {
     	log.info(id + ": cash received");
 		touchDisplayEmulatorController.handleCashReceived();
     } // handleCashReceived
 
 
-	//------------------------------------------------------------
-	// handleCardInput
-	protected void handleCardInput(Msg msg) {
+	/**
+	 * Handle rendering a card number value
+	 * @param inputValue Received value
+	 */
+	protected void handleCardInput(String inputValue) {
 		log.info(id + ": card input");
-		touchDisplayEmulatorController.handleCardInput(msg.getDetails());
+		touchDisplayEmulatorController.handleCardInput(inputValue);
 	} // handleCardInput
 
 
-	//------------------------------------------------------------
-	// handleGetAmount
+	/**
+	 * Handle sending amount to the ATMSS
+	 */
 	protected void handleGetAmount() {
 		log.info(id + ": send amount");
 		touchDisplayEmulatorController.handleSendAmount();
 	} // handleGetAmount
 
 
-	//------------------------------------------------------------
-	// handleGetCard
+	/**
+	 * Handle sending card number value to the ATMSS
+	 */
 	protected void handleGetCard() {
 		log.info(id + ": send card number");
 		touchDisplayEmulatorController.handleSendCard();
 	} // handleGetCard
 
 
-	//------------------------------------------------------------
-	// handleAppendText
+	/**
+	 * Handle rendering PIN characters on screen one by one
+	 */
 	protected void handleAppendPinText() {
 		log.info(id + ": update pin text");
 		touchDisplayEmulatorController.appendCardPinText();
 	} // handleAppendText
 
 
-	//------------------------------------------------------------
-	// handleAppendAmountText
-	protected void handleAppendAmountText(Msg msg) {
+	/**
+	 * Handle rendering amount character by character on screen
+	 * @param value Received  amount character
+	 */
+	protected void handleAppendAmountText(String value) {
 		log.info(id + ": update amount text");
-		touchDisplayEmulatorController.appendAmountText(msg.getDetails());
+		touchDisplayEmulatorController.appendAmountText(value);
 	} // handleAppendAmountText
 
 
-	//------------------------------------------------------------
-	// handleClearPinText
+	/**
+	 * Handle clearing PIN text on screen
+	 */
 	protected void handleClearPinText() {
 		log.info(id + ": clear pin text");
 		touchDisplayEmulatorController.clearCardPinText();
 	} // handleClearPinText
 
 
-	//------------------------------------------------------------
-	// handleIncorrectPin
+	/**
+	 * Handle setting text on screen to Incorrect Pin
+	 */
 	protected void handleIncorrectPin() {
 		log.info(id + ": Incorrect Pin");
 		touchDisplayEmulatorController.handleIncorrectPin();

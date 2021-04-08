@@ -2,7 +2,6 @@ package ATMSS.CollectorHandler.Emulator;
 
 import ATMSS.ATMSSStarter;
 import ATMSS.CollectorHandler.CollectorHandler;
-import ATMSS.CollectorHandler.Emulator.CollectorEmulatorController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,16 +10,34 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
-//======================================================================
-// CollectorEmulator
+/**
+ * Collector Emulator for the Collector hardware of ATM class
+ * Extends CollectorHandler class
+ */
 public class CollectorEmulator extends CollectorHandler {
+    /**
+     * Instance of the ATMSSStarter
+     */
     private ATMSSStarter atmssStarter;
+    /**
+     * ID of the current thread
+     */
     private String id;
+    /**
+     * Stage of the emulator
+     */
     private Stage myStage;
+    /**
+     * Instance of the Emulator Controller
+     */
     private CollectorEmulatorController collectorEmulatorController;
 
-    //------------------------------------------------------------
-    // CollectorEmulator
+
+    /**
+     * Constructor of the class
+     * @param id ID of the current thread
+     * @param atmssStarter ATMSSStarter instance
+     */
     public CollectorEmulator(String id, ATMSSStarter atmssStarter) {
         super(id, atmssStarter);
         this.atmssStarter = atmssStarter;
@@ -28,8 +45,10 @@ public class CollectorEmulator extends CollectorHandler {
     } // CollectorEmulator
 
 
-    //------------------------------------------------------------
-    // start
+    /**
+     * Function to start the emulator
+     * @throws Exception Throws Exception
+     */
     public void start() throws Exception {
         Parent root;
         myStage = new Stage();
@@ -50,16 +69,19 @@ public class CollectorEmulator extends CollectorHandler {
         myStage.show();
     } // CollectorEmulator
 
-    //------------------------------------------------------------
-    // handleGetAmount
+
+    /**
+     * Handle receiving the cash from the user
+     */
     protected void handleGetAmount() {
         log.info(id + ": ready to receive cash");
         collectorEmulatorController.getReady();
     } // handleGetAmount
 
 
-    //------------------------------------------------------------
-    // handleReset
+    /**
+     * Reset the emulator and controller
+     */
     protected void handleReset() {
         log.info(id + ": reset");
         collectorEmulatorController.reset();
