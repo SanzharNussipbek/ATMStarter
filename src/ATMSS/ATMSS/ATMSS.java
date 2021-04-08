@@ -666,6 +666,10 @@ public class ATMSS extends AppThread {
 	 */
 	private void handleCancel() {
 		buzz("beep");
+		if (state == State.ADMIN || state == State.ADMIN_MENU) {
+			handleLogout();
+			return;
+		}
 		String details = user.getCardNum() + "/" + user.getCredential();
 		bamsMBox.send(new Msg(id, mbox, Msg.Type.BAMS_Logout, details));
 	} // handleCancel
@@ -795,8 +799,6 @@ public class ATMSS extends AppThread {
 	 * Reset all buffers, variables and states/operations
 	 */
 	private void handleLogout() {
-		updateState(State.WELCOME);
-		updateOperation(Operation.NONE);
 		user.reset();
 		transferAcc = "";
 		amount = "";
@@ -807,12 +809,15 @@ public class ATMSS extends AppThread {
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Welcome"));
 		if (state == State.ADMIN) {
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.ADMIN_pwd, "CLEAR"));
-		} else {
+		}
+		if (state != State.ADMIN_MENU && state != State.ADMIN){
 			cardReaderMBox.send(new Msg(id, mbox, Msg.Type.CR_EjectCard, ""));
 		}
 		if (state == State.PIN || state == State.INCORRECT_PIN) {
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_ClearPinText, "TD_ClearPinText"));
 		}
+		updateState(State.WELCOME);
+		updateOperation(Operation.NONE);
 	}
 
 

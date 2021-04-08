@@ -52,9 +52,7 @@ public class CardReaderHandler extends HWHandler {
 
     //------------------------------------------------------------
     // handleCardEject
-    protected void handleCardEject() {
-	log.info(id + ": card ejected");
-    } // handleCardEject
+    protected void handleCardEject() { log.info(id + ": card ejected"); } // handleCardEject
 
 
     //------------------------------------------------------------
