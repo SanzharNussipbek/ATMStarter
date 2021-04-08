@@ -43,6 +43,7 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 	 * Constructor of the class
 	 * @param id ID of the current thread
 	 * @param atmssStarter ATMSSStarter instance
+	 * @throws Exception Throws Exception
 	 */
     public TouchDisplayEmulator(String id, ATMSSStarter atmssStarter) throws Exception {
 		super(id, atmssStarter);
@@ -78,7 +79,7 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 
 	/**
 	 * Handle display update
-	 * @param displayName
+	 * @param displayName Display name
 	 */
 	protected void handleUpdateDisplay(String displayName) {
 		log.info(id + ": update display -- " +displayName);
