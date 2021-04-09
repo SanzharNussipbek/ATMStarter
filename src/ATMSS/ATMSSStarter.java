@@ -4,8 +4,6 @@ import ATMSS.BAMSHandler.AtmBAMSHandler;
 import ATMSS.BuzzerHandler.BuzzerHandler;
 import ATMSS.CollectorHandler.CollectorHandler;
 import ATMSS.DispenserHandler.DispenserHandler;
-import ATMSS.DispenserHandler.Emulator.DispenserEmulator;
-import ATMSS.KeypadHandler.Emulator.KeypadEmulator;
 import ATMSS.PrinterHandler.PrinterHandler;
 import AppKickstarter.AppKickstarter;
 import AppKickstarter.misc.Msg;
@@ -17,6 +15,10 @@ import ATMSS.KeypadHandler.KeypadHandler;
 import ATMSS.TouchDisplayHandler.TouchDisplayHandler;
 
 import javafx.application.Platform;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 
 //======================================================================
@@ -33,12 +35,13 @@ public class ATMSSStarter extends AppKickstarter {
     protected BuzzerHandler buzzerHandler;
     protected AtmBAMSHandler bamsHandler;
 
-    protected static String URL_PREFIX = "http://cslinux0.comp.hkbu.edu.hk/comp4107_20-21_grp04/";
+    protected static String URL_PREFIX = "";
+    public static String ADMIN_PASSWORD = "";
 
 
     //------------------------------------------------------------
     // main
-    public static void main(String [] args) {
+    public static void main(String [] args) throws IOException {
         new ATMSSStarter().startApp();
     } // main
 
@@ -52,15 +55,26 @@ public class ATMSSStarter extends AppKickstarter {
 
     //------------------------------------------------------------
     // startApp
-    protected void startApp() {
+    protected void startApp() throws IOException {
 		// start our application
 		log.info("");
 		log.info("");
 		log.info("============================================================");
 		log.info(id + ": Application Starting...");
 
+		getProperties();
 		startHandlers();
     } // startApp
+
+
+	protected void getProperties() throws IOException {
+		Properties p = new Properties();
+		FileInputStream in = new FileInputStream("config.properties");
+		p.load(in);
+		URL_PREFIX = p.getProperty("urlPrefix");
+		ADMIN_PASSWORD = p.getProperty("adminPassword");
+		in.close();
+	}
 
 
     //------------------------------------------------------------

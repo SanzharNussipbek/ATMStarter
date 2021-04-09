@@ -23,13 +23,16 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
+
 //======================================================================
 // ATMSSEmulatorStarter
 public class ATMSSEmulatorStarter extends ATMSSStarter {
     //------------------------------------------------------------
     // main
-    public static void main(String [] args) {
-	new ATMSSEmulatorStarter().startApp();
+    public static void main(String [] args) throws IOException {
+		new ATMSSEmulatorStarter().startApp();
     } // main
 
 

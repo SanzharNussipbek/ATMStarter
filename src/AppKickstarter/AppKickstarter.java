@@ -25,7 +25,7 @@ public abstract class AppKickstarter {
     private ConsoleHandler logConHd = null;
     private FileHandler logFileHd = null;
     private Timer timer = null;
-    protected abstract void startApp();
+    protected abstract void startApp() throws IOException;
     protected abstract void stopApp();
 
 

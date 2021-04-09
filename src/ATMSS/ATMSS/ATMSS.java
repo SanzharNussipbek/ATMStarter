@@ -8,6 +8,8 @@ import AppKickstarter.timer.Timer;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import static ATMSS.ATMSSStarter.ADMIN_PASSWORD;
+
 
 /**
  * ATM Software System Class
@@ -294,7 +296,6 @@ public class ATMSS extends AppThread {
 	 */
 	private void handleAdminPasswordEnter() {
 		adminTries++;
-		String ADMIN_PASSWORD = "0000";
 		if (!adminPassword.equals(ADMIN_PASSWORD)) {
 			adminPassword = "";
 			if (adminTries >= 3) {
@@ -595,7 +596,6 @@ public class ATMSS extends AppThread {
 		log.info(id + ": Current Account: [" + user.getCurrentAcc() + "]");
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "MainMenu"));
 		updateState(State.MAIN_MENU);
-		log.info(id + ": " + user);
 	} // handleAccountClick
 
 
