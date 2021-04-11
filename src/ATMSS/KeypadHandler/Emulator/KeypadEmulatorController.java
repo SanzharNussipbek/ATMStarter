@@ -20,6 +20,9 @@ public class KeypadEmulatorController {
     private MBox keypadMBox;
 
 
+    private boolean buttonsBroken;
+
+
     //------------------------------------------------------------
     // initialize
     public void initialize(String id, AppKickstarter appKickstarter, Logger log, KeypadEmulator keypadEmulator) {
@@ -28,7 +31,15 @@ public class KeypadEmulatorController {
 		this.log = log;
 		this.keypadEmulator = keypadEmulator;
 		this.keypadMBox = appKickstarter.getThread("KeypadHandler").getMBox();
+		buttonsBroken = false;
     } // initialize
+
+
+	//------------------------------------------------------------
+	// getPollAck
+	public String getPollAck() {
+		return buttonsBroken ? " is broken!" : " is up!";
+	} // getPollAck
 
 
     //------------------------------------------------------------

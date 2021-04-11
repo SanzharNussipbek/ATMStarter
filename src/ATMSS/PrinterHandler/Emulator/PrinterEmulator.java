@@ -2,6 +2,7 @@ package ATMSS.PrinterHandler.Emulator;
 
 import ATMSS.ATMSSStarter;
 import ATMSS.PrinterHandler.PrinterHandler;
+import AppKickstarter.misc.Msg;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -68,6 +69,15 @@ public class PrinterEmulator extends PrinterHandler {
         });
         myStage.show();
     } // PrinterEmulator
+
+
+    /**
+     * Handle Poll Acknowledgement
+     */
+    protected void handlePollAck() {
+        String result = printerEmulatorController.getPollAck();
+        atmss.send(new Msg(id, mbox, Msg.Type.PollAck, id + result));
+    } // handlePollAck
 
 
     /**

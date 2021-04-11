@@ -20,6 +20,10 @@ public class CardReaderHandler extends HWHandler {
     protected void processMsg(Msg msg) {
         if (this.isShutdown) return;
         switch (msg.getType()) {
+            case Poll:
+                handlePollAck();
+                break;
+
             case CR_CardInserted:
                 atmss.send(new Msg(id, mbox, Msg.Type.CR_CardInserted, msg.getDetails()));
                 break;
@@ -41,6 +45,11 @@ public class CardReaderHandler extends HWHandler {
                 log.warning(id + ": unknown message type: [" + msg + "]");
         }
     } // processMsg
+
+
+    //------------------------------------------------------------
+    // handlePollAck
+    protected void handlePollAck() { } // handlePollAck
 
 
     //------------------------------------------------------------

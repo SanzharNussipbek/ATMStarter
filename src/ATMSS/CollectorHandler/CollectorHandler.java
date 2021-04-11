@@ -20,6 +20,10 @@ public class CollectorHandler extends HWHandler {
     protected void processMsg(Msg msg) {
         if (this.isShutdown) return;
         switch (msg.getType()) {
+            case Poll:
+                handlePollAck();
+                break;
+
             case TD_GetAmount:
                 handleGetAmount();
                 break;
@@ -40,6 +44,12 @@ public class CollectorHandler extends HWHandler {
                 log.warning(id + ": unknown message type: [" + msg + "]");
         }
     } // processMsg
+
+
+    //------------------------------------------------------------
+    // handlePollAck
+    protected void handlePollAck() { } // handlePollAck
+
 
     //------------------------------------------------------------
     // handleGetAmount

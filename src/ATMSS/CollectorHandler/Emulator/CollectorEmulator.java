@@ -2,6 +2,7 @@ package ATMSS.CollectorHandler.Emulator;
 
 import ATMSS.ATMSSStarter;
 import ATMSS.CollectorHandler.CollectorHandler;
+import AppKickstarter.misc.Msg;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -68,6 +69,15 @@ public class CollectorEmulator extends CollectorHandler {
         });
         myStage.show();
     } // CollectorEmulator
+
+
+    /**
+     * Handle Poll Acknowledgement
+     */
+    protected void handlePollAck() {
+        String result = collectorEmulatorController.getPollAck();
+        atmss.send(new Msg(id, mbox, Msg.Type.PollAck, id + result));
+    } // handlePollAck
 
 
     /**

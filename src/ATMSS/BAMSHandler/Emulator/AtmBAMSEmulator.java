@@ -18,6 +18,10 @@ public class AtmBAMSEmulator extends AtmBAMSHandler {
      * BAMSHandler instance to send queries
      */
     BAMSHandler bams;
+    /**
+     * Boolean value to track lost connection issue for Poll Acknowledgements
+     */
+    private boolean connectionLost;
 
 
     /**
@@ -29,6 +33,7 @@ public class AtmBAMSEmulator extends AtmBAMSHandler {
     public AtmBAMSEmulator(String id, AppKickstarter appKickstarter, String urlPrefix) {
         super(id, appKickstarter, urlPrefix);
         this.bams = new BAMSHandler(urlPrefix, initLogger());
+        connectionLost = false;
     }
 
 
@@ -36,6 +41,15 @@ public class AtmBAMSEmulator extends AtmBAMSHandler {
      * Mock function to start the emulator
      */
     public void start() { } // start
+
+
+    /**
+     * Handle Poll Acknowledgement
+     */
+    protected void handlePollAck() {
+        String result = connectionLost ? " is broken!" : " is up!";;
+        atmss.send(new Msg(id, mbox, Msg.Type.PollAck, id + result));
+    } // handlePollAck
 
 
     /**

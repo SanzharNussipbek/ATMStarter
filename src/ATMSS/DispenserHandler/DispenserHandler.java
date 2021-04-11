@@ -20,6 +20,10 @@ public class DispenserHandler extends HWHandler {
     protected void processMsg(Msg msg) {
         if (this.isShutdown) return;
         switch (msg.getType()) {
+            case Poll:
+                handlePollAck();
+                break;
+
             case DP_DispenseCash:
                 handleDispenseCash(msg.getDetails());
                 break;
@@ -41,6 +45,11 @@ public class DispenserHandler extends HWHandler {
                 break;
         }
     } // processMsg
+
+
+    //------------------------------------------------------------
+    // handlePollAck
+    protected void handlePollAck() { } // handlePollAck
 
 
     //------------------------------------------------------------

@@ -22,7 +22,7 @@ public class CardReaderEmulatorController {
     public TextField cardNumField;
     public TextField cardStatusField;
     public TextArea cardReaderTextArea;
-
+	private boolean componentBroken;
 
     //------------------------------------------------------------
     // initialize
@@ -32,6 +32,7 @@ public class CardReaderEmulatorController {
 		this.log = log;
 		this.cardReaderEmulator = cardReaderEmulator;
 		this.cardReaderMBox = appKickstarter.getThread("CardReaderHandler").getMBox();
+		componentBroken = false;
     } // initialize
 
 
@@ -110,4 +111,11 @@ public class CardReaderEmulatorController {
 		}
 		return counter;
 	}// numCount
+
+
+	//------------------------------------------------------------
+	// getPollAck
+	public String getPollAck() {
+		return componentBroken ? " is broken!" : " is up!";
+	} // getPollAck
 } // CardReaderEmulatorController

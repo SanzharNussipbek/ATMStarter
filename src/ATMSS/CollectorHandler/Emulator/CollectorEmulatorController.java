@@ -26,6 +26,8 @@ public class CollectorEmulatorController {
     public TextField collectorStatusField;
     private String STATUS_READY = "Ready for deposit";
 
+    private boolean componentBroken;
+
     //------------------------------------------------------------
     // initialize
     public void initialize(String id, AppKickstarter appKickstarter, Logger log, CollectorEmulator collectorEmulator) {
@@ -34,12 +36,21 @@ public class CollectorEmulatorController {
         this.log = log;
         this.collectorEmulator = collectorEmulator;
         this.collectorMBox = appKickstarter.getThread("CollectorHandler").getMBox();
+        componentBroken = false;
     } // initialize
 
-
+    //------------------------------------------------------------
+    // getReady
     public void getReady() {
         collectorStatusField.setText(STATUS_READY);
-    }
+    } // getReady
+
+
+    //------------------------------------------------------------
+    // getPollAck
+    public String getPollAck() {
+        return componentBroken ? " is broken!" : " is up!";
+    } // getPollAck
 
 
     //------------------------------------------------------------

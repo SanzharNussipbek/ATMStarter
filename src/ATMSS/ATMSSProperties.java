@@ -19,6 +19,9 @@ public class ATMSSProperties {
         p.setProperty("member4", "Oshan SHAKYA 18200206");
         p.setProperty("adminPassword", "4107");
         p.setProperty("urlPrefix", "http://cslinux0.comp.hkbu.edu.hk/comp4107_20-21_grp04/");
+        p.setProperty("dbAccountName", "comp4107_grp04");
+        p.setProperty("dbName", "comp4107_grp04");
+        p.setProperty("dbPassword", "comp4107_grp04");
         p.setProperty("sdk", "1.8");
 
         p.store(os, null);

@@ -20,6 +20,10 @@ public class PrinterHandler extends HWHandler {
     protected void processMsg(Msg msg) {
         if (this.isShutdown) return;
         switch (msg.getType()) {
+            case Poll:
+                handlePollAck();
+                break;
+
             case PR_Print:
                 handlePrint(msg.getDetails());
                 break;
@@ -32,6 +36,11 @@ public class PrinterHandler extends HWHandler {
                 log.warning(id + ": unknown message type: [" + msg + "]");
         }
     } // processMsg
+
+
+    //------------------------------------------------------------
+    // handlePollAck
+    protected void handlePollAck() { } // handlePollAck
 
     //------------------------------------------------------------
     // handlePrint

@@ -24,6 +24,10 @@ public class BuzzerHandler extends HWHandler {
     protected void processMsg(Msg msg) {
         if (this.isShutdown) return;
         switch (msg.getType()) {
+            case Poll:
+                handlePollAck();
+                break;
+
             case BZ_Play:
                 play(msg.getDetails());
                 break;
@@ -32,6 +36,11 @@ public class BuzzerHandler extends HWHandler {
                 log.warning(id + ": unknown message type: [" + msg + "]");
         }
     } // processMsg
+
+
+    //------------------------------------------------------------
+    // handlePollAck
+    protected void handlePollAck() { } // handlePollAck
 
 
     //------------------------------------------------------------

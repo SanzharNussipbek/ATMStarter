@@ -21,6 +21,10 @@ public class AtmBAMSHandler extends HWHandler {
         String details = msg.getDetails();
         try {
             switch (msg.getType()) {
+                case Poll:
+                    handlePollAck();
+                    break;
+
                 case BAMS_Login:
                     handleLogin(details);
                     break;
@@ -61,6 +65,11 @@ public class AtmBAMSHandler extends HWHandler {
             e.printStackTrace();
         }
     } // processMsg
+
+
+    //------------------------------------------------------------
+    // handlePollAck
+    protected void handlePollAck() { } // handlePollAck
 
 
     //------------------------------------------------------------

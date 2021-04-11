@@ -25,6 +25,10 @@ public class TouchDisplayHandler extends HWHandler {
         if (this.isShutdown) return;
         String details = msg.getDetails();
         switch (msg.getType()) {
+            case Poll:
+                handlePollAck();
+                break;
+
             case TD_UpdateDisplay:
                 handleUpdateDisplay(details);
                 break;
@@ -45,12 +49,12 @@ public class TouchDisplayHandler extends HWHandler {
                 handleGetAmount();
                 break;
 
-            case TD_CardInput:
-                handleCardInput(details);
+            case TD_AccountInput:
+                handleAccountInput(details);
                 break;
 
-            case TD_GetCard:
-                handleGetCard();
+            case TD_GetAccount:
+                handleGetAccount();
                 break;
 
             case CL_CashReceived:
@@ -75,7 +79,7 @@ public class TouchDisplayHandler extends HWHandler {
             case AccountItem:
             case Cancel:
             case AmountList:
-            case TD_SendCard:
+            case TD_SendAccount:
             case AmountInput:
             case PR_Receipt:
             case TD_AnotherService:
@@ -89,9 +93,16 @@ public class TouchDisplayHandler extends HWHandler {
     } // processMsg
 
 
+    //------------------------------------------------------------
+    // handlePollAck
+    protected void handlePollAck() { } // handlePollAck
+
+
+    //------------------------------------------------------------
+    // handleAdminPassword
     protected void handleAdminPassword(String value) {
         log.info(id + ": admin password input");
-    }
+    } // handleAdminPassword
 
 
     //------------------------------------------------------------
@@ -110,8 +121,8 @@ public class TouchDisplayHandler extends HWHandler {
 
 
     //------------------------------------------------------------
-    // handleCardInput
-    protected void handleCardInput(String inputValue) { log.info(id + ": card input"); } // handleCardInput
+    // handleAccountInput
+    protected void handleAccountInput(String inputValue) { log.info(id + ": account input"); } // handleAccountInput
 
 
     //------------------------------------------------------------
@@ -123,16 +134,12 @@ public class TouchDisplayHandler extends HWHandler {
 
     //------------------------------------------------------------
     // handleGetCard
-    protected void handleGetCard() {
-        log.info(id + ": send card number");
-    } // handleGetCard
+    protected void handleGetAccount() { log.info(id + ": send account number"); } // handleGetCard
 
 
     //------------------------------------------------------------
     // handleUpdateDisplay
-    protected void handleUpdateDisplay(String displayName) {
-	    log.info(id + ": update display -- " + displayName);
-    } // handleUpdateDisplay
+    protected void handleUpdateDisplay(String displayName) { log.info(id + ": update display -- " + displayName); } // handleUpdateDisplay
 
 
     //------------------------------------------------------------
@@ -143,9 +150,7 @@ public class TouchDisplayHandler extends HWHandler {
 
     //------------------------------------------------------------
     // handleAppendAmountText
-    protected void handleAppendAmountText(String value) {
-        log.info(id + ": update amount text");
-    } // handleAppendAmountText
+    protected void handleAppendAmountText(String value) { log.info(id + ": update amount text"); } // handleAppendAmountText
 
 
     //------------------------------------------------------------

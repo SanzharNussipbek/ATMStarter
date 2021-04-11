@@ -2,6 +2,7 @@ package ATMSS.TouchDisplayHandler.Emulator;
 
 import ATMSS.ATMSSStarter;
 import ATMSS.TouchDisplayHandler.TouchDisplayHandler;
+import AppKickstarter.misc.Msg;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -115,12 +116,12 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 			case "WithdrawSuccess":
 			case "WithdrawError":
 			case "DepositSuccess":
-			case "TransactionSuccess":
-			case "TransactionError":
+			case "TransferSuccess":
 			case "TransferError":
 			case "AdminPassword":
 			case "AdminMenu":
 			case "ChangePinSuccess":
+			case "OutOfService":
 				String filename = "TouchDisplay" + displayName + ".fxml";
 				reloadStage(filename);
 				break;
@@ -159,6 +160,15 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 			}
 		});
     } // reloadStage
+
+
+	/**
+	 * Handle Poll Acknowledgement
+	 */
+	protected void handlePollAck() {
+		String result = touchDisplayEmulatorController.getPollAck();
+		atmss.send(new Msg(id, mbox, Msg.Type.PollAck, id + result));
+	} // handlePollAck
 
 
 	/**
@@ -232,12 +242,12 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 
 
 	/**
-	 * Handle rendering a card number value
+	 * Handle rendering an account number value
 	 * @param inputValue Received value
 	 */
-	protected void handleCardInput(String inputValue) {
-		log.info(id + ": card input");
-		touchDisplayEmulatorController.handleCardInput(inputValue);
+	protected void handleAccountInput(String inputValue) {
+		log.info(id + ": account input");
+		touchDisplayEmulatorController.handleAccInput(inputValue);
 	} // handleCardInput
 
 
@@ -251,11 +261,11 @@ public class TouchDisplayEmulator extends TouchDisplayHandler {
 
 
 	/**
-	 * Handle sending card number value to the ATMSS
+	 * Handle sending Account number value to the ATMSS
 	 */
-	protected void handleGetCard() {
+	protected void handleGetAccount() {
 		log.info(id + ": send card number");
-		touchDisplayEmulatorController.handleSendCard();
+		touchDisplayEmulatorController.handleSendAccount();
 	} // handleGetCard
 
 

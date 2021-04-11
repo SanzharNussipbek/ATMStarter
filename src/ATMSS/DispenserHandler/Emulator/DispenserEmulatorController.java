@@ -25,6 +25,8 @@ public class DispenserEmulatorController {
     public TextArea dispenserTextArea;
     public TextField dispenserStatusField;
 
+    private boolean ejectorBroken;
+
 
     //------------------------------------------------------------
     // initialize
@@ -34,7 +36,15 @@ public class DispenserEmulatorController {
         this.log = log;
         this.dispenserEmulator = dispenserEmulator;
         this.dispenserMBox = appKickstarter.getThread("DispenserHandler").getMBox();
+        ejectorBroken = false;
     } // initialize
+
+
+    //------------------------------------------------------------
+    // getPollAck
+    public String getPollAck() {
+        return ejectorBroken ? " is broken!" : " is up!";
+    } // getPollAck
 
 
     //------------------------------------------------------------

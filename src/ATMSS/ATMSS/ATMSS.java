@@ -87,6 +87,15 @@ public class ATMSS extends AppThread {
 	private int authTries;
 	private int adminTries;
 
+	private boolean cardReaderPollAck;
+	private boolean buzzerPollAck;
+	private boolean collectorPollAck;
+	private boolean dispenserPollAck;
+	private boolean printerPollAck;
+	private boolean keypadPollAck;
+	private boolean touchDisplayPollAck;
+	private boolean bamsPollAck;
+
 
 	/**
 	 * ATM-SS Constructor
@@ -115,6 +124,8 @@ public class ATMSS extends AppThread {
 		printerMBox = appKickstarter.getThread("PrinterHandler").getMBox();
 		buzzerMBox = appKickstarter.getThread("BuzzerHandler").getMBox();
 		bamsMBox = appKickstarter.getThread("BAMSHandler").getMBox();
+
+		setAllPollAcks(true);
 
 		user = new User();
 		authTries = 0;
@@ -158,7 +169,7 @@ public class ATMSS extends AppThread {
 					break;
 
 				case PollAck:
-					log.info("PollAck: " + details);
+					handlePollAck(sender, details);
 					break;
 
 				case Terminate:
@@ -186,12 +197,8 @@ public class ATMSS extends AppThread {
 					processMouseClicked(details);
 					break;
 
-				case TD_SendCard:
+				case TD_SendAccount:
 					handleReceiveTransferAcc(details);
-					break;
-
-				case TD_GetBalance:
-					touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_SendBalance, "1000.0"));
 					break;
 
 				case TD_AnotherService:
@@ -509,7 +516,7 @@ public class ATMSS extends AppThread {
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "TransferError"));
 			return;
 		}
-		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "TransactionSuccess"));
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "TransferSuccess"));
 	} // handleTransferBAMS
 
 
@@ -686,7 +693,7 @@ public class ATMSS extends AppThread {
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_GetAmount, ""));
 		}
 		if (state == State.ACCOUNT_INPUT) {
-			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_GetCard, ""));
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_GetAccount, ""));
 		}
 		if (state == State.ADMIN) {
 			handleAdminPasswordEnter();
@@ -732,7 +739,7 @@ public class ATMSS extends AppThread {
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_AppendAmountText, numkey));
 		}
     	if (state == State.ACCOUNT_INPUT) {
-			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_CardInput, numkey));
+			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_AccountInput, numkey));
 		}
     	if (state == State.ADMIN) {
 			adminPassword += numkey;
@@ -799,6 +806,7 @@ public class ATMSS extends AppThread {
 	 * Reset all buffers, variables and states/operations
 	 */
 	private void handleLogout() {
+		setAllPollAcks(true);
 		user.reset();
 		transferAcc = "";
 		amount = "";
@@ -865,6 +873,18 @@ public class ATMSS extends AppThread {
 	private void handleTimesUp(String details) {
 		Timer.setTimer(id, mbox, pollingTime);
 		log.info("Poll: " + details);
+
+		if (!cardReaderPollAck || !touchDisplayPollAck
+				|| !collectorPollAck || !printerPollAck
+				|| !dispenserPollAck || !keypadPollAck
+				|| !bamsPollAck || !buzzerPollAck) {
+			log.info(id + ": Poll Ack not received");
+			setOutOfService();
+			return;
+		}
+
+		setAllPollAcks(false);
+
 		cardReaderMBox.send(new Msg(id, mbox, Msg.Type.Poll, ""));
 		keypadMBox.send(new Msg(id, mbox, Msg.Type.Poll, ""));
 		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.Poll, ""));
@@ -874,6 +894,63 @@ public class ATMSS extends AppThread {
 		buzzerMBox.send(new Msg(id, mbox, Msg.Type.Poll, ""));
 		bamsMBox.send(new Msg(id, mbox, Msg.Type.Poll, ""));
 	} // handleTimesUp
+
+
+	/**
+	 * Handle Poll Acknowledgement message
+	 * @param sender Message sender
+	 * @param details Message details
+	 */
+	private void handlePollAck(String sender, String details) {
+		log.info("PollAck: " + details);
+		if (details.equals(sender + " is broken!")) {
+			setOutOfService();
+			return;
+		}
+		switch (sender) {
+			case "CardReaderHandler":
+				cardReaderPollAck = true;
+				break;
+
+			case "TouchDisplayHandler":
+				touchDisplayPollAck = true;
+				break;
+
+			case "DispenserHandler":
+				dispenserPollAck = true;
+				break;
+
+			case "PrinterHandler":
+				printerPollAck = true;
+				break;
+
+			case "BuzzerHandler":
+				buzzerPollAck = true;
+				break;
+
+			case "BAMSHandler":
+				bamsPollAck = true;
+				break;
+
+			case "CollectorHandler":
+				collectorPollAck = true;
+				break;
+
+			case "KeypadHandler":
+				keypadPollAck = true;
+				break;
+		}
+	}
+
+
+	/**
+	 * Miscellaneous function to set the ATM to out of service
+	 */
+	private void setOutOfService() {
+		log.info(id + ": Out of service");
+		handleCancel();
+		touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.Poll, "OutOfService"));
+	}
 
 
 	/**
@@ -892,6 +969,22 @@ public class ATMSS extends AppThread {
 	private void updateOperation(Operation newOperation) {
 		operation = newOperation;
 	} // updateOperation
+
+
+	/**
+	 * Miscellaneous function to set all poll ack values at once
+	 * @param value Value to be set with
+	 */
+	private void setAllPollAcks(Boolean value) {
+		cardReaderPollAck = value;
+		buzzerPollAck = value;
+		collectorPollAck = value;
+		dispenserPollAck = value;
+		printerPollAck = value;
+		keypadPollAck = value;
+		touchDisplayPollAck = true;
+		bamsPollAck = value;
+	}
 
 
 	/**

@@ -21,6 +21,9 @@ public class PrinterEmulatorController {
     private MBox printerMBox;
     public TextArea printerOutput;
 
+    private boolean ejectorBroken;
+    private boolean outOfPaper;
+
 
     //------------------------------------------------------------
     // initialize
@@ -30,6 +33,8 @@ public class PrinterEmulatorController {
         this.log = log;
         this.printerEmulator = printerEmulator;
         this.printerMBox = appKickstarter.getThread("PrinterHandler").getMBox();
+        ejectorBroken = false;
+        outOfPaper = false;
     } // initialize
 
 
@@ -51,6 +56,13 @@ public class PrinterEmulatorController {
                 break;
         }
     } // buttonPressed
+
+
+    //------------------------------------------------------------
+    // getPollAck
+    public String getPollAck() {
+        return ejectorBroken || outOfPaper ? " is broken!" : " is up!";
+    } // getPollAck
 
 
     //------------------------------------------------------------

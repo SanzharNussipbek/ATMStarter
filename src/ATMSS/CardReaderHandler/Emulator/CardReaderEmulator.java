@@ -3,6 +3,7 @@ package ATMSS.CardReaderHandler.Emulator;
 import ATMSS.ATMSSStarter;
 import ATMSS.CardReaderHandler.CardReaderHandler;
 
+import AppKickstarter.misc.Msg;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -70,6 +71,15 @@ public class CardReaderEmulator extends CardReaderHandler {
 		});
 		myStage.show();
     } // CardReaderEmulator
+
+
+	/**
+	 * Handle Poll Acknowledgement
+	 */
+	protected void handlePollAck() {
+		String result = cardReaderEmulatorController.getPollAck();
+		atmss.send(new Msg(id, mbox, Msg.Type.PollAck, id + result));
+	} // handlePollAck
 
 
 	/**

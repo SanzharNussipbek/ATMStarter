@@ -2,6 +2,7 @@ package ATMSS.KeypadHandler.Emulator;
 
 import ATMSS.ATMSSStarter;
 import ATMSS.KeypadHandler.KeypadHandler;
+import AppKickstarter.misc.Msg;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -69,4 +70,13 @@ public class KeypadEmulator extends KeypadHandler {
 		});
 		myStage.show();
     } // KeypadEmulator
+
+
+	/**
+	 * Handle Poll Acknowledgement
+	 */
+	protected void handlePollAck() {
+		String result = keypadEmulatorController.getPollAck();
+		atmss.send(new Msg(id, mbox, Msg.Type.PollAck, id + result));
+	} // handlePollAck
 } // KeypadEmulator

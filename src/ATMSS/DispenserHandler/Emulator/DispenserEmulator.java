@@ -2,6 +2,7 @@ package ATMSS.DispenserHandler.Emulator;
 
 import ATMSS.ATMSSStarter;
 import ATMSS.DispenserHandler.DispenserHandler;
+import AppKickstarter.misc.Msg;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -67,6 +68,15 @@ public class DispenserEmulator extends DispenserHandler {
         });
         myStage.show();
     } // DispenserEmulator
+
+
+    /**
+     * Handle Poll Acknowledgement
+     */
+    protected void handlePollAck() {
+        String result = dispenserEmulatorController.getPollAck();
+        atmss.send(new Msg(id, mbox, Msg.Type.PollAck, id + result));
+    } // handlePollAck
 
 
     /**

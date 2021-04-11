@@ -31,24 +31,18 @@ public class HWHandler extends AppThread {
             log.fine(id + ": message received: [" + msg + "].");
 
             switch (msg.getType()) {
-                case Poll:
-                    atmss.send(new Msg(id, mbox, Msg.Type.PollAck, id + " is up!"));
-                    break;
-
                 case Terminate:
                     quit = true;
                     break;
 
                 case Shutdown:
                     isShutdown = true;
-                    String result = new Random().nextDouble() <= 0.9 ? "SUCCESS" : "FAILED";
-                    atmss.send(new Msg(id, mbox, Msg.Type.Shutdown, result));
+                    atmss.send(new Msg(id, mbox, Msg.Type.Shutdown, "SUCCESS"));
                     break;
 
                 case Reset:
                     isShutdown = false;
-                    String resetResult = new Random().nextDouble() <= 0.9 ? "HEALTHY" : "FAILURE";
-                    atmss.send(new Msg(id, mbox, Msg.Type.Reset, resetResult));
+                    atmss.send(new Msg(id, mbox, Msg.Type.Reset, "HEALTHY"));
                     break;
 
                 default:

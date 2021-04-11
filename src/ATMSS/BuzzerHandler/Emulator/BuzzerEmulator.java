@@ -2,6 +2,7 @@ package ATMSS.BuzzerHandler.Emulator;
 
 import ATMSS.ATMSSStarter;
 import ATMSS.BuzzerHandler.BuzzerHandler;
+import AppKickstarter.misc.Msg;
 import javafx.stage.Stage;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
@@ -28,6 +29,10 @@ public class BuzzerEmulator extends BuzzerHandler {
      * Stage of the emulator
      */
     private Stage myStage;
+    /**
+     * Boolean value to track broken component issue for Poll Acknowledgements
+     */
+    private boolean componentBroken;
 
 
     /**
@@ -39,6 +44,7 @@ public class BuzzerEmulator extends BuzzerHandler {
         super(id, atmssStarter);
         this.atmssStarter = atmssStarter;
         this.id = id;
+        componentBroken = false;
     } // BuzzerEmulator
 
 
@@ -46,6 +52,15 @@ public class BuzzerEmulator extends BuzzerHandler {
      * Mock function to start the emulator
      */
     public void start() { } // start
+
+
+    /**
+     * Handle Poll Acknowledgement
+     */
+    protected void handlePollAck() {
+        String result = componentBroken ? " is broken!" : " is up!";;
+        atmss.send(new Msg(id, mbox, Msg.Type.PollAck, id + result));
+    } // handlePollAck
 
 
     /**

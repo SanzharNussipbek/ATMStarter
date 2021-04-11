@@ -32,12 +32,15 @@ public class TouchDisplayEmulatorController {
     public TextField denomination1000Input;
     public Text totalCash;
     public Text insertCashTitle;
-    public TextField cardNumber;
+    public TextField accNumber;
     public Button firstAcc;
     public Button secondAcc;
     public Button thirdAcc;
     public Text balance;
     public TextField adminPassword;
+
+    private boolean displayBroken;
+    private boolean wiredConnectionBroken;
 
 
     //------------------------------------------------------------
@@ -48,6 +51,8 @@ public class TouchDisplayEmulatorController {
         this.log = log;
         this.touchDisplayEmulator = touchDisplayEmulator;
         this.touchDisplayMBox = appKickstarter.getThread("TouchDisplayHandler").getMBox();
+        displayBroken = false;
+        wiredConnectionBroken = false;
     } // initialize
 
 
@@ -60,6 +65,13 @@ public class TouchDisplayEmulatorController {
         log.fine(id + ": mouse clicked: -- (" + x + ", " + y + ")");
         touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.TD_MouseClicked, x + " " + y));
     } // td_mouseClick
+
+
+    //------------------------------------------------------------
+    // getPollAck
+    public String getPollAck() {
+        return displayBroken || wiredConnectionBroken ? " is broken!" : " is up!";
+    } // getPollAck
 
 
     public void handleNewPin() {
@@ -181,10 +193,10 @@ public class TouchDisplayEmulatorController {
 
 
     //------------------------------------------------------------
-    // handleSendCard
-    public void handleSendCard() {
-        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.TD_SendCard, cardNumber.getText()));
-    } // handleSendCard
+    // handleSendAccount
+    public void handleSendAccount() {
+        touchDisplayMBox.send(new Msg(id, touchDisplayMBox, Msg.Type.TD_SendAccount, accNumber.getText()));
+    } // handleSendAccount
 
 
     //------------------------------------------------------------
@@ -214,11 +226,11 @@ public class TouchDisplayEmulatorController {
 
 
     //------------------------------------------------------------
-    // handleCardInput
-    public void handleCardInput(String value) {
-        if (isValidCardNum(cardNumber.getText())) return;
-        cardNumber.appendText(value);
-    } // handleCardInput
+    // handleAccInput
+    public void handleAccInput(String value) {
+        if (isValidCardNum(accNumber.getText())) return;
+        accNumber.appendText(value);
+    } // handleAccInput
 
 
     //------------------------------------------------------------
