@@ -22,6 +22,12 @@ public class ATMSSProperties {
         p.setProperty("dbAccountName", "comp4107_grp04");
         p.setProperty("dbName", "comp4107_grp04");
         p.setProperty("dbPassword", "comp4107_grp04");
+        p.setProperty("firstCardNum", "1111-1111-1111-1111");
+        p.setProperty("firstCardPin", "111111");
+        p.setProperty("secondCardNum", "2222-2222-2222-2222");
+        p.setProperty("secondCardPin", "222222");
+        p.setProperty("thirdCardNum", "3333-3333-3333-3333");
+        p.setProperty("thirdCardPin", "333333");
         p.setProperty("sdk", "1.8");
 
         p.store(os, null);

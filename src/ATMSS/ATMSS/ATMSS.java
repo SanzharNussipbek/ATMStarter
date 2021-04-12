@@ -652,7 +652,7 @@ public class ATMSS extends AppThread {
 			handleErase();
 			if (authTries >= 3) {
 				log.info(id + ": Three tries were expired!");
-				handleCancel();
+				handleLogout();
 				return;
 			}
 			touchDisplayMBox.send(new Msg(id, mbox, Msg.Type.TD_UpdateDisplay, "Incorrect Pin"));
